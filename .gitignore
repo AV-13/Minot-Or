@@ -1,0 +1,19 @@
+# Fichiers et dossiers générés par Symfony
+/var/
+/vendor/
+/public/build/
+/node_modules/
+
+# Fichiers de configuration personnels
+.env.local
+.env.*.local
+
+# Fichiers de cache
+/cache/
+
+# IDE ou éditeurs
+.idea/
+.vscode/
+
+# Autres fichiers
+*.log
