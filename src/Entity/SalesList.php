@@ -31,7 +31,7 @@ class SalesList
     #[ORM\Column]
     private ?\DateTime $expirationDate = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTime $orderDate = null;
 
     #[ORM\OneToOne(mappedBy: 'salesList', cascade: ['persist', 'remove'])]
@@ -128,7 +128,7 @@ class SalesList
         return $this->orderDate;
     }
 
-    public function setOrderDate(\DateTime $orderDate): static
+    public function setOrderDate(?\DateTimeInterface $orderDate): static
     {
         $this->orderDate = $orderDate;
 
