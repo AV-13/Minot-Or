@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class UserController extends AbstractController
 {
 
-    #[Route('/api/users', name: 'api_user_create', methods: ['POST'])]
+    #[Route('/api/createUser', name: 'api_user_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
