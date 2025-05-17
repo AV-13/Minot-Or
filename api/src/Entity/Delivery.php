@@ -29,8 +29,8 @@ class Delivery
     #[ORM\Column(length: 20)]
     private DeliveryStatus|null $deliveryStatus = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $driverRemark = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private string|null $driverRemark = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $qrCode = null;

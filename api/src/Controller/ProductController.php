@@ -118,5 +118,72 @@ class ProductController extends AbstractController
             'items' => $items
         ]);
     }
+    #[Route('/api/products/{id}', name: 'get_product', methods: ['GET'])]
+    public function getProduct(Product $product): JsonResponse
+    {
+        return $this->json([
+            'id' => $product->getId(),
+            'name' => $product->getProductName(),
+            'quantity' => $product->getQuantity(),
+            'stockQuantity' => $product->getStockQuantity(),
+            'netPrice' => $product->getNetPrice(),
+            'grossPrice' => $product->getGrossPrice(),
+            'unitWeight' => $product->getUnitWeight(),
+            'category' => $product->getCategory()->value,
+            'warehouseId' => $product->getWarehouse()->getId()
+        ]);
+    }
+    #[Route('/api/products/{id}', name: 'update_product', methods: ['PUT'])]
+    public function updateProduct(Request $request, Product $product, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (isset($data['productName'])) $product->setProductName($data['productName']);
+        if (isset($data['quantity'])) $product->setQuantity($data['quantity']);
+        if (isset($data['netPrice'])) $product->setNetPrice($data['netPrice']);
+        if (isset($data['grossPrice'])) $product->setGrossPrice($data['grossPrice']);
+        if (isset($data['unitWeight'])) $product->setUnitWeight($data['unitWeight']);
+        if (isset($data['category'])) {
+            $category = ProductCategory::tryFrom($data['category']);
+            if (!$category) {
+                return $this->json(['error' => 'Invalid category'], 400);
+            }
+            $product->setCategory($category);
+        }
+        if (isset($data['warehouseId'])) {
+            // Optionnel : vérifier que l'entrepôt existe
+            // ...
+        }
+        $em->flush();
+        return $this->json(['message' => 'Product updated successfully']);
+    }
+    #[Route('/api/products/{id}', name: 'delete_product', methods: ['DELETE'])]
+    public function deleteProduct(Product $product, EntityManagerInterface $em): JsonResponse
+    {
+        // Vérifie présence dans Restock
+        if (count($product->getRestocks() ?? []) > 0) {
+            return $this->json([
+                'error' => 'Impossible de supprimer ce produit : il est utilisé dans une commande de réapprovisionnement.'
+            ], 409);
+        }
+        // (ajoute d'autres vérifs selon ton modèle, ex: Contains, etc.)
+
+        $em->remove($product);
+        $em->flush();
+        return $this->json(['message' => 'Product deleted successfully']);
+    }
+
+    #[Route('/api/products/{id}/stock', name: 'update_product_stock', methods: ['PATCH'])]
+    public function updateStock(Product $product, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if (!isset($data['stockQuantity'])) {
+            return $this->json(['error' => 'Missing stockQuantity'], 400);
+        }
+        $product->setStockQuantity((int)$data['stockQuantity']);
+        $em->flush();
+        return $this->json(['message' => 'Stock updated', 'stockQuantity' => $product->getStockQuantity()]);
+    }
+
 
 }

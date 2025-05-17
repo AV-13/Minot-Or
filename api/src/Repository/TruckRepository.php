@@ -17,7 +17,7 @@ class TruckRepository extends ServiceEntityRepository
     }
 
     //    /**
-    //     * @return Truck[] Returns an array of Truck objects
+    //     * @return TruckCategory[] Returns an array of TruckCategory objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class TruckRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Truck
+    //    public function findOneBySomeField($value): ?TruckCategory
     //    {
     //        return $this->createQueryBuilder('t')
     //            ->andWhere('t.exampleField = :val')

@@ -31,6 +31,9 @@ class Invoice
 
     #[ORM\OneToOne(inversedBy: 'invoices', cascade: ['persist', 'remove'])]
     private ?SalesList $salesList = null;
+    #[ORM\ManyToOne(targetEntity: Pricing::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Pricing $pricing = null;
 
     public function getId(): ?int
     {
@@ -106,6 +109,16 @@ class Invoice
     {
         $this->salesList = $salesList;
 
+        return $this;
+    }
+    public function getPricing(): ?Pricing
+    {
+        return $this->pricing;
+    }
+
+    public function setPricing(?Pricing $pricing): static
+    {
+        $this->pricing = $pricing;
         return $this;
     }
 }

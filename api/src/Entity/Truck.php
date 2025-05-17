@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\TruckCategory;
 use App\Repository\TruckRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +20,7 @@ class Truck
     private ?string $registrationNumber = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $truckType = null;
+    private TruckCategory|null $truckType = null;
 
     #[ORM\Column]
     private ?bool $isAvailable = null;
@@ -78,12 +79,12 @@ class Truck
         return $this;
     }
 
-    public function getTruckType(): ?string
+    public function getTruckType(): ?TruckCategory
     {
         return $this->truckType;
     }
 
-    public function setTruckType(string $truckType): static
+    public function setTruckType(TruckCategory $truckType): static
     {
         $this->truckType = $truckType;
 
