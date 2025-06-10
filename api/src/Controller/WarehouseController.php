@@ -9,23 +9,54 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use OpenApi\Attributes as OA;
 
+#[OA\Tag(name: "Warehouse")]
 #[Route('/api/warehouses')]
 final class WarehouseController extends AbstractController
 {
-    #[Route('', name: 'create_warehouse', methods: ['POST'])]
-    public function createWarehouse(Request $request, EntityManagerInterface $em): JsonResponse
+    /**
+     * Creates a new warehouse.
+     */
+    #[OA\Post(
+        path: '/api/warehouses',
+        summary: 'Create a new warehouse',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['warehouseAddress', 'storageCapacity'],
+                properties: [
+                    new OA\Property(property: 'warehouseAddress', type: 'string', maxLength: 10),
+                    new OA\Property(property: 'storageCapacity', type: 'integer', minimum: 1)
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: 'Warehouse created'),
+            new OA\Response(response: 400, description: 'Invalid input')
+        ]
+    )]
+    #[Route('', name: 'warehouse_create', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         if (empty($data['warehouseAddress']) || empty($data['storageCapacity'])) {
             return $this->json(['error' => 'Missing fields'], 400);
         }
+        if (mb_strlen($data['warehouseAddress']) > 10) {
+            return $this->json(['error' => 'Address too long (max 10 characters)'], 400);
+        }
+        if (!is_numeric($data['storageCapacity']) || $data['storageCapacity'] <= 0) {
+            return $this->json(['error' => 'Invalid storage capacity'], 400);
+        }
 
         $warehouse = new Warehouse();
         $warehouse
             ->setWarehouseAddress($data['warehouseAddress'])
-            ->setStorageCapacity($data['storageCapacity']);
+            ->setStorageCapacity((int)$data['storageCapacity']);
 
         $em->persist($warehouse);
         $em->flush();
@@ -35,11 +66,31 @@ final class WarehouseController extends AbstractController
             'id' => $warehouse->getId()
         ], 201);
     }
-    // Lister tous les entrepôts
-    #[Route('', name: 'list_warehouses', methods: ['GET'])]
-    public function listWarehouses(EntityManagerInterface $em): JsonResponse
+
+    /**
+     * Returns a paginated list of warehouses.
+     */
+    #[OA\Get(
+        path: '/api/warehouses',
+        summary: 'List warehouses (paginated)',
+        parameters: [
+            new OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Paginated warehouse list')
+        ]
+    )]
+    #[Route('', name: 'warehouse_list', methods: ['GET'])]
+    public function list(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $warehouses = $em->getRepository(Warehouse::class)->findAll();
+        $page = max(1, (int)$request->query->get('page', 1));
+        $limit = max(1, (int)$request->query->get('limit', 20));
+        $offset = ($page - 1) * $limit;
+
+        $repo = $em->getRepository(Warehouse::class);
+        $total = $repo->count([]);
+        $warehouses = $repo->findBy([], [], $limit, $offset);
 
         $data = array_map(fn(Warehouse $w) => [
             'id' => $w->getId(),
@@ -47,12 +98,30 @@ final class WarehouseController extends AbstractController
             'storageCapacity' => $w->getStorageCapacity()
         ], $warehouses);
 
-        return $this->json($data);
+        return $this->json([
+            'total' => $total,
+            'page' => $page,
+            'limit' => $limit,
+            'items' => $data
+        ]);
     }
 
-// Voir le détail d’un entrepôt
-    #[Route('/{id}', name: 'get_warehouse', methods: ['GET'])]
-    public function getWarehouse(Warehouse $warehouse): JsonResponse
+    /**
+     * Returns the details of a warehouse.
+     */
+    #[OA\Get(
+        path: '/api/warehouses/{id}',
+        summary: 'Get warehouse details',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Warehouse details'),
+            new OA\Response(response: 404, description: 'Not found')
+        ]
+    )]
+    #[Route('/{id}', name: 'warehouse_detail', methods: ['GET'])]
+    public function detail(Warehouse $warehouse): JsonResponse
     {
         return $this->json([
             'id' => $warehouse->getId(),
@@ -61,20 +130,45 @@ final class WarehouseController extends AbstractController
         ]);
     }
 
-// Modifier un entrepôt
-    #[Route('/{id}', name: 'update_warehouse', methods: ['PUT'])]
-    public function updateWarehouse(
-        Warehouse $warehouse,
-        Request $request,
-        EntityManagerInterface $em
-    ): JsonResponse {
+    /**
+     * Updates a warehouse.
+     */
+    #[OA\Put(
+        path: '/api/warehouses/{id}',
+        summary: 'Update a warehouse',
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'warehouseAddress', type: 'string', maxLength: 10),
+                    new OA\Property(property: 'storageCapacity', type: 'integer', minimum: 1)
+                ]
+            )
+        ),
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Warehouse updated'),
+            new OA\Response(response: 400, description: 'Invalid input')
+        ]
+    )]
+    #[Route('/{id}', name: 'warehouse_update', methods: ['PUT'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function update(Warehouse $warehouse, Request $request, EntityManagerInterface $em): JsonResponse
+    {
         $data = json_decode($request->getContent(), true);
 
-        if (!empty($data['warehouseAddress'])) {
+        if (isset($data['warehouseAddress'])) {
+            if (mb_strlen($data['warehouseAddress']) > 10) {
+                return $this->json(['error' => 'Address too long (max 10 characters)'], 400);
+            }
             $warehouse->setWarehouseAddress($data['warehouseAddress']);
         }
-        if (!empty($data['storageCapacity'])) {
-            $warehouse->setStorageCapacity($data['storageCapacity']);
+        if (isset($data['storageCapacity'])) {
+            if (!is_numeric($data['storageCapacity']) || $data['storageCapacity'] <= 0) {
+                return $this->json(['error' => 'Invalid storage capacity'], 400);
+            }
+            $warehouse->setStorageCapacity((int)$data['storageCapacity']);
         }
 
         $em->flush();
@@ -84,13 +178,24 @@ final class WarehouseController extends AbstractController
         ]);
     }
 
-// Supprimer un entrepôt
-    #[Route('/{id}', name: 'delete_warehouse', methods: ['DELETE'])]
-    public function deleteWarehouse(
-        Warehouse $warehouse,
-        EntityManagerInterface $em
-    ): JsonResponse {
-        // Vérifier s'il y a des produits liés à cet entrepôt
+    /**
+     * Deletes a warehouse (only if empty).
+     */
+    #[OA\Delete(
+        path: '/api/warehouses/{id}',
+        summary: 'Delete a warehouse (only if empty)',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Warehouse deleted'),
+            new OA\Response(response: 409, description: 'Warehouse not empty')
+        ]
+    )]
+    #[Route('/{id}', name: 'warehouse_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function delete(Warehouse $warehouse, EntityManagerInterface $em): JsonResponse
+    {
         if (count($warehouse->getProducts() ?? []) > 0) {
             return $this->json([
                 'error' => 'Cannot delete warehouse: products are still stored here.'
@@ -104,7 +209,20 @@ final class WarehouseController extends AbstractController
             'message' => 'Warehouse deleted successfully'
         ]);
     }
-    // Voir le stock de tous les produits dans un entrepôt
+
+    /**
+     * Returns all product stock in a warehouse.
+     */
+    #[OA\Get(
+        path: '/api/warehouses/{id}/stock',
+        summary: 'Get all product stock in a warehouse',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Warehouse stock')
+        ]
+    )]
     #[Route('/{id}/stock', name: 'warehouse_stock', methods: ['GET'])]
     public function stock(Warehouse $warehouse, EntityManagerInterface $em): JsonResponse
     {
@@ -115,81 +233,6 @@ final class WarehouseController extends AbstractController
             'productName' => $p->getProductName(),
             'stockQuantity' => $p->getStockQuantity()
         ], $products);
-
-        return $this->json($data);
-    }
-
-    // Ajouter du stock pour un produit
-    #[Route('/{id}/stock/add', name: 'warehouse_stock_add', methods: ['POST'])]
-    public function addStock(
-        Warehouse $warehouse,
-        Request $request,
-        EntityManagerInterface $em
-    ): JsonResponse {
-        $data = json_decode($request->getContent(), true);
-
-        if (empty($data['productId']) || empty($data['quantity'])) {
-            return $this->json(['error' => 'Missing productId or quantity'], 400);
-        }
-        $product = $em->getRepository(Product::class)->find($data['productId']);
-        if (!$product || $product->getWarehouse()->getId() !== $warehouse->getId()) {
-            return $this->json(['error' => 'Product not found in this warehouse'], 404);
-        }
-
-        $product->setStockQuantity($product->getStockQuantity() + $data['quantity']);
-        $em->flush();
-
-        return $this->json([
-            'message' => 'Stock increased',
-            'productId' => $product->getId(),
-            'newQuantity' => $product->getStockQuantity()
-        ]);
-    }
-
-    // Retirer du stock pour un produit
-    #[Route('/{id}/stock/remove', name: 'warehouse_stock_remove', methods: ['POST'])]
-    public function removeStock(
-        Warehouse $warehouse,
-        Request $request,
-        EntityManagerInterface $em
-    ): JsonResponse {
-        $data = json_decode($request->getContent(), true);
-
-        if (empty($data['productId']) || empty($data['quantity'])) {
-            return $this->json(['error' => 'Missing productId or quantity'], 400);
-        }
-        $product = $em->getRepository(Product::class)->find($data['productId']);
-        if (!$product || $product->getWarehouse()->getId() !== $warehouse->getId()) {
-            return $this->json(['error' => 'Product not found in this warehouse'], 404);
-        }
-        if ($product->getStockQuantity() < $data['quantity']) {
-            return $this->json(['error' => 'Not enough stock'], 409);
-        }
-
-        $product->setStockQuantity($product->getStockQuantity() - $data['quantity']);
-        $em->flush();
-
-        return $this->json([
-            'message' => 'Stock decreased',
-            'productId' => $product->getId(),
-            'newQuantity' => $product->getStockQuantity()
-        ]);
-    }
-
-    // Optionnel : Lister les produits bientôt en rupture de stock (seuil à adapter)
-    #[Route('/{id}/stock/low', name: 'warehouse_stock_low', methods: ['GET'])]
-    public function lowStock(Warehouse $warehouse, EntityManagerInterface $em): JsonResponse
-    {
-        $threshold = 20; // seuil d'alerte
-        $products = $em->getRepository(Product::class)->findBy(['warehouse' => $warehouse]);
-
-        $lowStock = array_filter($products, fn(Product $p) => $p->getStockQuantity() <= $threshold);
-
-        $data = array_map(fn(Product $p) => [
-            'productId' => $p->getId(),
-            'productName' => $p->getProductName(),
-            'stockQuantity' => $p->getStockQuantity()
-        ], $lowStock);
 
         return $this->json($data);
     }

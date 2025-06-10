@@ -5,3 +5,21 @@ controllers:
     type: attribute
 api_login_check:
     path: /api/login
+app.swagger:
+    path: /api/doc.json
+    methods: GET
+    defaults:
+        _controller: nelmio_api_doc.controller.swagger
+app.swagger_ui:
+    path: /api/doc
+    methods: GET
+    defaults:
+        _controller: nelmio_api_doc.controller.swagger_ui
+app.redocly:
+    path: /api/doc-redoc
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.redocly }
+app.stoplight:
+    path: /api/doc-stoplight
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.stoplight }

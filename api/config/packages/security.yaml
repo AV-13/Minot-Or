@@ -41,6 +41,10 @@ security:
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/createUser, roles: PUBLIC_ACCESS }
+        # $ means /api/companies and nothing more /api/companies/43 will not be public
+        - { path: ^/api/companies$, roles: PUBLIC_ACCESS, methods: [ POST ] }
+        # Autorise l'accès public à la doc
+        - { path: ^/api/doc, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
