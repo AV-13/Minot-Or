@@ -45,7 +45,6 @@ final class UserController extends AbstractController
             new OA\Response(response: 409, description: 'Email already used')
         ]
     )]
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('', name: 'user_create', methods: ['POST'])]
     public function create(
         Request $request,
