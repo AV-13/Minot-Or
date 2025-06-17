@@ -2,6 +2,7 @@
 .idea/
 
 # Symfony / API
+/api/.env
 /api/.env.local
 /api/.env.local.php
 /api/.env.*.local
