@@ -19,7 +19,7 @@ class Truck
     #[ORM\Column(length: 50)]
     private ?string $registrationNumber = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(type: 'truck_category_enum',length: 50)]
     private TruckCategory|null $truckType = null;
 
     #[ORM\Column]

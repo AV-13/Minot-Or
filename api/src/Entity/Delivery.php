@@ -26,7 +26,7 @@ class Delivery
     #[ORM\Column(length: 20)]
     private ?string $deliveryNumber = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(type: 'delivery_status_enum',length: 20)]
     private DeliveryStatus|null $deliveryStatus = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

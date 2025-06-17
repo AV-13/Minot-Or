@@ -16,7 +16,16 @@ const Register = () => {
     const handleFinish = async (data) => {
         const finalData = { ...formData, ...data };
         try {
-            const result = await apiClient.post('/users', finalData);
+            console.log(finalData);
+            let testData = {
+                email: "test",
+                password: "test",
+                firstName: "test",
+                lastName: "test",
+                role: "un role",
+                companyId: 1
+            }
+            const result = await apiClient.post('/users', testData);
             console.log('Utilisateur créé avec succès :', result);
         } catch (err) {
             console.error('Erreur lors de la création de \'utilisateur :', err.message);

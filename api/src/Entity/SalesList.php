@@ -16,7 +16,7 @@ class SalesList
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(type: 'sales_status_enum',length: 20)]
     private SalesStatus|null $status;
 
     #[ORM\Column]

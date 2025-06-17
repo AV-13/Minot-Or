@@ -8,6 +8,17 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+        mapping_types:
+            enum: string
+        types:
+            user_role_enum: App\DBAL\Types\UserRoleType
+            truck_category_enum: App\DBAL\Types\TruckCategoryType
+            sales_status_enum: App\DBAL\Types\SalesStatusType
+            product_category_enum: App\DBAL\Types\ProductCategoryType
+            order_status_enum: App\DBAL\Types\OrderStatusType
+            delivery_status_enum: App\DBAL\Types\DeliveryStatusType
+
+
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true

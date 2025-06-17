@@ -1,3 +1,4 @@
+# api/config/packages/nelmio_cors.yaml
 nelmio_cors:
     defaults:
         allow_origin: ['http://localhost:3000']

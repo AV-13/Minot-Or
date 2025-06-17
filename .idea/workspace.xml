@@ -6,9 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="374e178a-3231-4af5-a3f7-aff6e985e9e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fb08c258-a1f4-4647-8fc6-810c0a5f97c7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/fb08c258-a1f4-4647-8fc6-810c0a5f97c7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/.env" beforeDir="false" afterPath="$PROJECT_DIR$/api/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/config/packages/doctrine.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/packages/doctrine.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/config/packages/nelmio_cors.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/packages/nelmio_cors.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Controller/CompanyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Controller/CompanyController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/Delivery.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/Delivery.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/Product.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/SalesList.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/SalesList.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/Truck.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/Truck.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/CompanyForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/CompanyForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -184,6 +195,9 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2wsVyc6tZ3gcHXFkzKgkkEkihzN" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -200,6 +214,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "ts.external.directory.path": "C:\\Users\\Clement-synakene\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -248,7 +263,8 @@
       <workItem from="1747590515722" duration="5812000" />
       <workItem from="1749712523021" duration="397000" />
       <workItem from="1749712940872" duration="1422000" />
-      <workItem from="1749714520564" duration="20000" />
+      <workItem from="1749714520564" duration="11838000" />
+      <workItem from="1749736457936" duration="8847000" />
     </task>
     <servers />
   </component>
