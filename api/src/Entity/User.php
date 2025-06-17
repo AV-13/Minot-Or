@@ -99,18 +99,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        if ($this->role instanceof \App\Enum\UserRole) {
+            $roles[] = $this->role->toSymfonyRole();
+        }
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
+
     /**
-     * @param list<string> $roles
+     * Définit les rôles à partir d'un tableau de UserRole ou de string.
+     * @param array<UserRole|string> $roles
      */
     public function setRoles(array $roles): static
     {
-        $this->roles = $roles;
+        $this->roles = array_map(function ($role) {
+            if ($role instanceof \App\Enum\UserRole) {
+                return $role->toSymfonyRole();
+            }
+            if (is_string($role) && str_starts_with($role, 'ROLE_')) {
+                return $role;
+            }
+            if (is_string($role) && \App\Enum\UserRole::tryFrom($role)) {
+                return \App\Enum\UserRole::from($role)->toSymfonyRole();
+            }
+            throw new \InvalidArgumentException('Rôle invalide');
+        }, $roles);
 
         return $this;
     }

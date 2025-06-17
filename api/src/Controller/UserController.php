@@ -76,6 +76,7 @@ final class UserController extends AbstractController
         $user->setFirstName($data['firstName']);
         $user->setLastName($data['lastName']);
         $user->setRole(UserRole::from($data['role']));
+        $user->setRoles([$user->getRole()->toSymfonyRole()]);
         $user->setCompany($company);
 
         $errors = $validator->validate($user);
@@ -236,6 +237,7 @@ final class UserController extends AbstractController
         if (isset($data['lastName'])) $user->setLastName($data['lastName']);
         if (isset($data['role']) && UserRole::tryFrom($data['role'])) {
             $user->setRole(UserRole::from($data['role']));
+            $user->setRoles([$user->getRole()->toSymfonyRole()]);
         }
         if (isset($data['companyId'])) {
             $company = $em->getRepository(Company::class)->find($data['companyId']);

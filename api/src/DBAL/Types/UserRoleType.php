@@ -11,7 +11,7 @@ class UserRoleType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return "ENUM('Baker','Sales','Driver','OrderPreparer','Miller','Procurement')";
+        return "ENUM('WaitingForValidation','Baker','Sales','Driver','OrderPreparer','Maintenance','Procurement')";
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform): ?UserRole

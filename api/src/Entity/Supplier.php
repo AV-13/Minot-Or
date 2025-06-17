@@ -15,10 +15,10 @@ class Supplier
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $supplierName = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $supplierAddress = null;
 
     /**
@@ -32,11 +32,17 @@ class Supplier
      */
     #[ORM\OneToMany(targetEntity: Restock::class, mappedBy: 'supplier')]
     private Collection $restocks;
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'suppliers')]
+    private Collection $products;
 
     public function __construct()
     {
         $this->productSuppliers = new ArrayCollection();
         $this->restocks = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,6 +131,31 @@ class Supplier
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->addSupplier($this);
+        }
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            $product->removeSupplier($this);
+        }
         return $this;
     }
 }

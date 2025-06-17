@@ -41,6 +41,9 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Warehouse $warehouse = null;
 
+    #[ORM\ManyToMany(targetEntity: Supplier::class, mappedBy: 'products')]
+    private Collection $suppliers;
+
     /**
      * @var Collection<int, Contains>
      */
@@ -64,6 +67,7 @@ class Product
         $this->contains = new ArrayCollection();
         $this->productSuppliers = new ArrayCollection();
         $this->restocks = new ArrayCollection();
+        $this->suppliers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -254,6 +258,31 @@ class Product
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Supplier>
+     */
+    public function getSuppliers(): Collection
+    {
+        return $this->suppliers;
+    }
+
+    public function addSupplier(Supplier $supplier): static
+    {
+        if (!$this->suppliers->contains($supplier)) {
+            $this->suppliers->add($supplier);
+            $supplier->addProduct($this);
+        }
+        return $this;
+    }
+
+    public function removeSupplier(Supplier $supplier): static
+    {
+        if ($this->suppliers->removeElement($supplier)) {
+            $supplier->removeProduct($this);
+        }
         return $this;
     }
 }
