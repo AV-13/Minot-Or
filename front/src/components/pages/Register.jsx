@@ -22,7 +22,7 @@ const Register = () => {
                 password: "test",
                 firstName: "test",
                 lastName: "test",
-                role: "un role",
+                role: "Baker",
                 companyId: 1
             }
             const result = await apiClient.post('/users', testData);
