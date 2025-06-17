@@ -9,6 +9,18 @@
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/fb08c258-a1f4-4647-8fc6-810c0a5f97c7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/fb08c258-a1f4-4647-8fc6-810c0a5f97c7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/.env" beforeDir="false" afterPath="$PROJECT_DIR$/api/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/config/packages/doctrine.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/packages/doctrine.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/config/packages/nelmio_cors.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/packages/nelmio_cors.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Controller/CompanyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Controller/CompanyController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/Delivery.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/Delivery.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/Product.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/SalesList.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/SalesList.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/Truck.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/Truck.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/CompanyForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/CompanyForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +34,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\Users\augus\Downloads\php-8.3.9-nts-Win32-vs16-x64\php.exe">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\php\php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/symfony/runtime" />
       <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
@@ -183,6 +195,9 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2wsVyc6tZ3gcHXFkzKgkkEkihzN" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -190,14 +205,16 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/user/PhpstormProjects/IMIE/Minot-Or/api",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "front",
+    "last_opened_file_path": "C:/Users/Clement-synakene/Desktop/Cours/IMIE/Projet Fil Rouge/Code",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "ts.external.directory.path": "C:\\Users\\Clement-synakene\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -217,8 +234,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
-        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-WS-251.25410.117" />
       </set>
     </attachedChunks>
   </component>
@@ -245,11 +261,19 @@
       <workItem from="1747569556030" duration="1477000" />
       <workItem from="1747584625734" duration="5802000" />
       <workItem from="1747590515722" duration="5812000" />
-      <workItem from="1750057666768" duration="9000" />
+      <workItem from="1749712523021" duration="397000" />
+      <workItem from="1749712940872" duration="1422000" />
+      <workItem from="1749714520564" duration="11838000" />
+      <workItem from="1749736457936" duration="8847000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/api" />
+    </ignored-roots>
   </component>
 </project>

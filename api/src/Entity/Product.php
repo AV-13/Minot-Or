@@ -31,7 +31,7 @@ class Product
     #[ORM\Column]
     private ?float $unitWeight = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(type: 'product_category_enum', length: 20)]
     private ProductCategory|null $category = null;
 
     #[ORM\Column]

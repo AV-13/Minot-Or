@@ -143,6 +143,39 @@ final class CompanyController extends AbstractController
         ]);
     }
 
+    #[OA\Get(
+        path: '/api/companies/siret/{siret}',
+        summary: 'Obtenir une company par son numéro de Siret',
+        parameters: [
+            new OA\Parameter(
+                name: 'siret',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'string')
+            )
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Détails de la company'),
+            new OA\Response(response: 404, description: 'Company non trouvée')
+        ]
+    )]
+    #[Route('/siret/{siret}', name: 'company_get_by_siret', methods: ['GET'])]
+    public function getBySiret(string $siret, EntityManagerInterface $em): JsonResponse
+    {
+        $company = $em->getRepository(Company::class)->findOneBy(['companySiret' => $siret]);
+
+        if (!$company) {
+            return $this->json(['error' => 'Company non trouvée'], 404);
+        }
+
+        return $this->json([
+            'id' => $company->getId(),
+            'companyName' => $company->getCompanyName(),
+            'companySiret' => $company->getCompanySiret(),
+            'companyContact' => $company->getCompanyContact()
+        ]);
+    }
+
     /**
      * Updates a company.
      */

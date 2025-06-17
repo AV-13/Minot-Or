@@ -2,6 +2,7 @@ import { useState } from 'react';
 import RegisterForm from '../organisms/RegisterForm';
 import CompanyForm from '../organisms/CompanyForm';
 import AuthLayout from "../templates/AuthLayout";
+import apiClient from '../../utils/apiClient';
 
 const Register = () => {
     const [step, setStep] = useState(1);
@@ -12,10 +13,23 @@ const Register = () => {
         setStep(step + 1);
     };
 
-    const handleFinish = (data) => {
+    const handleFinish = async (data) => {
         const finalData = { ...formData, ...data };
-        console.log('Inscription complète :', finalData);
-        // Envoie les données à l'API ici
+        try {
+            console.log(finalData);
+            let testData = {
+                email: "test",
+                password: "test",
+                firstName: "test",
+                lastName: "test",
+                role: "un role",
+                companyId: 1
+            }
+            const result = await apiClient.post('/users', testData);
+            console.log('Utilisateur créé avec succès :', result);
+        } catch (err) {
+            console.error('Erreur lors de la création de \'utilisateur :', err.message);
+        }
     };
 
     const handleBack = () => {
