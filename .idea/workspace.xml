@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="374e178a-3231-4af5-a3f7-aff6e985e9e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Button.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/LoginForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/LoginForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/CompanyForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/CompanyForm.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\Users\augus\Downloads\php-8.3.9-nts-Win32-vs16-x64\php.exe">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\php\php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/symfony/runtime" />
       <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
@@ -179,10 +177,6 @@
       <path value="$PROJECT_DIR$/api/vendor/symfony/asset" />
       <path value="$PROJECT_DIR$/api/vendor/twig/twig" />
       <path value="$PROJECT_DIR$/api/vendor/symfony/twig-bundle" />
-      <path value="$PROJECT_DIR$/api/vendor/fakerphp/faker" />
-      <path value="$PROJECT_DIR$/api/vendor/nelmio/cors-bundle" />
-      <path value="$PROJECT_DIR$/api/vendor/doctrine/doctrine-fixtures-bundle" />
-      <path value="$PROJECT_DIR$/api/vendor/doctrine/data-fixtures" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -196,41 +190,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Clement-synakene/Desktop/Cours/IMIE/Projet Fil Rouge/Code&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;watcher.settings&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Clement-synakene\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "front",
+    "last_opened_file_path": "C:/Users/Clement-synakene/Desktop/Cours/IMIE/Projet Fil Rouge/Code",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "ts.external.directory.path": "C:\\Users\\Clement-synakene\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\user\PhpstormProjects\IMIE\Minot-Or\api" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\augus\IMIE\Minot-Or\front\src\components\atoms\Button" />
       <recent name="C:\Users\user\PhpstormProjects\IMIE\Minot-Or\api" />
     </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
-        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-WS-251.25410.117" />
       </set>
     </attachedChunks>
   </component>
@@ -262,8 +254,6 @@
       <workItem from="1749714520564" duration="11838000" />
       <workItem from="1749736457936" duration="8847000" />
       <workItem from="1750161953088" duration="4154000" />
-      <workItem from="1750186207641" duration="2307000" />
-      <workItem from="1750230398010" duration="3515000" />
     </task>
     <servers />
   </component>
@@ -274,16 +264,5 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/api" />
     </ignored-roots>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/api/src/Entity/Delivery.php</url>
-          <line>32</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

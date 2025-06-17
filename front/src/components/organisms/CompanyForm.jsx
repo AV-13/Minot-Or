@@ -6,7 +6,6 @@ const CompanyForm = ({ onFinish, onBack }) => {
     const [companyData, setCompanyData] = useState(null);
     const [error, setError] = useState('');
     const [verified, setVerified] = useState(false);
-    const [data, setData] = useState({companyId : ''});
 
     // Vérifie le numéro de Siret au clic sur le bouton "Vérifier"
     const handleVerify = async () => {
@@ -16,9 +15,8 @@ const CompanyForm = ({ onFinish, onBack }) => {
                 // Si la company est trouvée, on soumet directement
                 if (response) {
                     setCompanyData(response);
-                    setData({companyId: response.id});
                     setError('');
-                    onFinish(data);
+                    onFinish({ companyId: response.id });
                 }
             } catch (err) {
                 if (err.response && err.response.status === 404) {

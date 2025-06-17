@@ -16,7 +16,7 @@ const Register = () => {
     const handleFinish = async (data) => {
         const finalData = { ...formData, ...data };
         try {
-            console.log(finalData);
+            console.log('final data :',finalData);
             let testData = {
                 email: "test",
                 password: "test",
