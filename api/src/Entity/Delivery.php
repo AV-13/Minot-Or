@@ -20,10 +20,10 @@ class Delivery
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $deliveryDate = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $deliveryAddress = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 50)]
     private ?string $deliveryNumber = null;
 
     #[ORM\Column(type: 'delivery_status_enum',length: 20)]
@@ -108,7 +108,7 @@ class Delivery
         return $this->driverRemark;
     }
 
-    public function setDriverRemark(string $driverRemark): static
+    public function setDriverRemark(?string $driverRemark): static
     {
         $this->driverRemark = $driverRemark;
 

@@ -6,10 +6,17 @@ use App\Entity\Truck;
 use App\Entity\Warehouse;
 use App\Enum\TruckCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class TruckFixtures extends Fixture
+class TruckFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function getDependencies(): array
+    {
+        return [
+            WarehouseFixtures::class,
+        ];
+    }
     public function load(ObjectManager $manager): void
     {
         $monocuveWarehouses = [0, 1, 7, 20, 31, 32, 34];
@@ -54,12 +61,5 @@ class TruckFixtures extends Fixture
         }
 
         $manager->flush();
-    }
-
-    public function getDependencies(): array
-    {
-        return [
-            WarehouseFixtures::class,
-        ];
     }
 }

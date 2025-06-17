@@ -4,26 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="374e178a-3231-4af5-a3f7-aff6e985e9e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/minotor.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/spec.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.idea/Minot-Or.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.idea/commandlinetools/Symfony_10_05_2025_01_24.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.idea/commandlinetools/schemas/frameworkDescriptionVersion1.1.4.xsd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.idea/php.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/Enum/UserRole.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/Enum/UserRole.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/CompanyForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/CompanyForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="374e178a-3231-4af5-a3f7-aff6e985e9e6" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -191,6 +172,10 @@
       <path value="$PROJECT_DIR$/api/vendor/symfony/asset" />
       <path value="$PROJECT_DIR$/api/vendor/twig/twig" />
       <path value="$PROJECT_DIR$/api/vendor/symfony/twig-bundle" />
+      <path value="$PROJECT_DIR$/api/vendor/fakerphp/faker" />
+      <path value="$PROJECT_DIR$/api/vendor/nelmio/cors-bundle" />
+      <path value="$PROJECT_DIR$/api/vendor/doctrine/doctrine-fixtures-bundle" />
+      <path value="$PROJECT_DIR$/api/vendor/doctrine/data-fixtures" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -204,27 +189,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Clement-synakene/Desktop/Cours/IMIE/Projet Fil Rouge/Code&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Clement-synakene\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Clement-synakene/Desktop/Cours/IMIE/Projet Fil Rouge/Code",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "ts.external.directory.path": "C:\\Users\\Clement-synakene\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\user\PhpstormProjects\IMIE\Minot-Or\api" />
