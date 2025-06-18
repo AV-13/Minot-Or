@@ -19,6 +19,7 @@ const Navbar = () => {
                 ) : (
                     <>
                         <li><Link to="/dashboard">Tableau de bord</Link></li>
+                        <li><Link to="/product">Produits</Link></li>
 
                         {/* Éléments visibles uniquement par certains rôles */}
                         <AuthorizedElement allowedRoles={['Sales']}>
