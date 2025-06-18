@@ -1,0 +1,28 @@
+.registerSuccessContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.successIcon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #22C55E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+        width: 20px;
+        height: 20px;
+        display: block;
+    }
+}
+.pageTitle {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 40px auto;
+}

@@ -1,4 +1,4 @@
-import styles from './Logo.module.css';
+import styles from './Logo.module.scss';
 
 const Logo = ({ customClass = '' }) => (
     <img src="/images/logo1_minotor.png" alt="Logo" className={styles[customClass]} />

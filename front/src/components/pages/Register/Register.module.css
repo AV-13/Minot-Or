@@ -1,26 +1,18 @@
-.pageTitle {
-  text-align: center;
-  margin: 40px auto; }
-
 .registerContainer {
   background: #fff;
+  position: relative;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
   border-radius: 12px;
   padding: 40px 32px;
   width: 45%;
   margin: 48px auto; }
 
-.registerInformationLabel {
-  color: #4B5563;
-  text-align: center;
-  width: 50%;
-  margin: 50px auto; }
-
 .stepper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45%; }
+  width: 45%;
+  margin-top: 25px; }
 
 .step {
   display: flex;

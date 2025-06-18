@@ -9,6 +9,7 @@ const RegisterForm = ({ onNext }) => {
     const [error, setError] = useState(null);
 
     const handleChange = e => {
+        console.log('handleChange', e.target.name, e.target.value);
         setData({ ...data, [e.target.name]: e.target.value });
     };
 
@@ -20,6 +21,8 @@ const RegisterForm = ({ onNext }) => {
     return (
         <>
             <Error children={error}/>
+            <p className={styles.registerInformationLabel}>Commencez par renseigner vos informations personnelles
+                pour accéder à l'application.</p>
             <form className={styles.registerFormContainer} onSubmit={handleSubmit}>
                 <h2 className={styles.formTitle}><img src="/icons/user.svg"  alt="Utilisateur"/>Informations personnelles</h2>
                 <InputWithLabel placeholder="Votre prénom" label="Prénom" id="firstName" name="firstName" value={data.firstName} onChange={handleChange} />

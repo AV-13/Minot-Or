@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import apiClient from '../../utils/apiClient';
+import React, { useState } from 'react';
+import apiClient from '../../../utils/apiClient';
+import InputWithLabel from "../../molecules/InputWithLabel/InputWithLabel";
+import Button from "../../atoms/Button/Button";
+import styles from './CompanyForm.module.scss';
 
 const CompanyForm = ({ onFinish, onBack }) => {
     const [siret, setSiret] = useState('');
@@ -25,7 +28,7 @@ const CompanyForm = ({ onFinish, onBack }) => {
                     setError('Aucune company trouvée. Veuillez renseigner les informations.');
                     setVerified(true);
                 } else {
-                    setError('Erreur lors de la récupération de la company.');
+                    setError('Votre entreprise n\'a pas pu être trouvée. Veuillez renseigner le formulaire ci-dessous. Votre demande sera traitée manuellement par notre équipe.');
                     setVerified(true);
                 }
             }
@@ -57,35 +60,41 @@ const CompanyForm = ({ onFinish, onBack }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>
-                Numéro de Siret:
-                <input
-                    type="text"
-                    value={siret}
-                    onChange={(e) => setSiret(e.target.value)}
-                    required
-                />
-            </label>
-            <button type="button" onClick={handleVerify}>
-                Vérifier
-            </button>
-            {verified && error && <p>{error}</p>}
+            <a className={styles.backButton} onClick={onBack}><img alt="Retour" src="/icons/arrow-left.svg"/></a>
+            <InputWithLabel
+                label="Numéro de Siret"
+                id="siret"
+                type="text"
+                placeholder="Exemple: 90362639800015"
+                value={siret}
+                onChange={(e) => setSiret(e.target.value)}
+                required
+            />
+            <div className={styles.buttonsGroup}>
+                <Button onClick={handleVerify}>Vérifier</Button>
+            </div>
+            {verified && error && <p className={styles.labelError}>{error}</p>}
             {verified && !companyData && (
                 <div>
-                    <label>
-                        Nom de la company:
-                        <input type="text" name="companyName" required />
-                    </label>
-                    <label>
-                        Contact de la company:
-                        <input type="text" name="companyContact" required />
-                    </label>
-                    <button type="submit">Soumettre</button>
+                    <InputWithLabel
+                        label="Nom"
+                        id="companyName"
+                        name="companyName"
+                        type="text"
+                        placeholder="Nom de l'entreprise"
+                        required
+                    />
+                    <InputWithLabel
+                        label="Contact"
+                        id="companyContact"
+                        name="companyContact"
+                        placeholder="Numéro de téléphone ou email"
+                        type="text"
+                        required
+                    />
+                    <Button type="submit">Créer mon entreprise</Button>
                 </div>
             )}
-            <button type="button" onClick={onBack}>
-                Retour
-            </button>
         </form>
     );
 };

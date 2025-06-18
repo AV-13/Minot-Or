@@ -7,7 +7,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
-  width: 100%; }
+  width: fit-content; }
   .button:hover {
     background: #5637cc; }
 

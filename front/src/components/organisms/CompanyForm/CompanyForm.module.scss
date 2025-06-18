@@ -1,0 +1,17 @@
+.buttonsGroup {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.labelError {
+  color: #dc3545;
+}
+.backButton {
+  cursor: pointer;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  img {
+    width: 20px;
+  }
+}
