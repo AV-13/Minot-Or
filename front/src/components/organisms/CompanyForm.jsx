@@ -33,9 +33,9 @@ const CompanyForm = ({ onFinish, onBack }) => {
     };
 
     // Soumet le formulaire final avec les informations manuelles si nécessaire
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        let payload = { siret };
+        let payload = {};
 
         if (companyData) {
             payload.company = companyData;
@@ -43,8 +43,11 @@ const CompanyForm = ({ onFinish, onBack }) => {
             payload.company = {
                 companyName: e.target.companyName.value,
                 companyContact: e.target.companyContact.value,
+                companySiret: siret,
             };
+            const response = await apiClient.post('/companies', payload.company);
         }
+        console.log(payload);
         onFinish(payload);
     };
 

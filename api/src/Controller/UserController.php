@@ -28,13 +28,12 @@ final class UserController extends AbstractController
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ['email','password','firstName','lastName','role','companyId'],
+                required: ['email','password','firstName','lastName','companyId'],
                 properties: [
                     new OA\Property(property: 'email', type: 'string'),
                     new OA\Property(property: 'password', type: 'string'),
                     new OA\Property(property: 'firstName', type: 'string'),
                     new OA\Property(property: 'lastName', type: 'string'),
-                    new OA\Property(property: 'role', type: 'string'),
                     new OA\Property(property: 'companyId', type: 'integer')
                 ]
             )
@@ -53,14 +52,11 @@ final class UserController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['email'], $data['password'], $data['firstName'], $data['lastName'], $data['role'], $data['companyId'])) {
+        if (!isset($data['email'], $data['password'], $data['firstName'], $data['lastName'], $data['companyId'])) {
             return $this->json(['error' => 'Missing fields'], 400);
         }
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             return $this->json(['error' => 'Invalid email format'], 400);
-        }
-        if (!UserRole::tryFrom($data['role'])) {
-            return $this->json(['error' => 'Invalid role'], 400);
         }
         $company = $em->getRepository(Company::class)->find($data['companyId']);
         if (!$company) {
@@ -75,7 +71,7 @@ final class UserController extends AbstractController
         $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT));
         $user->setFirstName($data['firstName']);
         $user->setLastName($data['lastName']);
-        $user->setRole(UserRole::from($data['role']));
+        $user->setRole(UserRole::WaitingForValidation);
         $user->setRoles([$user->getRole()->toSymfonyRole()]);
         $user->setCompany($company);
 
