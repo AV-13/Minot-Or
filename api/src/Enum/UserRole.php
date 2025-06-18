@@ -10,7 +10,7 @@ enum UserRole: string
     case OrderPreparer  = 'OrderPreparer';   // A warehouse staff member preparing orders for delivery
     case Procurement    = 'Procurement';     // A procurement staff member managing stock levels and supplier transports
     case Maintenance    = 'Maintenance';    // A maintenance worker responsible for vehicle sanitation (e.g. cleaning tank trucks)
-    // case Admin ?
+//     case Admin ?
 
     public function toSymfonyRole(): string
     {

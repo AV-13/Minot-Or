@@ -115,7 +115,10 @@ final class UserController extends AbstractController
         $limit = max(1, (int)$request->query->get('limit', 10));
         $role = $request->query->get('role');
 
-        $criteria = ['company' => $company];
+        $criteria = [];
+        if (!$user->getRole() || $user->getRole()->value !== 'Sales') {
+            $criteria['company'] = $user->getCompany();
+        }
         if ($role && UserRole::tryFrom($role)) {
             $criteria['role'] = UserRole::from($role);
         }
@@ -260,14 +263,28 @@ final class UserController extends AbstractController
             new OA\Response(response: 200, description: 'User deleted')
         ]
     )]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}', name: 'user_delete', methods: ['DELETE'])]
     public function delete(User $user, EntityManagerInterface $em, Security $security): JsonResponse
     {
         $current = $security->getUser();
-        if ($user->getCompany()->getId() !== $current->getCompany()->getId()) {
-            return $this->json(['error' => 'Access denied'], 403);
+
+//         if ($user->getCompany()->getId() !== $current->getCompany()->getId()) {
+//             return $this->json(['error' => 'Access denied'], 403);
+//         }
+
+        // Si l'utilisateur courant est Sales
+        if ($current->getRole()->value === 'Sales') {
+            // Il ne peut pas supprimer un autre Sales
+            if ($user->getRole()->value === 'Sales') {
+                return $this->json(['error' => 'Impossible de supprimer un autre utilisateur Sales'], 403);
+            }
+        } else {
+            if (!$this->isGranted('ROLE_ADMIN')) {
+                return $this->json(['error' => 'Access denied'], 403);
+            }
         }
+
         $em->remove($user);
         $em->flush();
         return $this->json(['message' => 'User deleted successfully']);
