@@ -35,11 +35,11 @@ final class CompanyController extends AbstractController
         responses: [
             new OA\Response(response: 201, description: 'Company created'),
             new OA\Response(response: 400, description: 'Invalid input'),
-            new OA\Response(response: 409, description: 'Company already exists')
+            new OA\Response(response: 409, description: 'Company already exists'),
+            new OA\Response(response: 401, description: 'Unauthorized')
         ]
     )]
     #[Route('', name: 'company_create', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
