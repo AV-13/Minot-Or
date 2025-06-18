@@ -8,11 +8,11 @@ export default function UserRow({ user, onDelete, onRoleChange }) {
         <tr>
             <td>{user.email}</td>
             <td>{user.name}</td>
-            <td>{Object.values(user.roles).join(', ')}</td>
+            <td>{Object.values(user.role)}</td>
             <td>
                 <Select
                     options={ROLES}
-                    value={Object.values(user.roles)[0].replace(/^ROLE_/, '')}
+                    value={Object.values(user.role)[0].replace(/^ROLE_/, '')}
                     onChange={e => onRoleChange(user.id, e.target.value)}
                 />
             </td>

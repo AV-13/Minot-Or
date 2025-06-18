@@ -1,1 +1,1 @@
-export const ROLES = ['USER', 'ADMIN', 'Sales', 'Driver', 'WAITINGFORVALIDATION'];
+export const ROLES = ['WaitingForValidation', 'Sales', 'Baker', 'Driver', 'OrderPreparer', 'Procurement', 'Maintenance'];
