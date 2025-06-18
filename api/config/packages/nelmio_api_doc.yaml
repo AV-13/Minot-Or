@@ -4,6 +4,14 @@ nelmio_api_doc:
       title: "API"
       description: "Documentation de l'API du projet Minot'Or développé par Moussa, Clément, Augustin et Jairo"
       version: "1.0.0"
+    securitySchemes:
+      Bearer:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+    security:
+      - Bearer: []
   areas:
+
     path_patterns:
       - ^/api(?!/doc$)
