@@ -5,8 +5,8 @@ import { RequireAuth } from './components/auth/RequireAuth';
 import Home from './components/pages/Home';
 import Dashboard from './components/pages/Dashboard';
 // import AdminPanel from './components/pages/AdminPanel';
-import Login from './components/pages/Login';
-import Register from './components/pages/Register';
+import Login from './components/pages/Login/Login';
+import Register from './components/pages/Register/Register';
 // import Unauthorized from './components/pages/Unauthorized';
 
 function App() {

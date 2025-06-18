@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Input from '../atoms/Input';
+import InputWithLabel from '../molecules/InputWithLabel/InputWithLabel';
 import Select from '../atoms/Select';
 import UserTable from '../organisms/UserTable';
 import { ROLES } from '../../constants/roles';
@@ -43,7 +43,7 @@ export default function Dashboard() {
     return (
         <div>
             <h2>Dashboard Utilisateurs</h2>
-            <Input
+            <InputWithLabel
                 type="text"
                 placeholder="Recherche par email ou nom"
                 value={search}

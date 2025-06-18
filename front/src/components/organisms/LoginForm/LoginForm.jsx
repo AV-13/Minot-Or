@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../../contexts/AuthContext';
-import InputWithLabel from '../molecules/InputWithLabel';
-import Button from '../atoms/Button/Button';
-import Error from '../atoms/Error';
-import apiClient from '../../utils/apiClient';
+import { useAuth } from '../../../contexts/AuthContext';
+import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
+import Button from '../../atoms/Button/Button';
+import Error from '../../atoms/Error';
+import apiClient from '../../../utils/apiClient';
+import styles from './LoginForm.module.scss';
 
 const LoginForm = () => {
     const [form, setForm] = useState({ email: '', password: '' });
@@ -44,12 +45,13 @@ const LoginForm = () => {
     return (
         <>
             {error && <Error>{error}</Error>}
-            <form onSubmit={handleSubmit}>
+            <form className={styles.loginFormContainer} onSubmit={handleSubmit}>
                 <InputWithLabel
                     label="Email"
                     id="email"
                     name="email"
                     type="email"
+                    placeholder="exemple@mail.com"
                     value={form.email}
                     onChange={handleChange}
                     required
@@ -59,6 +61,7 @@ const LoginForm = () => {
                     id="password"
                     name="password"
                     type="password"
+                    placeholder="Votre mot de passe"
                     value={form.password}
                     onChange={handleChange}
                     required

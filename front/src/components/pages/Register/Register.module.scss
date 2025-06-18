@@ -1,0 +1,70 @@
+.pageTitle {
+  text-align: center;
+  margin: 40px auto;
+}
+.registerContainer {
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  padding: 40px 32px;
+  width: 45%;
+  margin: 48px auto;
+}
+.registerInformationLabel {
+  color: #4B5563;
+  text-align: center;
+  width: 50%;
+  margin: 50px auto;
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45%;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  z-index: 1;
+  transition: background 0.2s, color 0.2s;
+}
+
+.circle.active {
+  background: #6b45ff;
+  color: #fff;
+}
+
+.label {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #4b5563;
+  text-align: center;
+  width: 90px;
+}
+
+.line {
+  width: 33%;
+  height: 3px;
+  background: #e5e7eb;
+  margin: 0 8px;
+}
+
+.line.active {
+  background: #6b45ff;
+}

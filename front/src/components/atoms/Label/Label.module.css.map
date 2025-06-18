@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,MAAO;EACL,WAAW,EAAE,IAAI;EACjB,KAAK,EAAE,OAAO;EACd,KAAK,EAAE,IAAI",
+"sources": ["Label.module.scss"],
+"names": [],
+"file": "Label.module.css"
+}
