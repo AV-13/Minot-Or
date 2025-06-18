@@ -13,3 +13,54 @@
     background: #5637cc;
   }
 }
+.headerButtonColored {
+  font-size: 16px;
+  background: transparent;
+  border: 2px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background: transparent;
+  }
+  img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+}
+.headerButtonWhite {
+  &:hover {
+    background: white;
+  }
+    font-size: 16px;
+    background: white;
+    color: #6B45FF;
+    border: 2px solid white;
+    padding: 12px 20px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+}
+.buttonNoBg {
+  background: transparent;
+  color: #65558F;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  padding: unset;
+  transition: color 0.2s;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  &:hover {
+  background: transparent;
+    border-bottom: 2px solid #65558F;
+  }
+}
