@@ -1,5 +1,6 @@
-import InputWithLabel from '../molecules/InputWithLabel';
-import Button from '../atoms/Button/Button';
+import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
+import Button from '../../atoms/Button/Button';
+import styles from './LoginForm.module.scss';
 import { useState } from 'react';
 
 const LoginForm = () => {
@@ -16,12 +17,13 @@ const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className={styles.loginFormContainer} onSubmit={handleSubmit}>
             <InputWithLabel
                 label="Email"
                 id="email"
                 name="email"
                 type="email"
+                placeholder="exemple@mail.com"
                 value={form.email}
                 onChange={handleChange}
             />
@@ -30,6 +32,7 @@ const LoginForm = () => {
                 id="password"
                 name="password"
                 type="password"
+                placeholder="Votre mot de passe"
                 value={form.password}
                 onChange={handleChange}
             />

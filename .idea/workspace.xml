@@ -5,12 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="374e178a-3231-4af5-a3f7-aff6e985e9e6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/front/src/components/molecules/InputWithLabel/InputWithLabel.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Button.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/LoginForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/LoginForm.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Button/.sass-cache/e545e778356ed68f1147c6ad7b4015b03c4ec81d/Button.module.scssc" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Button/.sass-cache/e545e778356ed68f1147c6ad7b4015b03c4ec81d/Button.module.scssc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.module.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.module.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Input.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Input/Input.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Label.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Label/Label.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/molecules/InputWithLabel.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/LoginForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/LoginForm/LoginForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm/RegisterForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/pages/Login/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/pages/Register/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/templates/AuthLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/templates/AuthLayout/AuthLayout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,34 +206,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Clement-synakene/Desktop/Cours/IMIE/Projet Fil Rouge/Code&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;watcher.settings&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Clement-synakene\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "front-style",
+    "last_opened_file_path": "C:/Users/Clement-synakene/Desktop/Cours/IMIE/Projet Fil Rouge/Code",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "watcher.settings",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PhpStorm 2024.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\user\PhpstormProjects\IMIE\Minot-Or\api" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\augus\IMIE\Minot-Or\front\src\components\atoms\Button" />
-      <recent name="C:\Users\user\PhpstormProjects\IMIE\Minot-Or\api" />
+      <recent name="C:\Users\augus\IMIE\Minot-Or\front\src\components\organisms\RegisterForm" />
+      <recent name="C:\Users\augus\IMIE\Minot-Or\front\src\components\pages\Register" />
+      <recent name="C:\Users\augus\IMIE\Minot-Or\front\public\images" />
+      <recent name="C:\Users\augus\IMIE\Minot-Or\front\src\components\templates\AuthLayout" />
+      <recent name="C:\Users\augus\IMIE\Minot-Or\front\src\components\organisms\LoginForm" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -263,7 +276,7 @@
       <workItem from="1749736457936" duration="8847000" />
       <workItem from="1750161953088" duration="4154000" />
       <workItem from="1750186207641" duration="2307000" />
-      <workItem from="1750230398010" duration="3515000" />
+      <workItem from="1750230398010" duration="14894000" />
     </task>
     <servers />
   </component>

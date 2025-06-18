@@ -1,6 +1,6 @@
 # Ignorer le dossier de configuration de PhpStorm/IntelliJ
 .idea/
-
+**/.sass-cache/
 # Symfony / API
 /api/.env
 /api/.env.local

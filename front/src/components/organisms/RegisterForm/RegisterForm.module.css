@@ -1,0 +1,14 @@
+.registerFormContainer {
+  width: 50%;
+  margin: 0 auto; }
+
+.formTitle {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center; }
+  .formTitle img {
+    width: 20px;
+    height: 20px; }
+
+/*# sourceMappingURL=RegisterForm.module.css.map */
