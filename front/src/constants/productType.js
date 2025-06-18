@@ -1,0 +1,1 @@
+export const TYPES = ['flour', 'oil', 'egg', 'yeast', 'salt', 'sugar'];

@@ -1,25 +1,36 @@
-import React, { useState, useMemo } from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import ProductFilter from '../../molecules/ProductFilter/ProductFilter';
 import ProductList from '../../organisms/ProductList/ProductList';
+import apiClient from "../../../utils/apiClient";
+import { TYPES } from "../../../constants/productType";
+import { useCart } from '../../../contexts/CartContext';
 
-// Exemple de données
-const PRODUCTS = [
-    { id: 1, name: 'Produit A', type: 'Type 1', description: 'Description A' },
-    { id: 2, name: 'Produit B', type: 'Type 2', description: 'Description B' },
-    { id: 3, name: 'Produit C', type: 'Type 1', description: 'Description C' },
-];
-
-const TYPES = [...new Set(PRODUCTS.map(p => p.type))];
 
 export default function Product() {
     const [name, setName] = useState('');
     const [type, setType] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [products, setProducts] = useState([]);
+    const { addToCart } = useCart();
 
-    const filtered = useMemo(() =>
-        PRODUCTS.filter(p =>
+    useEffect(() => { fetchProduct(); }, []);
+
+    const fetchProduct = async () => {
+        setLoading(true);
+        try {
+            const res = await apiClient.get('/products');
+            setProducts(Array.isArray(res.items) ? res.items : []);
+        } catch (e) {
+            setProducts([]);
+        }
+        setLoading(false);
+    };
+
+    const filteredProduct = useMemo(() =>
+        products.filter(p =>
             (!name || p.name.toLowerCase().includes(name.toLowerCase())) &&
-            (!type || p.type === type)
-        ), [name, type]
+            (!type || p.category === type)
+        ), [name, type, products]
     );
 
     return (
@@ -32,7 +43,7 @@ export default function Product() {
                 onTypeChange={setType}
                 types={TYPES}
             />
-            <ProductList products={filtered} />
+            <ProductList products={filteredProduct} onAddToCart={addToCart} />
         </div>
     );
 }
