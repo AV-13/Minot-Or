@@ -1,15 +1,46 @@
-import './App.css';
+// index.js ou App.js
+import { BrowserRouter, Routes, Route } from 'react-router';
+import { AuthProvider } from './contexts/AuthContext';
+import { RequireAuth } from './components/auth/RequireAuth';
+import Home from './components/pages/Home';
+import Dashboard from './components/pages/Dashboard';
+// import AdminPanel from './components/pages/AdminPanel';
+import Login from './components/pages/Login';
+import Register from './components/pages/Register';
+// import Unauthorized from './components/pages/Unauthorized';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-      </header>
-    </div>
-  );
+    return (
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    {/*<Route path="/unauthorized" element={<Unauthorized />} />*/}
+
+                    {/* Routes protégées par rôle */}
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <RequireAuth allowedRoles={['admin', 'Sales', 'Driver']}>
+                                <Dashboard />
+                            </RequireAuth>
+                        }
+                    />
+
+                    <Route
+                        path="/admin"
+                        element={
+                            <RequireAuth allowedRoles={['Sales']}>
+                                {/*<AdminPanel />*/}
+                            </RequireAuth>
+                        }
+                    />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+    );
 }
 
 export default App;

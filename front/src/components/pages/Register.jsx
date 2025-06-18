@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../../contexts/AuthContext';
 import RegisterForm from '../organisms/RegisterForm';
 import CompanyForm from '../organisms/CompanyForm';
 import AuthLayout from "../templates/AuthLayout";
@@ -7,6 +9,8 @@ import apiClient from '../../utils/apiClient';
 const Register = () => {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({});
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleNext = (data) => {
         setFormData(prev => ({ ...prev, ...data }));
@@ -19,6 +23,17 @@ const Register = () => {
             console.log('final data :',finalData);
             const result = await apiClient.post('/users', finalData);
             console.log('Utilisateur créé avec succès :', result);
+
+            // Connexion automatique après inscription
+            const credentials = {
+                email: formData.email,
+                password: formData.password
+            };
+
+            const authResponse = await apiClient.post('/login', credentials);
+            login(authResponse.token);
+
+            navigate('/');
         } catch (err) {
             console.error('Erreur lors de la création de \'utilisateur :', err.message);
         }

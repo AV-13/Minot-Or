@@ -35,20 +35,24 @@ const CompanyForm = ({ onFinish, onBack }) => {
     // Soumet le formulaire final avec les informations manuelles si nécessaire
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let payload = {};
 
-        if (companyData) {
-            payload.company = companyData;
-        } else {
-            payload.company = {
-                companyName: e.target.companyName.value,
-                companyContact: e.target.companyContact.value,
-                companySiret: siret,
-            };
-            const response = await apiClient.post('/companies', payload.company);
+        try {
+            if (companyData) {
+                onFinish({ companyId: companyData.id });
+            } else {
+                const companyData = {
+                    companyName: e.target.companyName.value,
+                    companyContact: e.target.companyContact.value,
+                    companySiret: siret,
+                };
+                const response = await apiClient.post('/companies', companyData);
+
+                onFinish({ companyId: response.id });
+            }
+        } catch (err) {
+            setError('Erreur lors de la création de l\'entreprise. Veuillez réessayer.');
+            console.error('Erreur lors de la création de l\'entreprise :', err);
         }
-        console.log(payload);
-        onFinish(payload);
     };
 
     return (
