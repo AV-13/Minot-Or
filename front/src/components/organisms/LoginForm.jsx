@@ -1,5 +1,5 @@
 import InputWithLabel from '../molecules/InputWithLabel';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 import { useState } from 'react';
 
 const LoginForm = () => {

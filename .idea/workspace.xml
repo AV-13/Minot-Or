@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="374e178a-3231-4af5-a3f7-aff6e985e9e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/api/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/.env.sample" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/atoms/Button.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/atoms/Button/Button.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/LoginForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/LoginForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/organisms/RegisterForm.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,7 +207,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;watcher.settings&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Clement-synakene\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -219,6 +222,7 @@
       <recent name="C:\Users\user\PhpstormProjects\IMIE\Minot-Or\api" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\augus\IMIE\Minot-Or\front\src\components\atoms\Button" />
       <recent name="C:\Users\user\PhpstormProjects\IMIE\Minot-Or\api" />
     </key>
   </component>
@@ -258,7 +262,8 @@
       <workItem from="1749714520564" duration="11838000" />
       <workItem from="1749736457936" duration="8847000" />
       <workItem from="1750161953088" duration="4154000" />
-      <workItem from="1750186207641" duration="277000" />
+      <workItem from="1750186207641" duration="2307000" />
+      <workItem from="1750230398010" duration="3515000" />
     </task>
     <servers />
   </component>

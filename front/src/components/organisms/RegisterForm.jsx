@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import InputWithLabel from '../molecules/InputWithLabel';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 import Error from "../atoms/Error";
 
 const RegisterForm = ({ onNext }) => {
