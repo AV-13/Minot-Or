@@ -1,6 +1,42 @@
 .headerBgContainer {
   width: 100%;
-  background-color: #7958F8; }
+  background-color: #7958F8;
+  position: relative;
+  overflow: hidden; }
+  .headerBgContainer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("../../../../public/backgrounds/background-wheat.png");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: 1;
+    pointer-events: none; }
+
+.headerBgOverlay {
+  background-image: url("../../../../public/backgrounds/background-wheat.png");
+  object-fit: cover;
+  opacity: 0.1; }
+  background-color: #7958F8;
+  position: relative;
+  overflow: hidden; }
+  .headerBgContainer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("../../../../public/backgrounds/background-wheat.png");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: 1;
+    pointer-events: none; }
+
+.headerBgOverlay {
+  background-image: url("../../../../public/backgrounds/background-wheat.png");
+  object-fit: cover;
+  opacity: 0.1; }
+>>>>>>> d22def6 (style(css): home page wip)
 
 .headerContainer {
   padding: 20px 0 50px 50px;

@@ -21,7 +21,7 @@ const Header = () => (
             </div>
         </div>
         </div>
-            <img className={styles.wave} src="/forms/header-wave.svg" alt="" />
+            {/*<img className={styles.wave} src="/forms/header-wave.svg" alt="" />*/}
     </header>
 );
 
