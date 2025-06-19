@@ -7,6 +7,8 @@ import styles from './Register.module.scss';
 import {useNavigate} from "react-router";
 import {useAuth} from "../../../contexts/AuthContext";
 import RegisterSuccess from "../../organisms/RegisterSuccess/RegisterSuccess";
+import Header from "../../organisms/Header/Header";
+import Footer from "../../organisms/Footer/Footer";
 
 const Register = () => {
     const [step, setStep] = useState(1);
@@ -46,6 +48,7 @@ const Register = () => {
 
     return (
         <AuthLayout>
+            <Header></Header>
             <div className={styles.stepper}>
                 <div className={styles.step}>
                     <div className={`${styles.circle} ${step >= 1 ? styles.active : ''}`}>1</div>
@@ -67,6 +70,7 @@ const Register = () => {
                 {step === 2 && <CompanyForm onFinish={handleFinish} onBack={handleBack}/>}
                 {step === 3 && <RegisterSuccess />}
             </div>
+            <Footer></Footer>
         </AuthLayout>
     );
 };

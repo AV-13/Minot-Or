@@ -4,10 +4,11 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { AuthorizedElement } from '../../auth/RequireAuth';
 import styles from './Navbar.module.scss';
 import Logo from "../../atoms/Logo/Logo";
+import ProfileAvatar from "../../atoms/ProfileAvatar/ProfileAvatar";
 
 const Navbar = () => {
     const { user, logout } = useAuth();
-
+    console.log("user in Navbar:", user);
     return (
         <nav className={styles.navbar}>
             <NavLink to="/">
@@ -51,7 +52,17 @@ const Navbar = () => {
                         <NavLink to="/register">Inscription</NavLink>
                     </>
                 ) : (
-                    <button onClick={logout}>Déconnexion</button>
+                    <>
+                        <ProfileAvatar userName={user?.username} />
+                        <img
+                            src="/icons/power-off.svg"
+                            alt="Déconnexion"
+                            className={styles.logoutIcon}
+                            onClick={logout}
+                            style={{cursor: 'pointer', width: 22, height: 22}}
+                        />
+                        {/*<button onClick={logout}>Déconnexion</button>*/}
+                    </>
                 )}
             </div>
         </nav>

@@ -1,0 +1,16 @@
+.profileAvatar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid gray;
+}
+.userName {
+  font-weight: 600;
+  color: #2c3e50;
+}

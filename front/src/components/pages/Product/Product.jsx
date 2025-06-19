@@ -4,6 +4,9 @@ import ProductList from '../../organisms/ProductList/ProductList';
 import apiClient from "../../../utils/apiClient";
 import { TYPES } from "../../../constants/productType";
 import { useCart } from '../../../contexts/CartContext';
+import Header from "../../organisms/Header/Header";
+import Footer from "../../organisms/Footer/Footer";
+import MainLayout from "../../templates/MainLayout";
 
 
 export default function Product() {
@@ -34,7 +37,7 @@ export default function Product() {
     );
 
     return (
-        <div>
+        <MainLayout>
             <h2>Produits</h2>
             <ProductFilter
                 name={name}
@@ -44,6 +47,6 @@ export default function Product() {
                 types={TYPES}
             />
             <ProductList products={filteredProduct} onAddToCart={addToCart} loading={loading}/>
-        </div>
+        </MainLayout>
     );
 }
