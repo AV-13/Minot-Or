@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AAAA,YAAa;EACX,OAAO,EAAE,IAAI;EACb,GAAG,EAAE,IAAI;EAET,iBAAK;IACH,OAAO,EAAE,IAAI;IACb,WAAW,EAAE,MAAM;IACnB,eAAe,EAAE,MAAM;EAGzB,gBAAI;IACF,KAAK,EAAE,IAAI;IACX,MAAM,EAAE,IAAI;IACZ,OAAO,EAAE,KAAK;IACd,UAAU,EAAE,OAAO;IACnB,UAAU,EAAE,WAAW;EAGzB,sBAAU;IACR,MAAM,EAAE,2BAA2B",
+"sources": ["SocialIcons.module.scss"],
 "names": [],
 "file": "SocialIcons.module.css"
 }

@@ -5,9 +5,9 @@ import styles from './FooterSection.module.scss';
 
 export default function FooterSection() {
     return (
-        <div className="footer-section">
-            <div className="column">
-                <img src="/logo.png" alt="Minot'Or" className="logo" />
+        <div className={styles.footerSection}>
+            <div className={styles.column}>
+                <img src="/images/logo_minotor_white.png" alt="Minot'Or" className={styles.logo} />
                 <p className="desc">
                     Spécialiste de la distribution de produits de minoterie pour les professionnels de la boulangerie.
                 </p>
@@ -24,7 +24,7 @@ export default function FooterSection() {
                 links={["À propos", "Équipe", "Carrières", "Témoignages", "Blog"]}
             />
 
-            <div className="column">
+            <div className={styles.column}>
                 <h4>Contact</h4>
                 <ContactInfo />
             </div>
