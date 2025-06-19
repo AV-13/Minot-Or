@@ -43,7 +43,7 @@ export default function Product() {
                 onTypeChange={setType}
                 types={TYPES}
             />
-            <ProductList products={filteredProduct} onAddToCart={addToCart} />
+            <ProductList products={filteredProduct} onAddToCart={addToCart} loading={loading}/>
         </div>
     );
 }

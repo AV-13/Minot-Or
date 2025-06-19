@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductCard from '../../molecules/ProductCard/ProductCard';
-export default function ProductList({ products, onAddToCart }) {
+export default function ProductList({ products, onAddToCart, loading }) {
+    if (loading) return <p>Chargement des produits...</p>;
     if (!products.length) return <p>Aucun produit trouvé.</p>;
     return (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>

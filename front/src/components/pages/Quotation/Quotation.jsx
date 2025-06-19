@@ -4,7 +4,6 @@ import { useCart } from '../../../contexts/CartContext';
 export default function Quotation() {
     const { cart, removeFromCart } = useCart();
 
-    console.log("quotation", cart);
 
     return (
         <div>

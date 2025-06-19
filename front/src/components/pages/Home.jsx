@@ -7,7 +7,6 @@ const Home = () => {
     return (
         <MainLayout>
             <h1>Bienvenue sur l'accueil</h1>
-            {console.log('User data:', user)}
             {user && (
                 <p>
                     Votre rôle : {

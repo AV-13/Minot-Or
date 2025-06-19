@@ -23,7 +23,6 @@ export const RequireAuth = ({ children, allowedRoles = [] }) => {
                 .includes(role.replace(/^ROLE_/, '').toLowerCase())
         );
 
-    console.log(Object.values(user.roles));
 
     // Si des rôles sont spécifiés et que l'utilisateur n'a pas le rôle requis
     if (!hasRole) {

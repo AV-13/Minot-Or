@@ -159,7 +159,7 @@ final class UserController extends AbstractController
         ]
     )]
     #[IsGranted('ROLE_USER')]
-    #[Route('/{id}', name: 'user_detail', methods: ['GET'])]
+    #[Route('/{id<\d+>}', name: 'user_detail', methods: ['GET'])]
     public function detail(User $user, Security $security): JsonResponse
     {
         $current = $security->getUser();
@@ -201,7 +201,7 @@ final class UserController extends AbstractController
         ]
     )]
     #[IsGranted('ROLE_USER')]
-    #[Route('/{id}', name: 'user_update', methods: ['PUT'])]
+    #[Route('/{id<\d+>}', name: 'user_update', methods: ['PUT'])]
     public function update(
         Request $request,
         User $user,
@@ -264,14 +264,10 @@ final class UserController extends AbstractController
         ]
     )]
     #[IsGranted('ROLE_USER')]
-    #[Route('/{id}', name: 'user_delete', methods: ['DELETE'])]
+    #[Route('/{id<\d+>}', name: 'user_delete', methods: ['DELETE'])]
     public function delete(User $user, EntityManagerInterface $em, Security $security): JsonResponse
     {
         $current = $security->getUser();
-
-//         if ($user->getCompany()->getId() !== $current->getCompany()->getId()) {
-//             return $this->json(['error' => 'Access denied'], 403);
-//         }
 
         // Si l'utilisateur courant est Sales
         if ($current->getRole()->value === 'Sales') {
@@ -318,5 +314,28 @@ final class UserController extends AbstractController
             'role' => $user->getRole()->value,
             'companyId' => $user->getCompany()->getId()
         ]);
+    }
+    /**
+     * Check if user email already exists.
+     */
+    #[OA\Get(
+        path: '/api/users/verify',
+        summary: 'Vérifie si l\'email d\'un utilisateur existe déjà',
+        parameters: [
+            new OA\Parameter(name: 'email', in: 'query', required: true, schema: new OA\Schema(type: 'string'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Résultat de la vérification')
+        ]
+    )]
+    #[Route('/verify', name: 'user_verify', methods: ['GET'])]
+    public function verifyUser(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $email = $request->query->get('email');
+        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->json(['error' => 'Format d\'email invalide'], 400);
+        }
+        $exists = (bool) $em->getRepository(User::class)->findOneBy(['email' => $email]);
+        return $this->json(['exists' => $exists]);
     }
 }
