@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AACE,aAAG;EACD,KAAK,EAAE,IAAI;EACX,aAAa,EAAE,MAAM;AAEvB,sBAAY;EACV,OAAO,EAAE,KAAK;EACd,KAAK,EAAE,IAAI;EACX,aAAa,EAAE,MAAM;EACrB,eAAe,EAAE,IAAI;EACrB,4BAAQ;IACN,KAAK,EAAE,IAAI",
+"sources": ["LinkGroup.module.scss"],
 "names": [],
 "file": "LinkGroup.module.css"
 }

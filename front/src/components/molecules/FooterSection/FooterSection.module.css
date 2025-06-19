@@ -1,3 +1,20 @@
-
+.footerSection {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  background-color: #111827;
+  color: #ccc; }
+  .footerSection .column {
+    max-width: 250px; }
+    .footerSection .column h4 {
+      color: white; }
+    .footerSection .column .logo {
+      width: 120px;
+      margin-bottom: 1rem;
+      color: #ccc; }
+    .footerSection .column .desc {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin-bottom: 1rem; }
 
 /*# sourceMappingURL=FooterSection.module.css.map */

@@ -1,0 +1,22 @@
+.socialIcons {
+  display: flex;
+  gap: 16px;
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  img {
+    width: 28px;
+    height: 28px;
+    display: block;
+    object-fit: contain;
+    transition: filter 0.2s; // pour les SVG noirs sur fond foncé
+  }
+
+  img:hover {
+    filter: brightness(0.8) invert(0.8);
+  }
+}

@@ -1,3 +1,17 @@
-
+.footerBottom {
+  border-top: 1px solid #2c3e50;
+  background-color: #111827;
+  padding: 1rem 2rem;
+  font-size: 0.8rem;
+  color: #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+  .footerBottom .legalLinks a {
+    color: #ccc;
+    margin-left: 1rem;
+    text-decoration: none; }
+    .footerBottom .legalLinks a:hover {
+      color: #fff; }
 
 /*# sourceMappingURL=FooterBottom.module.css.map */

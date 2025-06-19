@@ -2,11 +2,11 @@ import styles from './SocialIcons.module.scss';
 
 export default function SocialIcons() {
     return (
-        <div className="social-icons">
-            <i className="icon icon-facebook" aria-hidden="true" />
-            <i className="icon icon-twitter" aria-hidden="true" />
-            <i className="icon icon-linkedin" aria-hidden="true" />
-            <i className="icon icon-instagram" aria-hidden="true" />
+        <div className={styles.socialIcons}>
+            <span><img src="/icons/socials/facebook-f.svg"  alt="" /></span>
+            <span><img src="/icons/socials/x-twitter.svg" alt=""/></span>
+            <span><img src="/icons/socials/instagram.svg" alt=""/></span>
+           <span><img src="/icons/socials/linkedin.svg" alt=""/></span>
         </div>
-    );
+);
 }

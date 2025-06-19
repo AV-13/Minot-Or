@@ -1,5 +1,5 @@
 // src/components/organisms/Navbar.jsx
-import { Link } from 'react-router';
+import {Link, NavLink} from 'react-router';
 import { useAuth } from '../../../contexts/AuthContext';
 import { AuthorizedElement } from '../../auth/RequireAuth';
 import styles from './Navbar.module.scss';
@@ -10,22 +10,36 @@ const Navbar = () => {
 
     return (
         <nav className={styles.navbar}>
-            <Link to="/">
+            <NavLink to="/">
                 <Logo customClass={"navLogo"} ></Logo>
-            </Link>
+            </NavLink>
             <ul className={styles.navLinks}>
                 {user && (
                     <>
-                        <li><Link to="/dashboard">Tableau de bord</Link></li>
-                        <li><Link to="/product">Produits</Link></li>
+                        <li>
+                            <NavLink to="/" end className={({isActive}) => isActive ? styles.active : undefined}>
+                                Accueil
+                            </NavLink>
+                        </li>
+                        <li><NavLink to="/dashboard" className={({isActive}) => isActive ? styles.active : undefined}>Tableau
+                            de bord</NavLink></li>
+                        <li><NavLink to="/product"
+                                     className={({isActive}) => isActive ? styles.active : undefined}>Produits</NavLink>
+                        </li>
                         <AuthorizedElement allowedRoles={['Sales']}>
-                            <li><Link to="/admin">Administration</Link></li>
+                            <li><NavLink to="/admin"
+                                         className={({isActive}) => isActive ? styles.active : undefined}>Administration</NavLink>
+                            </li>
                         </AuthorizedElement>
                         <AuthorizedElement allowedRoles={['Sales', 'Procurement']}>
-                            <li><Link to="/fournisseurs">Gestion fournisseurs</Link></li>
+                            <li><NavLink to="/fournisseurs"
+                                         className={({isActive}) => isActive ? styles.active : undefined}>Gestion
+                                fournisseurs</NavLink></li>
                         </AuthorizedElement>
                         <AuthorizedElement allowedRoles={['Driver']}>
-                            <li><Link to="/livraisons">Livraisons</Link></li>
+                            <li><NavLink to="/livraisons"
+                                         className={({isActive}) => isActive ? styles.active : undefined}>Livraisons</NavLink>
+                            </li>
                         </AuthorizedElement>
                     </>
                 )}
@@ -33,8 +47,8 @@ const Navbar = () => {
             <div className={styles.actions}>
                 {!user ? (
                     <>
-                        <Link to="/login">Connexion</Link>
-                        <Link to="/register">Inscription</Link>
+                        <NavLink to="/login">Connexion</NavLink>
+                        <NavLink to="/register">Inscription</NavLink>
                     </>
                 ) : (
                     <button onClick={logout}>Déconnexion</button>

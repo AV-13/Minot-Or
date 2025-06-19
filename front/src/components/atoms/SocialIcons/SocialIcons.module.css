@@ -1,3 +1,17 @@
-
+.socialIcons {
+  display: flex;
+  gap: 16px; }
+  .socialIcons span {
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .socialIcons img {
+    width: 28px;
+    height: 28px;
+    display: block;
+    object-fit: contain;
+    transition: filter 0.2s; }
+  .socialIcons img:hover {
+    filter: brightness(0.8) invert(0.8); }
 
 /*# sourceMappingURL=SocialIcons.module.css.map */

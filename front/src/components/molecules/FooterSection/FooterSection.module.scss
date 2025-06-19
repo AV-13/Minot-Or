@@ -1,0 +1,24 @@
+.footerSection {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  background-color: #111827;
+  color: #ccc;
+
+  .column {
+    max-width: 250px;
+    h4 {
+      color: white;
+    }
+    .logo {
+      width: 120px;
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+    .desc {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+    }
+  }
+}

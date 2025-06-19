@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AAAA,cAAe;EACb,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,aAAa;EAC9B,OAAO,EAAE,IAAI;EACb,gBAAgB,EAAE,OAAO;EACzB,KAAK,EAAE,IAAI;EAEX,sBAAQ;IACN,SAAS,EAAE,KAAK;IAChB,yBAAG;MACD,KAAK,EAAE,KAAK;IAEd,4BAAM;MACJ,KAAK,EAAE,KAAK;MACZ,aAAa,EAAE,IAAI;MACnB,KAAK,EAAE,IAAI;IAEb,4BAAM;MACJ,SAAS,EAAE,MAAM;MACjB,WAAW,EAAE,GAAG;MAChB,aAAa,EAAE,IAAI",
+"sources": ["FooterSection.module.scss"],
 "names": [],
 "file": "FooterSection.module.css"
 }

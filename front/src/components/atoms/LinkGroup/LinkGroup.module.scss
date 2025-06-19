@@ -1,0 +1,15 @@
+.linkGroup {
+  h4 {
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+  .footerLink {
+    display: block;
+    color: #ccc;
+    margin-bottom: 1.3rem;
+    text-decoration: none;
+    &:hover {
+      color: #fff;
+    }
+  }
+}
