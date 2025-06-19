@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import InputWithLabel from '../molecules/InputWithLabel/InputWithLabel';
-import Select from '../atoms/Select';
-import UserTable from '../organisms/UserTable';
-import { ROLES } from '../../constants/roles';
-import apiClient from "../../utils/apiClient";
+import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
+import Select from '../../atoms/Select';
+import UserTable from '../../organisms/UserTable';
+import { ROLES } from '../../../constants/roles';
+import apiClient from "../../../utils/apiClient";
+import MainLayout from "../../templates/MainLayout";
 
 export default function Dashboard() {
     const [users, setUsers] = useState([]);
@@ -47,7 +48,7 @@ export default function Dashboard() {
     });
 
     return (
-        <div>
+        <MainLayout>
             <h2>Dashboard Utilisateurs</h2>
             <InputWithLabel
                 type="text"
@@ -63,6 +64,6 @@ export default function Dashboard() {
             {loading ? <p>Chargement...</p> :
                 <UserTable users={filteredUsers} onDelete={handleDelete} onRoleChange={handleRoleChange} />
             }
-        </div>
+        </MainLayout>
     );
 }

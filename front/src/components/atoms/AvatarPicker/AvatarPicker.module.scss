@@ -1,0 +1,97 @@
+// Modale (à appliquer dans le composant Modal si possible)
+.modalContent {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  padding: 32px 24px 24px 24px;
+  min-width: 340px;
+  max-width: 95vw;
+  margin: auto;
+  max-height: 70%;
+  overflow-y: auto;
+}
+.selectedAvatar {
+  border-radius: 50%;
+  border: 2px solid gray;
+  width: 150px;
+  margin: auto;
+}
+.avatarPreview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+// Onglets
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tabs button {
+  background: #f4f6fa;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 22px;
+  font-weight: 600;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-size: 1rem;
+}
+
+.tabs .activeTab,
+.tabs button.activeTab {
+  background: #ff9800;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.08);
+}
+
+// Liste d’avatars
+.avatars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.avatarBtn {
+  border: none !important;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 16px;
+  outline: none;
+  background: #f4f6fa !important;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+  transition: box-shadow 0.2s, border 0.2s, transform 0.15s;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 4px 16px rgba(255, 152, 0, 0.18);
+    transform: translateY(-2px) scale(1.04);
+    background: #fffbe6 !important;
+  }
+}
+
+.avatarBtn.selected,
+.avatarBtn.selected img {
+  border: 2.5px solid #ff9800;
+  box-shadow: 0 0 0 3px #fffbe6;
+}
+
+.avatarBtn img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  background: #fff;
+  transition: border 0.2s;
+}

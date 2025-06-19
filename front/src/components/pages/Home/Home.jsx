@@ -22,7 +22,6 @@ const Home = () => {
                 </p>            )}
             <OurServices></OurServices>
             <CatchyFooter></CatchyFooter>
-            <Footer></Footer>
         </MainLayout>
     );
 };

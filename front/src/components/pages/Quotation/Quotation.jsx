@@ -1,5 +1,8 @@
 import React from 'react';
 import { useCart } from '../../../contexts/CartContext';
+import Header from "../../organisms/Header/Header";
+import Footer from "../../organisms/Footer/Footer";
+import MainLayout from "../../templates/MainLayout";
 
 export default function Quotation() {
     const { cart, removeFromCart } = useCart();
@@ -7,7 +10,8 @@ export default function Quotation() {
     console.log("quotation", cart);
 
     return (
-        <div>
+        <MainLayout>
+            <Header></Header>
             <h2>Mon Devis</h2>
             {cart.length === 0 ? <p>Aucun produit dans le devis.</p> : (
                 <ul>
@@ -18,7 +22,8 @@ export default function Quotation() {
                     ))}
                 </ul>
             )}
+            <Footer></Footer>
             {/* Ajoute ici la logique de soumission du devis si besoin */}
-        </div>
+        </MainLayout>
     );
 }
