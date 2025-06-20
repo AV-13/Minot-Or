@@ -12,6 +12,7 @@ export default function DashboardProduct() {
     const [search, setSearch] = useState('');
     const [searchInput, setSearchInput] = useState('');
     const [typeFilter, setTypeFilter] = useState('');
+    const [typeFilterInput, setTypeFilterInput] = useState('');
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [page, setPage] = useState(1);
@@ -54,11 +55,7 @@ export default function DashboardProduct() {
     const handleSearch = () => {
         setPage(1);
         setSearch(searchInput);
-    };
-
-    const handleTypeFilter = (e) => {
-        setPage(1);
-        setTypeFilter(e.target.value);
+        setTypeFilter(typeFilterInput);
     };
 
     return (
@@ -77,8 +74,8 @@ export default function DashboardProduct() {
                 />
                 <Select
                     options={['', ...TYPES]}
-                    value={typeFilter}
-                    onChange={handleTypeFilter}
+                    value={typeFilterInput}
+                    onChange={e => setTypeFilterInput(e.target.value)}
                 />
                 <button onClick={handleSearch}>Rechercher</button>
             </div>

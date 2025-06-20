@@ -142,8 +142,7 @@ class ProductController extends AbstractController
         if ($search) {
             $qb->andWhere(
                 $qb->expr()->orX(
-                    'LOWER(p.productName) LIKE :search',
-                    'LOWER(p.description) LIKE :search'
+                    'LOWER(p.productName) LIKE :search'
                 )
             )->setParameter('search', '%' . strtolower($search) . '%');
         }

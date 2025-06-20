@@ -11,6 +11,7 @@ export default function DashboardUser() {
     const [search, setSearch] = useState('');
     const [searchInput, setSearchInput] = useState('');
     const [roleFilter, setRoleFilter] = useState('');
+    const [roleFilterInput, setRoleFilterInput] = useState('');
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [limit] = useState(20);
@@ -51,6 +52,7 @@ export default function DashboardUser() {
     const handleSearch = () => {
         setPage(1);
         setSearch(searchInput);
+        setRoleFilter(roleFilterInput);
     };
 
     return (
@@ -65,8 +67,8 @@ export default function DashboardUser() {
                 />
                 <Select
                     options={['', ...ROLES]}
-                    value={roleFilter}
-                    onChange={e => setRoleFilter(e.target.value)}
+                    value={roleFilterInput}
+                    onChange={e => setRoleFilterInput(e.target.value)}
                 />
                 <button onClick={handleSearch}>Rechercher</button>
             </div>
