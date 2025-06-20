@@ -1,0 +1,53 @@
+.home-card {
+  background: #F9FAFB;
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: start;
+  transition: box-shadow 0.2s;
+  width: 25%; }
+  .home-card:hover {
+    box-shadow: 0 4px 24px rgba(121, 88, 248, 0.15); }
+  .home-card-logo {
+    background-color: #EEEAFF;
+    padding: 15px;
+    border-radius: 10px;
+    width: 25px;
+    height: 25px;
+    margin-bottom: 1rem; }
+    .home-card-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; }
+  .home-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1F2937; }
+  .home-card-description {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 1.5rem;
+    text-align: start; }
+  .home-card-button {
+    margin-top: auto;
+    padding: 0.5rem 1.5rem;
+    border-radius: 2rem;
+    background: #7958f8;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s; }
+    .home-card-button:hover {
+      background: #a18aff; }
+
+.arrowRight {
+  margin-left: 10px;
+  height: 14px;
+  width: 15px; }
+
+/*# sourceMappingURL=HomeCard.module.css.map */
