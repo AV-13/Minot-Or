@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import RegisterForm from '../../organisms/RegisterForm/RegisterForm';
-import CompanyForm from '../../organisms/CompanyForm/CompanyForm';
+import CompanyForm from "../../organisms/CompanyForm/CompanyForm";
 import AuthLayout from "../../templates/AuthLayout/AuthLayout";
 import apiClient from '../../../utils/apiClient';
 import styles from './Register.module.scss';
@@ -24,9 +24,7 @@ const Register = () => {
     const handleFinish = async (data) => {
         const finalData = { ...formData, ...data, role : "WaitingForValidation" };
         try {
-            console.log('final data :',finalData);
             const result = await apiClient.post('/users', finalData);
-            console.log('Utilisateur créé avec succès :', result);
             // Si l'utilisateur a été créé avec succès, on peut procéder à la connexion
             // Connexion automatique après inscription
             const credentials = {

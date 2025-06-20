@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
     const login = (token) => {
         localStorage.setItem('token', token);
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
         setUser(decodedToken);
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     };

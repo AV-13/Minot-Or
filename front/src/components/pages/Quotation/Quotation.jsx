@@ -7,7 +7,6 @@ import MainLayout from "../../templates/MainLayout";
 export default function Quotation() {
     const { cart, removeFromCart } = useCart();
 
-    console.log("quotation", cart);
 
     return (
         <MainLayout>

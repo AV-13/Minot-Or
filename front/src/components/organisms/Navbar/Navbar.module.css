@@ -35,7 +35,8 @@
 
 .actions {
   display: flex;
-  gap: 16px; }
+  gap: 16px;
+  align-items: center; }
 
 .actions button,
 .actions a {
@@ -52,5 +53,10 @@
 .actions button:hover,
 .actions a:hover {
   background: #0056b3; }
+
+.logoutIcon {
+  transition: transform 0.2s; }
+  .logoutIcon:hover {
+    transform: scale(1.1); }
 
 /*# sourceMappingURL=Navbar.module.css.map */

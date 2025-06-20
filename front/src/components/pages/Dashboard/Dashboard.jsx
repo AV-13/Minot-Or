@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
-import Select from '../../atoms/Select';
-import UserTable from '../../organisms/UserTable';
-import { ROLES } from '../../../constants/roles';
-import apiClient from "../../../utils/apiClient";
+import DashboardUser from "../../organisms/DashboardUser/DashboardUser";
+import DashboardProduct from "../../organisms/DashboardProduct/DashboardProduct";
+import DashboardWarehouse from "../../organisms/DashboardWarehouse/DashboardWarehouse";
 import MainLayout from "../../templates/MainLayout";
+import apiClient from "../../../utils/apiClient";
 
 export default function Dashboard() {
     const [users, setUsers] = useState([]);
@@ -49,21 +48,9 @@ export default function Dashboard() {
 
     return (
         <MainLayout>
-            <h2>Dashboard Utilisateurs</h2>
-            <InputWithLabel
-                type="text"
-                placeholder="Recherche par email ou nom"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-            />
-            <Select
-                options={['', ...ROLES]}
-                value={roleFilter}
-                onChange={e => setRoleFilter(e.target.value)}
-            />
-            {loading ? <p>Chargement...</p> :
-                <UserTable users={filteredUsers} onDelete={handleDelete} onRoleChange={handleRoleChange} />
-            }
+            <DashboardUser />
+            <DashboardProduct />
+            <DashboardWarehouse />
         </MainLayout>
     );
 }

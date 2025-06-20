@@ -4,8 +4,6 @@ import ProductList from '../../organisms/ProductList/ProductList';
 import apiClient from "../../../utils/apiClient";
 import { TYPES } from "../../../constants/productType";
 import { useCart } from '../../../contexts/CartContext';
-import Header from "../../organisms/Header/Header";
-import Footer from "../../organisms/Footer/Footer";
 import MainLayout from "../../templates/MainLayout";
 
 
@@ -38,7 +36,8 @@ export default function Product() {
 
     return (
         <MainLayout>
-            <h2>Produits</h2>
+            <h2>Catalogue de produits</h2>
+            <p>Parcourez notre catalogue complet de produits de minoterie pour votre boulangerie.</p>
             <ProductFilter
                 name={name}
                 type={type}
@@ -46,7 +45,7 @@ export default function Product() {
                 onTypeChange={setType}
                 types={TYPES}
             />
-            <ProductList products={filteredProduct} onAddToCart={addToCart} />
+            <ProductList products={filteredProduct} onAddToCart={addToCart} loading={loading}/>
         </MainLayout>
     );
 }

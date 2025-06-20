@@ -3,18 +3,31 @@ import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
 import Button from '../../atoms/Button/Button';
 import Error from "../../atoms/Error";
 import styles from './RegisterForm.module.scss';
+import apiClient from "../../../utils/apiClient";
 
 const RegisterForm = ({ onNext }) => {
     const [data, setData] = useState({ email: '', password: '', firstName: '', lastName: '' });
     const [error, setError] = useState(null);
 
     const handleChange = e => {
-        console.log('handleChange', e.target.name, e.target.value);
         setData({ ...data, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
+        setError(null);
+
+        try {
+            const res = await apiClient.get(`/users/verify?email=${encodeURIComponent(data.email)}`);
+            if (res.exists === true) {
+                setError("Cet email est déjà utilisé.");
+                return;
+            }
+        } catch (err) {
+            setError("Erreur lors de la vérification de l'email.");
+            return;
+        }
+
         onNext(data);
     };
 

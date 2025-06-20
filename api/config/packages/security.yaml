@@ -44,6 +44,7 @@ security:
         - { path: ^/api/companies/siret, roles: PUBLIC_ACCESS }
         - { path: ^/api/users$, roles: PUBLIC_ACCESS, methods: [POST] }
         - { path: ^/api/users, roles: PUBLIC_ACCESS }
+        - { path: ^/api/users/verify, roles: PUBLIC_ACCESS, methods: [GET] }
         # $ means /api/companies and nothing more /api/companies/43 will not be public
         # Autorise l'accès public à la doc
         - { path: ^/api/doc, roles: PUBLIC_ACCESS }
