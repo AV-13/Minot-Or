@@ -75,7 +75,8 @@ final class WarehouseController extends AbstractController
         summary: 'List warehouses (paginated)',
         parameters: [
             new OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer')),
-            new OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'search', in: 'query', schema: new OA\Schema(type: 'string'))
         ],
         responses: [
             new OA\Response(response: 200, description: 'Paginated warehouse list')
@@ -87,10 +88,26 @@ final class WarehouseController extends AbstractController
         $page = max(1, (int)$request->query->get('page', 1));
         $limit = max(1, (int)$request->query->get('limit', 20));
         $offset = ($page - 1) * $limit;
+        $search = $request->query->get('search', '');
 
         $repo = $em->getRepository(Warehouse::class);
-        $total = $repo->count([]);
-        $warehouses = $repo->findBy([], [], $limit, $offset);
+
+        $qb = $repo->createQueryBuilder('w');
+        if ($search) {
+            $qb->where('LOWER(w.warehouseAddress) LIKE :search')
+               ->setParameter('search', '%' . strtolower($search) . '%');
+        }
+        $qb->setFirstResult($offset)
+           ->setMaxResults($limit);
+
+        $warehouses = $qb->getQuery()->getResult();
+
+        $countQb = $repo->createQueryBuilder('w');
+        if ($search) {
+            $countQb->where('LOWER(w.warehouseAddress) LIKE :search')
+                    ->setParameter('search', '%' . strtolower($search) . '%');
+        }
+        $total = (int)$countQb->select('COUNT(w.id)')->getQuery()->getSingleScalarResult();
 
         $data = array_map(fn(Warehouse $w) => [
             'id' => $w->getId(),

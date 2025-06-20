@@ -1,66 +1,84 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import InputWithLabel from "../../molecules/InputWithLabel/InputWithLabel";
 import Select from "../../atoms/Select";
-import {ROLES} from "../../../constants/roles";
+import { ROLES } from "../../../constants/roles";
 import UserTable from "../UserTable";
 import apiClient from "../../../utils/apiClient";
+import Pagination from "../../molecules/Pagination/Pagination";
 
 export default function DashboardUser() {
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('');
+    const [searchInput, setSearchInput] = useState('');
     const [roleFilter, setRoleFilter] = useState('');
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [limit] = useState(20);
+    const [total, setTotal] = useState(0);
 
-    useEffect(() => { fetchUsers(); }, []);
+    useEffect(() => { fetchUsers(); }, [page, search, roleFilter]);
 
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const res = await apiClient.get('/users');
+            const res = await apiClient.get('/users', {
+                params: {
+                    page,
+                    limit,
+                    search,
+                    role: roleFilter
+                }
+            });
             setUsers(Array.isArray(res.items) ? res.items : []);
+            setTotal(res.total || 0);
         } catch (e) {
             setUsers([]);
+            setTotal(0);
         }
         setLoading(false);
     };
 
     const handleDelete = async (id) => {
         await apiClient.delete(`users/${id}`);
-        setUsers(users.filter(u => u.id !== id));
+        fetchUsers();
     };
 
     const handleRoleChange = async (id, newRole) => {
         await apiClient.put(`users/${id}`, { role: newRole });
-        setUsers(users.map(u => u.id === id ? { ...u, roles: [`ROLE_${newRole.toUpperCase()}`] } : u));
+        fetchUsers();
     };
 
-    const filteredUsers = users.filter(u => {
-        const matchesSearch =
-            u.email.toLowerCase().includes(search.toLowerCase()) ||
-            (u.name && u.name.toLowerCase().includes(search.toLowerCase()));
-        const matchesRole =
-            !roleFilter ||
-            u.role.replace(/^ROLE_/, '').toLowerCase() === roleFilter.toLowerCase();
-        return matchesSearch && matchesRole;
-    });
+    const handleSearch = () => {
+        setPage(1);
+        setSearch(searchInput);
+    };
 
     return (
         <div>
             <h2>Dashboard Utilisateurs</h2>
-            <InputWithLabel
-                type="text"
-                placeholder="Recherche par email ou nom"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-            />
-            <Select
-                options={['', ...ROLES]}
-                value={roleFilter}
-                onChange={e => setRoleFilter(e.target.value)}
-            />
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <InputWithLabel
+                    type="text"
+                    placeholder="Recherche par email ou nom"
+                    value={searchInput}
+                    onChange={e => setSearchInput(e.target.value)}
+                />
+                <Select
+                    options={['', ...ROLES]}
+                    value={roleFilter}
+                    onChange={e => setRoleFilter(e.target.value)}
+                />
+                <button onClick={handleSearch}>Rechercher</button>
+            </div>
             {loading ? <p>Chargement...</p> :
-                <UserTable users={filteredUsers} onDelete={handleDelete} onRoleChange={handleRoleChange} />
+                <UserTable users={users} onDelete={handleDelete} onRoleChange={handleRoleChange} />
             }
+            <Pagination
+                page={page}
+                limit={limit}
+                total={total}
+                onPageChange={setPage}
+            />
         </div>
     );
 }

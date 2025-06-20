@@ -5,23 +5,37 @@ import ProductTable from '../ProductTable/ProductTable';
 import apiClient from '../../../utils/apiClient';
 import { TYPES } from '../../../constants/productType';
 import AddProductForm from '../../molecules/AddProductForm/AddProductForm';
+import Pagination from "../../molecules/Pagination/Pagination";
 
 export default function DashboardProduct() {
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState('');
+    const [searchInput, setSearchInput] = useState('');
     const [typeFilter, setTypeFilter] = useState('');
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
+    const [page, setPage] = useState(1);
+    const [limit] = useState(20);
+    const [total, setTotal] = useState(0);
 
-    useEffect(() => { fetchProducts(); }, []);
+    useEffect(() => { fetchProducts(); }, [page, search, typeFilter]);
 
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const res = await apiClient.get('/products');
+            const res = await apiClient.get('/products', {
+                params: {
+                    page,
+                    limit,
+                    search,
+                    category: typeFilter
+                }
+            });
             setProducts(Array.isArray(res.items) ? res.items : []);
+            setTotal(res.total || 0);
         } catch (e) {
             setProducts([]);
+            setTotal(0);
         }
         setLoading(false);
     };
@@ -34,16 +48,18 @@ export default function DashboardProduct() {
 
     const handleDelete = async (id) => {
         await apiClient.delete(`/products/${id}`);
-        setProducts(products.filter(p => p.id !== id));
+        fetchProducts();
     };
 
-    const filteredProducts = products.filter(p => {
-        const matchesSearch =
-            (p.productName || '').toLowerCase().includes(search.toLowerCase());
-        const matchesType =
-            !typeFilter || p.category === typeFilter;
-        return matchesSearch && matchesType;
-    });
+    const handleSearch = () => {
+        setPage(1);
+        setSearch(searchInput);
+    };
+
+    const handleTypeFilter = (e) => {
+        setPage(1);
+        setTypeFilter(e.target.value);
+    };
 
     return (
         <div>
@@ -52,20 +68,29 @@ export default function DashboardProduct() {
                 {showForm ? 'Annuler' : 'Ajouter un produit'}
             </button>
             {showForm && <AddProductForm onAdd={handleAdd} />}
-            <InputWithLabel
-                type="text"
-                placeholder="Recherche par nom"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-            />
-            <Select
-                options={['', ...TYPES]}
-                value={typeFilter}
-                onChange={e => setTypeFilter(e.target.value)}
-            />
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <InputWithLabel
+                    type="text"
+                    placeholder="Recherche par nom"
+                    value={searchInput}
+                    onChange={e => setSearchInput(e.target.value)}
+                />
+                <Select
+                    options={['', ...TYPES]}
+                    value={typeFilter}
+                    onChange={handleTypeFilter}
+                />
+                <button onClick={handleSearch}>Rechercher</button>
+            </div>
             {loading ? <p>Chargement...</p> :
-                <ProductTable products={filteredProducts} onDelete={handleDelete} />
+                <ProductTable products={products} onDelete={handleDelete} />
             }
+            <Pagination
+                page={page}
+                limit={limit}
+                total={total}
+                onPageChange={setPage}
+            />
         </div>
     );
 }

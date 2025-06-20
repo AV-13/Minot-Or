@@ -3,22 +3,35 @@ import AddWarehouseForm from '../../molecules/AddWarehouseForm/AddWarehouseForm'
 import WarehouseTable from '../../molecules/WarehouseTable/WarehouseTable';
 import apiClient from '../../../utils/apiClient';
 import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
+import Pagination from "../../molecules/Pagination/Pagination";
 
 export default function DashboardWarehouse() {
     const [warehouses, setWarehouses] = useState([]);
     const [search, setSearch] = useState('');
+    const [searchInput, setSearchInput] = useState('');
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
+    const [page, setPage] = useState(1);
+    const [limit] = useState(20);
+    const [total, setTotal] = useState(0);
 
-    useEffect(() => { fetchWarehouses(); }, []);
+    useEffect(() => { fetchWarehouses(); }, [page, search]);
 
     const fetchWarehouses = async () => {
         setLoading(true);
         try {
-            const res = await apiClient.get('/warehouses');
+            const res = await apiClient.get('/warehouses', {
+                params: {
+                    page,
+                    limit,
+                    search
+                }
+            });
             setWarehouses(Array.isArray(res.items) ? res.items : []);
+            setTotal(res.total || 0);
         } catch (e) {
             setWarehouses([]);
+            setTotal(0);
         }
         setLoading(false);
     };
@@ -33,11 +46,11 @@ export default function DashboardWarehouse() {
         await apiClient.delete(`/warehouses/${id}`);
         setWarehouses(warehouses.filter(w => w.id !== id));
     };
-    console.log(warehouses);
-    const filteredWarehouses = warehouses.filter(w =>
-        w.storageCapacity.toString().toLowerCase().includes(search.toLowerCase()) ||
-        w.warehouseAddress.toLowerCase().includes(search.toLowerCase())
-    );
+
+    const handleSearch = () => {
+        setPage(1);
+        setSearch(searchInput);
+    };
 
     return (
         <div>
@@ -46,15 +59,24 @@ export default function DashboardWarehouse() {
                 {showForm ? 'Annuler' : 'Ajouter un entrepôt'}
             </button>
             {showForm && <AddWarehouseForm onAdd={handleAdd} />}
-            <InputWithLabel
-                type="text"
-                placeholder="Recherche par nom ou localisation"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-            />
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <InputWithLabel
+                    type="text"
+                    placeholder="Recherche par nom ou localisation"
+                    value={searchInput}
+                    onChange={e => setSearchInput(e.target.value)}
+                />
+                <button onClick={handleSearch}>Rechercher</button>
+            </div>
             {loading ? <p>Chargement...</p> :
-                <WarehouseTable warehouses={filteredWarehouses} onDelete={handleDelete} />
+                <WarehouseTable warehouses={warehouses} onDelete={handleDelete} />
             }
+            <Pagination
+                page={page}
+                limit={limit}
+                total={total}
+                onPageChange={setPage}
+            />
         </div>
     );
 }
