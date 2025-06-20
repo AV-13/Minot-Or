@@ -31,6 +31,9 @@ class Product
     #[ORM\Column]
     private ?float $unitWeight = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description = null;
+
     #[ORM\Column(type: 'product_category_enum', length: 20)]
     private ProductCategory|null $category = null;
 
@@ -132,6 +135,17 @@ class Product
     {
         $this->unitWeight = $unitWeight;
 
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
         return $this;
     }
 

@@ -98,7 +98,8 @@ final class UserController extends AbstractController
         parameters: [
             new OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer', default: 1)),
             new OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer', default: 10)),
-            new OA\Parameter(name: 'role', in: 'query', schema: new OA\Schema(type: 'string'))
+            new OA\Parameter(name: 'role', in: 'query', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'search', in: 'query', schema: new OA\Schema(type: 'string'))
         ],
         responses: [
             new OA\Response(response: 200, description: 'Paginated user list')
@@ -114,18 +115,31 @@ final class UserController extends AbstractController
         $page = max(1, (int)$request->query->get('page', 1));
         $limit = max(1, (int)$request->query->get('limit', 10));
         $role = $request->query->get('role');
+        $search = $request->query->get('search', '');
 
-        $criteria = [];
-        if (!$user->getRole() || $user->getRole()->value !== 'Sales') {
-            $criteria['company'] = $user->getCompany();
-        }
+        $qb = $em->getRepository(User::class)->createQueryBuilder('u');
+        $qb->where('u.company = :company')->setParameter('company', $company);
+
         if ($role && UserRole::tryFrom($role)) {
-            $criteria['role'] = UserRole::from($role);
+            $qb->andWhere('u.role = :role')->setParameter('role', UserRole::from($role));
+        }
+        if ($search) {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    'LOWER(u.email) LIKE :search',
+                    'LOWER(u.firstName) LIKE :search',
+                    'LOWER(u.lastName) LIKE :search'
+                )
+            )->setParameter('search', '%' . strtolower($search) . '%');
         }
 
-        $repo = $em->getRepository(User::class);
-        $total = $repo->count($criteria);
-        $users = $repo->findBy($criteria, [], $limit, ($page - 1) * $limit);
+        $total = (clone $qb)->select('COUNT(u.id)')->getQuery()->getSingleScalarResult();
+
+        $users = $qb
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
 
         $data = array_map(fn(User $u) => [
             'id' => $u->getId(),

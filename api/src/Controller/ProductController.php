@@ -34,6 +34,7 @@ class ProductController extends AbstractController
                     new OA\Property(property: 'netPrice', type: 'number'),
                     new OA\Property(property: 'grossPrice', type: 'number'),
                     new OA\Property(property: 'unitWeight', type: 'number'),
+                    new OA\Property(property: 'description', type: 'string', nullable: true),
                     new OA\Property(property: 'category', description: 'Product category', type: 'string'),
                     new OA\Property(property: 'warehouseId', type: 'integer')
                 ]
@@ -84,6 +85,10 @@ class ProductController extends AbstractController
             ->setStockQuantity(0)
             ->setWarehouse($warehouse);
 
+        if (isset($data['description'])) {
+            $product->setDescription($data['description']);
+        }
+
         $em->persist($product);
         $em->flush();
 
@@ -100,40 +105,58 @@ class ProductController extends AbstractController
             new OA\Parameter(name: 'category', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
             new OA\Parameter(name: 'warehouse', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
             new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 1)),
-            new OA\Parameter(name: 'limit', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10))
+            new OA\Parameter(name: 'limit', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10)),
+            new OA\Parameter(name: 'search', in: 'query', required: false, schema: new OA\Schema(type: 'string'))
         ],
         responses: [
             new OA\Response(response: 200, description: 'Paginated product list')
         ]
     )]
     #[Route('', name: 'product_list', methods: ['GET'])]
-    public function list(Request $request, ProductRepository $productRepository): JsonResponse
+    public function list(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $categoryParam = $request->query->get('category');
         $warehouseParam = $request->query->get('warehouse');
         $page = max(1, (int) $request->query->get('page', 1));
         $limit = max(1, (int) $request->query->get('limit', 10));
         $offset = ($page - 1) * $limit;
+        $search = $request->query->get('search', '');
 
-        $criteria = [];
+        $qb = $em->getRepository(Product::class)->createQueryBuilder('p');
+
         if ($categoryParam) {
             $category = ProductCategory::tryFrom($categoryParam);
             if (!$category) {
                 return $this->json(['error' => 'Invalid category'], 400);
             }
-            $criteria['category'] = $category;
+            $qb->andWhere('p.category = :category')
+               ->setParameter('category', $category);
         }
         if ($warehouseParam) {
             if (!is_numeric($warehouseParam)) {
                 return $this->json(['error' => 'Invalid warehouse ID'], 400);
             }
-            $criteria['warehouse'] = (int) $warehouseParam;
+            $qb->andWhere('p.warehouse = :warehouse')
+               ->setParameter('warehouse', (int)$warehouseParam);
+        }
+        if ($search) {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    'LOWER(p.productName) LIKE :search',
+                    'LOWER(p.description) LIKE :search'
+                )
+            )->setParameter('search', '%' . strtolower($search) . '%');
         }
 
-        $total = $productRepository->count($criteria);
-        $products = $productRepository->findBy($criteria, [], $limit, $offset);
+        $total = (clone $qb)->select('COUNT(p.id)')->getQuery()->getSingleScalarResult();
 
-        $items = array_map(function ($product) {
+        $products = $qb
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        $items = array_map(function (Product $product) {
             return [
                 'id' => $product->getId(),
                 'name' => $product->getProductName(),
@@ -143,7 +166,8 @@ class ProductController extends AbstractController
                 'grossPrice' => $product->getGrossPrice(),
                 'unitWeight' => $product->getUnitWeight(),
                 'category' => $product->getCategory()->value,
-                'warehouseId' => $product->getWarehouse()->getId()
+                'warehouseId' => $product->getWarehouse()->getId(),
+                'description' => $product->getDescription(),
             ];
         }, $products);
 
@@ -199,6 +223,7 @@ class ProductController extends AbstractController
                     new OA\Property(property: 'netPrice', type: 'number'),
                     new OA\Property(property: 'grossPrice', type: 'number'),
                     new OA\Property(property: 'unitWeight', type: 'number'),
+                    new OA\Property(property: 'description', type: 'string', nullable: true),
                     new OA\Property(property: 'category', type: 'string'),
                     new OA\Property(property: 'warehouseId', type: 'integer')
                 ]
@@ -222,6 +247,7 @@ class ProductController extends AbstractController
         if (isset($data['netPrice'])) $product->setNetPrice($data['netPrice']);
         if (isset($data['grossPrice'])) $product->setGrossPrice($data['grossPrice']);
         if (isset($data['unitWeight'])) $product->setUnitWeight($data['unitWeight']);
+        if (isset($data['description'])) $product->setDescription($data['description']);
         if (isset($data['category'])) {
             $category = ProductCategory::tryFrom($data['category']);
             if (!$category) {
