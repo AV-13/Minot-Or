@@ -38,7 +38,8 @@ export default function Product() {
 
     return (
         <MainLayout>
-            <h2>Produits</h2>
+            <h2>Catalogue de produits</h2>
+            <p>Parcourez notre catalogue complet de produits de minoterie pour votre boulangerie.</p>
             <ProductFilter
                 name={name}
                 type={type}
