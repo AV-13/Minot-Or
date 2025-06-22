@@ -7,6 +7,7 @@ import { useCart } from '../../../contexts/CartContext';
 import Header from "../../organisms/Header/Header";
 import Footer from "../../organisms/Footer/Footer";
 import MainLayout from "../../templates/MainLayout";
+import DebuggingComponent from "../Debugging";
 
 
 export default function Product() {
@@ -38,6 +39,7 @@ export default function Product() {
 
     return (
         <MainLayout>
+            <DebuggingComponent />
             <h2>Catalogue de produits</h2>
             <p>Parcourez notre catalogue complet de produits de minoterie pour votre boulangerie.</p>
             <ProductFilter

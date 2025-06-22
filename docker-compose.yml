@@ -1,0 +1,42 @@
+services:
+  api:
+    build: ./api
+    ports:
+      - "8000:80"                # API visible sur localhost:8000
+    environment:
+      # Symfony >= 5/6
+      APP_ENV: dev
+      DATABASE_URL: "mysql://user:password@db:3306/minotor?serverVersion=8.0"
+    depends_on:
+      - db
+    volumes:
+      - ./api:/var/www/html      # hot-reload dev
+      - vendor_data:/var/www/html/vendor
+      - ./api/config/jwt:/var/www/html/config/jwt # pour les clés JWT
+
+  front:
+    build: ./front
+    ports:
+      - "3000:80"                # Front visible sur localhost:3000
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+    depends_on:
+      - api
+    volumes:
+      - ./front:/app             # optionnel en dev
+
+  db:
+    image: mysql:8
+    ports:
+      - "3307:3306"              # hôte:3307 → conteneur:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: minotor
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+  vendor_data:

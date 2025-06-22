@@ -8,7 +8,6 @@ import ProfileAvatar from "../../atoms/ProfileAvatar/ProfileAvatar";
 
 const Navbar = () => {
     const { user, logout } = useAuth();
-    console.log("user in Navbar:", user);
     return (
         <nav className={styles.navbar}>
             <NavLink to="/">
