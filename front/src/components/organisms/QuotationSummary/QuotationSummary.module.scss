@@ -1,0 +1,131 @@
+.summarySection {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+
+  .sectionHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+      color: #6366f1;
+    }
+
+    h3 {
+      margin: 0;
+      color: #333;
+    }
+  }
+
+  .productList {
+    margin-bottom: 20px;
+
+    .productSummary {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .productName {
+        color: #555;
+      }
+
+      .productPrice {
+        font-weight: 500;
+      }
+    }
+  }
+
+  .summaryDetails {
+    .summaryRow {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .totalRow {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px solid #eee;
+      font-weight: 600;
+      font-size: 1.1rem;
+
+      .totalPrice {
+        color: #6366f1;
+      }
+    }
+  }
+
+  .saveOption {
+    margin: 25px 0;
+    text-align: center;
+
+    p {
+      margin-bottom: 15px;
+      color: #555;
+    }
+
+    .saveActions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+
+      .saveButton {
+        background-color: #6366f1;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+      }
+
+      .cancelButton {
+        background-color: white;
+        color: #555;
+        border: 1px solid #ddd;
+        padding: 10px 20px;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .submitButton {
+    width: 100%;
+    background-color: #6366f1;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .submitIcon {
+      margin-right: 10px;
+    }
+  }
+
+  .disclaimer {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: #777;
+    text-align: center;
+
+    a {
+      color: #6366f1;
+      text-decoration: none;
+    }
+  }
+}

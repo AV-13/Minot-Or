@@ -1,0 +1,65 @@
+.deliverySection {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+
+  .sectionHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+      color: #6366f1;
+    }
+
+    h3 {
+      margin: 0;
+      color: #333;
+    }
+  }
+
+  .deliveryForm {
+    .formRow {
+      display: flex;
+      margin-bottom: 20px;
+
+      .formColumn {
+        flex: 1;
+        margin-right: 15px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .fullWidth {
+        width: 100%;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .dateInput, .timeSlotSelect, .addressSelect {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .instructionsTextarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-height: 100px;
+        resize: vertical;
+      }
+    }
+  }
+}

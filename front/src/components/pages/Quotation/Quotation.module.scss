@@ -1,0 +1,65 @@
+.breadcrumb {
+  margin: 20px 0;
+  color: #777;
+
+  a {
+    color: #777;
+    text-decoration: none;
+
+    &:hover {
+      color: #6366f1;
+      text-decoration: underline;
+    }
+  }
+
+  span {
+    color: #333;
+  }
+}
+
+.pageHeader {
+  margin-bottom: 30px;
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: 2rem;
+    color: #333;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+  }
+}
+
+.pageContent {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 50px;
+
+  .leftColumn {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .rightColumn {
+    flex: 2;
+    align-self: flex-start;
+    position: sticky;
+    top: 20px;
+  }
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+
+    .leftColumn, .rightColumn {
+      width: 100%;
+    }
+
+    .rightColumn {
+      position: static;
+    }
+  }
+}

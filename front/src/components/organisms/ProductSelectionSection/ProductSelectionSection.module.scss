@@ -1,0 +1,44 @@
+.selectionSection {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+
+  .sectionHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+      color: #6366f1;
+    }
+
+    h3 {
+      margin: 0;
+      color: #333;
+    }
+  }
+
+  .selectedProducts {
+    margin-bottom: 20px;
+  }
+
+  .addProductButton {
+    display: flex;
+    justify-content: center;
+
+    .addButton {
+      background-color: transparent;
+      color: #6366f1;
+      border: 1px dashed #6366f1;
+      padding: 10px 20px;
+
+      &:hover {
+        background-color: rgba(99, 102, 241, 0.05);
+      }
+    }
+  }
+}
