@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\InvoiceRepository;
+use App\Repository\QuotationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: InvoiceRepository::class)]
-class Invoice
+#[ORM\Entity(repositoryClass: QuotationRepository::class)]
+class Quotation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,7 +29,7 @@ class Invoice
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $acceptanceDate = null;
 
-    #[ORM\OneToOne(inversedBy: 'invoices', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'quotations', cascade: ['persist', 'remove'])]
     private ?SalesList $salesList = null;
     #[ORM\ManyToOne(targetEntity: Pricing::class)]
     #[ORM\JoinColumn(nullable: false)]

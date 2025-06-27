@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Invoice;
+use App\Entity\Quotation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Invoice>
+ * @extends ServiceEntityRepository<quotation>
  */
-class InvoiceRepository extends ServiceEntityRepository
+class QuotationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Invoice::class);
+        parent::__construct($registry, Quotation::class);
     }
 
     //    /**
-    //     * @return Invoice[] Returns an array of Invoice objects
+    //     * @return Quotation[] Returns an array of Quotation objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class InvoiceRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Invoice
+    //    public function findOneBySomeField($value): ?Quotation
     //    {
     //        return $this->createQueryBuilder('i')
     //            ->andWhere('i.exampleField = :val')

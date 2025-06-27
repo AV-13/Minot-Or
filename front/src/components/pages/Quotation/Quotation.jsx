@@ -7,9 +7,11 @@ import ProductSelectionSection from '../../organisms/ProductSelectionSection/Pro
 import DeliveryInfoSection from '../../organisms/DeliveryInfoSection/DeliveryInfoSection';
 import QuotationSummary from '../../organisms/QuotationSummary/QuotationSummary';
 import styles from './Quotation.module.scss';
+import { useNavigate } from "react-router";
 
 export default function Quotation() {
     const { cart, removeFromCart, updateQuantity } = useCart();
+    const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
     const [deliveryInfo, setDeliveryInfo] = useState({
         deliveryDate: '',
@@ -22,7 +24,7 @@ export default function Quotation() {
     const subtotal = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
     const vatRate = 0.055; // 5.5%
     const vat = subtotal * vatRate;
-    const shippingCost = 0; // Gratuit pour cet exemple
+    const shippingCost = 0; // Gratuit ???
     const total = subtotal + vat + shippingCost;
 
     useEffect(() => {
@@ -55,8 +57,7 @@ export default function Quotation() {
     };
 
     const handleAddProduct = () => {
-        console.log('Add product clicked');
-        // Ouvrir une modal ou naviguer vers une page de sélection de produits
+        navigate('/product');
     };
 
     const handleSubmitQuotation = () => {

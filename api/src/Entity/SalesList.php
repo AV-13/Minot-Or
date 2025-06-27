@@ -38,7 +38,7 @@ class SalesList
     private ?Delivery $delivery = null;
 
     #[ORM\OneToOne(mappedBy: 'salesList', cascade: ['persist', 'remove'])]
-    private ?Invoice $invoices = null;
+    private ?Quotation $quotations = null;
 
     /**
      * @var Collection<int, Contains>
@@ -152,24 +152,24 @@ class SalesList
         return $this;
     }
 
-    public function getInvoices(): ?Invoice
+    public function getQuotations(): ?Quotation
     {
-        return $this->invoices;
+        return $this->quotations;
     }
 
-    public function setInvoices(?Invoice $invoices): static
+    public function setQuotations(?Quotation $quotations): static
     {
         // unset the owning side of the relation if necessary
-        if ($invoices === null && $this->invoices !== null) {
-            $this->invoices->setSalesList(null);
+        if ($quotations === null && $this->quotations !== null) {
+            $this->quotations->setSalesList(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($invoices !== null && $invoices->getSalesList() !== $this) {
-            $invoices->setSalesList($this);
+        if ($quotations !== null && $quotations->getSalesList() !== $this) {
+            $quotations->setSalesList($this);
         }
 
-        $this->invoices = $invoices;
+        $this->quotations = $quotations;
 
         return $this;
     }
