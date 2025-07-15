@@ -66,7 +66,7 @@ class QuotationController extends AbstractController
      * Creates an quotation for a sales list.
      */
     #[OA\Post(
-        path: '/api/salesLists/{id}/quotation',
+        path: '/salesLists/{id}/quotation',
         summary: 'Create an quotation for a sales list',
         requestBody: new OA\RequestBody(
             required: true,
@@ -86,7 +86,7 @@ class QuotationController extends AbstractController
             new OA\Response(response: 409, description: 'quotation already exists')
         ]
     )]
-    #[Route('/../salesLists/{id}/quotation', name: 'salesList_quotation_create', methods: ['POST'])]
+    #[Route('/salesLists/{id}/quotation', name: 'salesList_quotation_create', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function create(
         SalesList $salesList,

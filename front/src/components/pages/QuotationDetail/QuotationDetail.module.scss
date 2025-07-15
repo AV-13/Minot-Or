@@ -1,0 +1,61 @@
+// front/src/components/pages/QuotationDetail/QuotationDetail.module.scss
+.pageHeader {
+  text-align: center;
+  margin: 2rem 0;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #666;
+  }
+}
+
+.pageContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+.backLink {
+  margin-bottom: 1.5rem;
+}
+
+.backButton {
+  background-color: transparent;
+  color: #4a6eb5;
+  border: 1px solid #4a6eb5;
+
+  &:hover {
+    background-color: rgba(74, 110, 181, 0.1);
+  }
+}
+
+.detailsContainer {
+  display: flex;
+  gap: 2rem;
+
+  @media (max-width: 960px) {
+    flex-direction: column;
+  }
+}
+
+.leftColumn, .rightColumn {
+  flex: 1;
+}
+
+.loadingContainer, .errorContainer {
+  text-align: center;
+  padding: 3rem;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorContainer {
+  color: #d9534f;
+}

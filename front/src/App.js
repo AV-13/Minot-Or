@@ -10,6 +10,7 @@ import Register from './components/pages/Register/Register';
 import Product from "./components/pages/Product/Product";
 import Quotation from "./components/pages/Quotation/Quotation";
 import {CartProvider} from "./contexts/CartContext";
+import QuotationDetail from "./components/pages/QuotationDetail/QuotationDetail";
 // import Unauthorized from './components/pages/Unauthorized';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
                                     </RequireAuth>
                                 }
                             />
+                            <Route path="/quotation/detail/:id" element={<QuotationDetail />} />
                         </Routes>
                 </CartProvider>
             </AuthProvider>

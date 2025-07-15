@@ -73,7 +73,7 @@ class DeliveryController extends AbstractController
      * Creates a delivery for a sales list.
      */
     #[OA\Post(
-        path: '/api/salesLists/{id}/delivery',
+        path: '/salesLists/{id}/delivery',
         summary: 'Create a delivery for a sales list',
         requestBody: new OA\RequestBody(
             required: true,
@@ -94,7 +94,7 @@ class DeliveryController extends AbstractController
             new OA\Response(response: 409, description: 'Delivery already exists')
         ]
     )]
-    #[Route('/../salesLists/{id}/delivery', name: 'salesList_delivery_create', methods: ['POST'])]
+    #[Route('/salesLists/{id}/delivery', name: 'salesList_delivery_create', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function create(
         SalesList $salesList,

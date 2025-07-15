@@ -31,10 +31,13 @@ export default function Quotation() {
 
     useEffect(() => {
         // Transformer les éléments du panier pour leur donner une structure adaptée à l'affichage
+        cart.map(item => {
+            console.log(item);
+        })
         const formattedCart = cart.map(item => ({
             ...item,
             unit: 'Sac 25kg',
-            totalPrice: item.price * item.quantity
+            totalPrice: item.grossPrice * item.quantity
         }));
         setCartItems(formattedCart);
     }, [cart]);
@@ -77,44 +80,57 @@ export default function Quotation() {
 
         try {
             // 1. Créer une liste de vente (SalesList)
+            const currentDate = new Date().toISOString().split('T')[0];
+            const expirationDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
             const salesListResponse = await apiClient.post('/salesLists', {
+                status: 'pending',
                 productsPrice: subTotal,
                 globalDiscount: 0,
-                status: 'pending',
-                expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 jours
+                issueDate: currentDate,
+                expirationDate: expirationDate,
+                orderDate: currentDate
             });
-
             const salesListId = salesListResponse.id;
+            console.log("SalesList créée avec l'ID:", salesListId);
 
-            // 2. Ajouter les produits à la liste de vente
+            // 2. Ajouter les produits à la liste de vente (via la table Contains)
             for (const item of cart) {
-                await apiClient.post(`/salesLists/${salesListId}/products`, {
+                await apiClient.post('/contains', {
+                    salesListId: salesListId,
                     productId: item.id,
                     productQuantity: item.quantity,
                     productDiscount: 0
                 });
+                console.log(`Produit ${item.id} ajouté à la liste`);
             }
 
             // 3. Créer les informations de livraison
-            await apiClient.post(`/salesLists/${salesListId}/delivery`, {
+            await apiClient.post(`deliveries/salesLists/${salesListId}/delivery`, {
                 deliveryDate: deliveryInfo.deliveryDate,
                 deliveryAddress: deliveryInfo.address || 'Adresse par défaut',
-                deliveryStatus: 'pending',
-                driverRemark: deliveryInfo.instructions || ''
+                deliveryNumber: `DEL-${Date.now().toString().slice(-6)}`,
+                deliveryStatus: 'InPreparation'
             });
+            console.log("Informations de livraison créées");
 
             // 4. Créer le devis
-            await apiClient.post(`/salesLists/${salesListId}/quotation`, {
-                dueDate: deliveryInfo.deliveryDate,
-                distance: 10 // Distance par défaut en km pour le calcul
+            await apiClient.post(`/quotations/salesLists/${salesListId}/quotation`, {
+                dueDate: expirationDate,
+                distance: 10
             });
+            console.log("Devis créé");
 
             // Redirection vers une page de confirmation
             navigate('/devis/confirmation', { state: { quotationId: salesListId } });
 
         } catch (error) {
             console.error('Erreur lors de la soumission du devis:', error);
-            alert('Une erreur est survenue lors de la soumission de votre demande de devis.');
+            if (error.response) {
+                console.error('Données de réponse:', error.response.data);
+                console.error('Statut:', error.response.status);
+            }
+            alert('Une erreur est survenue lors de la création du devis. Veuillez réessayer.');
         } finally {
             setIsSubmitting(false);
         }
