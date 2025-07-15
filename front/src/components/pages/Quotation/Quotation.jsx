@@ -8,11 +8,13 @@ import DeliveryInfoSection from '../../organisms/DeliveryInfoSection/DeliveryInf
 import QuotationSummary from '../../organisms/QuotationSummary/QuotationSummary';
 import styles from './Quotation.module.scss';
 import { useNavigate } from "react-router";
+import apiClient from "../../../utils/apiClient";
 
 export default function Quotation() {
     const { cart, removeFromCart, updateQuantity } = useCart();
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [deliveryInfo, setDeliveryInfo] = useState({
         deliveryDate: '',
         timeSlot: 'morning',
@@ -21,11 +23,11 @@ export default function Quotation() {
     });
 
     // Calculs financiers
-    const subtotal = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
+    const subTotal = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
     const vatRate = 0.055; // 5.5%
-    const vat = subtotal * vatRate;
+    const vat = subTotal * vatRate;
     const shippingCost = 0; // Gratuit ???
-    const total = subtotal + vat + shippingCost;
+    const total = subTotal + vat + shippingCost;
 
     useEffect(() => {
         // Transformer les éléments du panier pour leur donner une structure adaptée à l'affichage
@@ -60,20 +62,62 @@ export default function Quotation() {
         navigate('/product');
     };
 
-    const handleSubmitQuotation = () => {
-        const quotationData = {
-            products: cartItems,
-            deliveryInfo,
-            totals: {
-                subtotal,
-                vat,
-                shippingCost,
-                total
-            }
-        };
+    const handleSubmitQuotation = async () => {
+        if (cart.length === 0) {
+            alert('Veuillez ajouter des produits à votre demande de devis.');
+            return;
+        }
 
-        console.log('Submitting quotation:', quotationData);
-        // Envoyer la demande de devis à l'API
+        if (!deliveryInfo.deliveryDate) {
+            alert('Veuillez sélectionner une date de livraison.');
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // 1. Créer une liste de vente (SalesList)
+            const salesListResponse = await apiClient.post('/salesLists', {
+                productsPrice: subTotal,
+                globalDiscount: 0,
+                status: 'pending',
+                expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 jours
+            });
+
+            const salesListId = salesListResponse.id;
+
+            // 2. Ajouter les produits à la liste de vente
+            for (const item of cart) {
+                await apiClient.post(`/salesLists/${salesListId}/products`, {
+                    productId: item.id,
+                    productQuantity: item.quantity,
+                    productDiscount: 0
+                });
+            }
+
+            // 3. Créer les informations de livraison
+            await apiClient.post(`/salesLists/${salesListId}/delivery`, {
+                deliveryDate: deliveryInfo.deliveryDate,
+                deliveryAddress: deliveryInfo.address || 'Adresse par défaut',
+                deliveryStatus: 'pending',
+                driverRemark: deliveryInfo.instructions || ''
+            });
+
+            // 4. Créer le devis
+            await apiClient.post(`/salesLists/${salesListId}/quotation`, {
+                dueDate: deliveryInfo.deliveryDate,
+                distance: 10 // Distance par défaut en km pour le calcul
+            });
+
+            // Redirection vers une page de confirmation
+            navigate('/devis/confirmation', { state: { quotationId: salesListId } });
+
+        } catch (error) {
+            console.error('Erreur lors de la soumission du devis:', error);
+            alert('Une erreur est survenue lors de la soumission de votre demande de devis.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleSaveQuotation = () => {
@@ -84,10 +128,6 @@ export default function Quotation() {
     return (
         <MainLayout>
             <Header />
-
-            <div className={styles.breadcrumb}>
-                <a href="/accueil">Accueil</a> &gt; <a href="/devis">Devis</a> &gt; <span>Nouvelle demande</span>
-            </div>
 
             <div className={styles.pageHeader}>
                 <h1>Demande de devis</h1>
@@ -112,7 +152,7 @@ export default function Quotation() {
                 <div className={styles.rightColumn}>
                     <QuotationSummary
                         cart={cartItems}
-                        subtotal={subtotal.toFixed(2)}
+                        subtotal={subTotal.toFixed(2)}
                         vat={vat.toFixed(2)}
                         shippingCost={shippingCost}
                         total={total.toFixed(2)}

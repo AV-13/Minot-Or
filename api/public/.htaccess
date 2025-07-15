@@ -1,3 +1,5 @@
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
 <IfModule mod_rewrite.c>
     # Activation du moteur de réécriture
     RewriteEngine On

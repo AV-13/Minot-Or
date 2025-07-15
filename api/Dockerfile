@@ -38,6 +38,9 @@ RUN printf "<Directory /var/www/html/public>\n\
     > /etc/apache2/conf-available/symfony-allow-htaccess.conf \
  && a2enconf symfony-allow-htaccess
 
+RUN echo 'SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1' > /etc/apache2/conf-available/auth-header.conf \
+    && a2enconf auth-header
+
 WORKDIR /var/www/html
 COPY --from=vendor /app /var/www/html
 
@@ -45,11 +48,9 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf
 
-# Générer les clés JWT
-#RUN mkdir -p config/jwt
-#RUN APP_ENV=dev php bin/console lexik:jwt:generate-keypair --skip-if-exists --no-interaction
-#RUN chmod 644 config/jwt/public.pem
-#RUN chmod 600 config/jwt/private.pem
+RUN chown -R www-data:www-data /var/www/html/config/jwt
+RUN chmod 644 /var/www/html/config/jwt/public.pem
+RUN chmod 600 /var/www/html/config/jwt/private.pem
 
 EXPOSE 80
 

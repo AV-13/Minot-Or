@@ -16,7 +16,7 @@ const QuotationSummary = ({ cart, subtotal, vat, shippingCost, total, onSubmitQu
                         <div className={styles.productName}>
                             {product.name} ({product.quantity} × {product.unit})
                         </div>
-                        <div className={styles.productPrice}>{product.totalPrice} €</div>
+                        <div className={styles.productPrice}>{product.grossPrice} €</div>
                     </div>
                 ))}
             </div>
