@@ -30,7 +30,8 @@ export default function QuotationDetail() {
                 setQuotation(quotationResponse.data);
 
                 // 2. Récupérer les informations de livraison
-                const deliveryResponse = await apiClient.get(`/deliveries/${id}`);
+                const deliveryResponse = await apiClient.get(`/deliveries/salesLists/${id}`);
+                console.log(deliveryResponse);
                 setDelivery(deliveryResponse.data);
 
                 // 3. Récupérer les produits associés

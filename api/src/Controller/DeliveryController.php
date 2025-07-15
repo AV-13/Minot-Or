@@ -332,4 +332,48 @@ class DeliveryController extends AbstractController
 
         return $this->json(['message' => 'Truck dissociated from delivery']);
     }
+    /**
+     * Returns the delivery associated with a sales list.
+     */
+    #[OA\Get(
+        path: '/api/deliveries/salesLists/{id}',
+        summary: 'Get delivery by salesList ID',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Delivery details'),
+            new OA\Response(response: 404, description: 'Delivery not found for this salesList')
+        ]
+    )]
+
+    #[Route('/salesLists/{id}', name: 'delivery_by_saleslist', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function getDeliveryBySalesList(
+        int $id,
+        SalesListRepository $salesListRepo,
+        DeliveryRepository $deliveryRepo
+    ): JsonResponse
+    {
+        $salesList = $salesListRepo->find($id);
+        if (!$salesList) {
+            return $this->json(['error' => 'SalesList not found'], 404);
+        }
+
+        $delivery = $deliveryRepo->findOneBy(['salesList' => $salesList]);
+        if (!$delivery) {
+            return $this->json(['error' => 'No delivery found for this salesList'], 404);
+        }
+
+        return $this->json([
+            'id' => $delivery->getId(),
+            'deliveryDate' => $delivery->getDeliveryDate()?->format('Y-m-d'),
+            'deliveryAddress' => $delivery->getDeliveryAddress(),
+            'deliveryNumber' => $delivery->getDeliveryNumber(),
+            'deliveryStatus' => $delivery->getDeliveryStatus()?->value,
+            'driverRemark' => $delivery->getDriverRemark(),
+            'qrCode' => $delivery->getQrCode(),
+            'salesListId' => $delivery->getSalesList()?->getId()
+        ]);
+    }
 }
