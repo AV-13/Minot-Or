@@ -5,6 +5,24 @@ import styles from './QuotationDetailInfo.module.scss';
 const QuotationDetailInfo = ({ quotation }) => {
     if (!quotation) return <div className={styles.loading}>Chargement des informations...</div>;
 
+    // Traduction du statut en français
+    const getStatusFrench = (status) => {
+        switch (status) {
+            case 'pending':
+                return 'En attente';
+            case 'accepted':
+                return 'Accepté';
+            case 'rejected':
+                return 'Refusé';
+            case 'completed':
+                return 'Terminé';
+            case 'cancelled':
+                return 'Annulé';
+            default:
+                return status;
+        }
+    };
+
     return (
         <div className={styles.detailCard}>
             <div className={styles.sectionHeader}>
@@ -23,7 +41,7 @@ const QuotationDetailInfo = ({ quotation }) => {
                 </div>
                 <div className={styles.infoItem}>
                     <span className={styles.label}>Statut:</span>
-                    <span className={`${styles.value} ${styles.status}`}>{quotation.status}</span>
+                    <span className={`${styles.value} ${styles.status}`}>{getStatusFrench(quotation.salesListStatus)}</span>
                 </div>
             </div>
         </div>

@@ -304,14 +304,14 @@ final class UserController extends AbstractController
      * Returns the currently authenticated user.
      */
     #[OA\Get(
-        path: '/api/me',
+        path: '/me',
         summary: 'Get current authenticated user',
         responses: [
             new OA\Response(response: 200, description: 'Current user')
         ]
     )]
     #[IsGranted('ROLE_USER')]
-    #[Route('/api/me', name: 'user_me', methods: ['GET'])]
+    #[Route('/me', name: 'user_me', methods: ['GET'])]
     public function me(Security $security): JsonResponse
     {
         $user = $security->getUser();

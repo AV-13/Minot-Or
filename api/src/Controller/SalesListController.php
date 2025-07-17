@@ -259,6 +259,8 @@ class SalesListController extends AbstractController
             'productId' => $c->getProduct()?->getId(),
             'productName' => $c->getProduct()?->getProductName(),
             'productQuantity' => $c->getProductQuantity(),
+            'productGrossPrice' => $c->getProduct()?->getGrossPrice(),
+            'productNetPrice' => $c->getProduct()?->getNetPrice(),
             'productDiscount' => $c->getProductDiscount()
         ], $contains);
 

@@ -27,16 +27,17 @@ export default function QuotationDetail() {
 
                 // 1. Récupérer les informations du devis
                 const quotationResponse = await apiClient.get(`/salesLists/${id}`);
-                setQuotation(quotationResponse.data);
+                setQuotation(quotationResponse);
 
                 // 2. Récupérer les informations de livraison
                 const deliveryResponse = await apiClient.get(`/deliveries/salesLists/${id}`);
                 console.log(deliveryResponse);
-                setDelivery(deliveryResponse.data);
+                setDelivery(deliveryResponse);
 
                 // 3. Récupérer les produits associés
                 const productsResponse = await apiClient.get(`/salesLists/${id}/products`);
-                setProducts(productsResponse.data);
+                console.log('productsResponse', productsResponse);
+                setProducts(productsResponse);
 
                 setLoading(false);
             } catch (err) {
@@ -103,7 +104,7 @@ export default function QuotationDetail() {
                     </div>
 
                     <div className={styles.rightColumn}>
-                        <OrderedProducts products={products} />
+                        <OrderedProducts products={products} quotation={quotation} />
                     </div>
                 </div>
             </div>

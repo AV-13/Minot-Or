@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { RequireAuth } from './components/auth/RequireAuth';
 import Home from './components/pages/Home/Home';
 import Dashboard from './components/pages/Dashboard/Dashboard';
+import QuotationManagement from "./components/pages/QuotationManagement/QuotationManagement";
 // import AdminPanel from './components/pages/AdminPanel';
 import Login from './components/pages/Login/Login';
 import Register from './components/pages/Register/Register';
@@ -46,6 +47,7 @@ function App() {
                                 }
                             />
                             <Route path="/quotation/detail/:id" element={<QuotationDetail />} />
+                            <Route path="/admin/quotations" element={<QuotationManagement />} />
                         </Routes>
                 </CartProvider>
             </AuthProvider>

@@ -19,6 +19,119 @@ use OpenApi\Attributes as OA;
 class QuotationController extends AbstractController
 {
     /**
+     * Renvoie une liste paginée des devis avec informations client pour l'admin.
+     */
+    #[Route('/admin', name: 'quotation_admin_list', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function adminList(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $page = max(1, (int)$request->query->get('page', 1));
+        $limit = max(1, (int)$request->query->get('limit', 20));
+        $offset = ($page - 1) * $limit;
+
+        // Filtres optionnels
+        $searchTerm = $request->query->get('term');
+        $dateFrom = $request->query->get('dateFrom');
+        $dateTo = $request->query->get('dateTo');
+        $status = $request->query->get('status');
+
+        // Construction de la requête
+        $qb = $em->createQueryBuilder();
+        $qb->select('q, s, e, u')
+           ->from('App\Entity\Quotation', 'q')
+           ->leftJoin('q.salesList', 's')
+           ->leftJoin('s.evaluates', 'e')
+           ->leftJoin('e.reviewer', 'u')
+           ->orderBy('q.issueDate', 'DESC');
+
+        // Appliquer les filtres
+        if ($searchTerm) {
+            $qb->andWhere('u.email LIKE :term OR u.firstName LIKE :term OR u.lastName LIKE :term')
+               ->setParameter('term', '%' . $searchTerm . '%');
+        }
+
+        if ($dateFrom) {
+            $qb->andWhere('q.issueDate >= :dateFrom')
+               ->setParameter('dateFrom', new \DateTime($dateFrom));
+        }
+
+        if ($dateTo) {
+            $qb->andWhere('q.issueDate <= :dateTo')
+               ->setParameter('dateTo', new \DateTime($dateTo));
+        }
+
+        if ($status && $status !== 'all') {
+            $qb->andWhere('s.status = :status')
+               ->setParameter('status', $status);
+        }
+
+        // Comptage total pour pagination
+        $totalQb = clone $qb;
+        $totalQb->select('COUNT(DISTINCT q.id)');
+        $total = $totalQb->getQuery()->getSingleScalarResult();
+
+        // Pagination
+        $qb->setFirstResult($offset)
+           ->setMaxResults($limit);
+
+        $quotations = $qb->getQuery()->getResult();
+
+        // Formatage des données
+        $data = array_map(function($quotation) {
+            /** @var Quotation $quotation */
+            $client = null;
+            $salesList = $quotation->getSalesList();
+            $debugInfo = [];
+
+            $debugInfo['hasSalesList'] = $salesList !== null;
+
+            if ($salesList) {
+                $evaluates = $salesList->getEvaluates();
+                $debugInfo['evaluatesCount'] = $evaluates->count();
+                $debugInfo['evaluatesEmpty'] = $evaluates->isEmpty();
+
+                if (!$evaluates->isEmpty()) {
+                    $evaluate = $evaluates->first();
+                    $debugInfo['evaluateExists'] = $evaluate !== null;
+
+                    if ($evaluate) {
+                        $user = $evaluate->getReviewer();
+                        $debugInfo['hasReviewer'] = $user !== null;
+
+                        if ($user) {
+                            $client = [
+                                'id' => $user->getId(),
+                                'email' => $user->getEmail(),
+                                'firstName' => $user->getFirstName(),
+                                'lastName' => $user->getLastName(),
+                                'quoteAccepted' => $evaluate->isQuoteAccepted()
+                            ];
+                        }
+                    }
+                }
+            }
+
+            return [
+                'id' => $quotation->getId(),
+                'totalAmount' => $quotation->getTotalAmount(),
+                'issueDate' => $quotation->getIssueDate()?->format('Y-m-d'),
+                'dueDate' => $quotation->getDueDate()?->format('Y-m-d'),
+                'paymentStatus' => $quotation->isPaymentStatus(),
+                'salesListId' => $salesList?->getId(),
+                'salesListStatus' => $salesList?->getStatus()?->value,
+                'client' => $client,
+                'debug' => $debugInfo
+            ];
+        }, $quotations);
+
+        return $this->json([
+            'total' => $total,
+            'page' => $page,
+            'limit' => $limit,
+            'items' => $data
+        ]);
+    }
+    /**
      * Returns a paginated list of quotations.
      */
     #[OA\Get(
@@ -229,7 +342,7 @@ class QuotationController extends AbstractController
         ]
     )]
     #[Route('/{id}', name: 'quotation_delete', methods: ['DELETE'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SALES')]
     public function delete(Quotation $quotation = null, EntityManagerInterface $em): JsonResponse
     {
         if (!$quotation) {

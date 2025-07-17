@@ -121,8 +121,17 @@ export default function Quotation() {
             });
             console.log("Devis créé");
 
+            // 5. Créer l'évaluation (relation entre SalesList et User)
+            const currentUser = await apiClient.get('/users/me'); // Récupérer l'utilisateur courant
+            await apiClient.post('/evaluates', {
+                salesListId: salesListId,
+                userId: currentUser.id,
+                quoteAccepted: false // Initialement non accepté
+            });
+            console.log("Évaluation créée");
+
             // Redirection vers une page de confirmation
-            navigate('/devis/confirmation', { state: { quotationId: salesListId } });
+            navigate(`/quotation/detail/${salesListId}`, { state: { quotationId: salesListId } });
 
         } catch (error) {
             console.error('Erreur lors de la soumission du devis:', error);
