@@ -57,7 +57,6 @@ export default function DashboardUser() {
 
     return (
         <div>
-            <h2>Dashboard Utilisateurs</h2>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                 <InputWithLabel
                     type="text"

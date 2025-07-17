@@ -85,14 +85,7 @@ const QuotationManagement = () => {
     };
 
     return (
-        <MainLayout>
-            <Header />
-
-            <div className={styles.pageHeader}>
-                <h1>Gestion des devis</h1>
-                <p>Consultez et gérez tous les devis de vos clients</p>
-            </div>
-
+        <div>
             <div className={styles.pageContent}>
                 <QuotationFilters
                     onSearch={handleSearch}
@@ -113,9 +106,7 @@ const QuotationManagement = () => {
                     />
                 )}
             </div>
-
-            <Footer />
-        </MainLayout>
+        </div>
     );
 };
 

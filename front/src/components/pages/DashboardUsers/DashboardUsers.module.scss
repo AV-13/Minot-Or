@@ -1,0 +1,25 @@
+// Créer un fichier commun pour les styles des pages dashboard
+// front/src/components/pages/DashboardCommon.module.scss
+
+.container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 32px;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #2c3e50;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #6c757d;
+    margin: 0;
+  }
+}

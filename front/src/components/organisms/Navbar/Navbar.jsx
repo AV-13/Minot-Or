@@ -1,17 +1,28 @@
-// src/components/organisms/Navbar.jsx
-import {Link, NavLink} from 'react-router';
+// front/src/components/organisms/Navbar/Navbar.jsx
+import React from 'react';
+import { NavLink } from 'react-router';
 import { useAuth } from '../../../contexts/AuthContext';
 import { AuthorizedElement } from '../../auth/RequireAuth';
 import styles from './Navbar.module.scss';
 import Logo from "../../atoms/Logo/Logo";
 import ProfileAvatar from "../../atoms/ProfileAvatar/ProfileAvatar";
+import DropdownMenu from "../../atoms/DropdownMenu/DropdownMenu";
 
 const Navbar = () => {
     const { user, logout } = useAuth();
+
+    // Suppression de "Vue générale" du menu déroulant
+    const dashboardItems = [
+        { label: 'Utilisateurs', path: '/dashboard/users' },
+        { label: 'Produits', path: '/dashboard/products' },
+        { label: 'Entrepôts', path: '/dashboard/warehouses' },
+        { label: 'Devis', path: '/dashboard/quotations' },
+    ];
+
     return (
         <nav className={styles.navbar}>
             <NavLink to="/">
-                <Logo customClass={"navLogo"} ></Logo>
+                <Logo customClass={"navLogo"} />
             </NavLink>
             <ul className={styles.navLinks}>
                 {user && (
@@ -21,24 +32,23 @@ const Navbar = () => {
                                 Accueil
                             </NavLink>
                         </li>
-                        <li><NavLink to="/dashboard" className={({isActive}) => isActive ? styles.active : undefined}>Tableau
-                            de bord</NavLink></li>
-                        <li><NavLink to="/product"
-                                     className={({isActive}) => isActive ? styles.active : undefined}>Produits</NavLink>
+                        <li className={styles.dropdownContainer}>
+                            <DropdownMenu
+                                trigger="Tableau de bord"
+                                items={dashboardItems}
+                                mainLink="/dashboard"
+                            />
                         </li>
-                        <AuthorizedElement allowedRoles={['Sales']}>
-                            <li><NavLink to="/admin"
-                                         className={({isActive}) => isActive ? styles.active : undefined}>Administration</NavLink>
-                            </li>
-                        </AuthorizedElement>
-                        <AuthorizedElement allowedRoles={['Sales', 'Procurement']}>
-                            <li><NavLink to="/fournisseurs"
-                                         className={({isActive}) => isActive ? styles.active : undefined}>Gestion
-                                fournisseurs</NavLink></li>
-                        </AuthorizedElement>
+                        <li>
+                            <NavLink to="/product" className={({isActive}) => isActive ? styles.active : undefined}>
+                                Produits
+                            </NavLink>
+                        </li>
                         <AuthorizedElement allowedRoles={['Driver']}>
-                            <li><NavLink to="/livraisons"
-                                         className={({isActive}) => isActive ? styles.active : undefined}>Livraisons</NavLink>
+                            <li>
+                                <NavLink to="/livraisons" className={({isActive}) => isActive ? styles.active : undefined}>
+                                    Livraisons
+                                </NavLink>
                             </li>
                         </AuthorizedElement>
                     </>
@@ -60,7 +70,6 @@ const Navbar = () => {
                             onClick={logout}
                             style={{cursor: 'pointer', width: 22, height: 22}}
                         />
-                        {/*<button onClick={logout}>Déconnexion</button>*/}
                     </>
                 )}
             </div>
