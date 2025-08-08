@@ -7,9 +7,17 @@ use App\Enum\UserRole;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
@@ -29,9 +37,14 @@ class UserFixtures extends Fixture
             $user->setFirstName($faker->firstName);
             $user->setLastName($faker->lastName);
             $user->setEmail($faker->unique()->email);
-            $user->setPassword('password'); // À encoder selon tes besoins
+
+            // Hacher le mot de passe
+            $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
+            $user->setPassword($hashedPassword);
+
             $role = $faker->randomElement(UserRole::cases());
             $user->setRole($role);
+            $user->setRoles([$role->toSymfonyRole()]);
             $user->setCompany($minotor);
             $manager->persist($user);
         }
@@ -44,12 +57,46 @@ class UserFixtures extends Fixture
                 $user->setFirstName($faker->firstName);
                 $user->setLastName($faker->lastName);
                 $user->setEmail($faker->unique()->email);
-                $user->setPassword('password');
+
+                // Hacher le mot de passe
+                $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
+                $user->setPassword($hashedPassword);
+
                 $user->setRole(UserRole::Baker);
+                $user->setRoles([UserRole::Baker->toSymfonyRole()]);
                 $user->setCompany($company);
                 $manager->persist($user);
             }
         }
+
+        // Création des utilisateurs spécifiques pour les tests
+        $user = new User();
+        $user->setFirstName('sales');
+        $user->setLastName('sales');
+        $user->setEmail('sales@sales.com');
+
+        // Hacher le mot de passe
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'sales');
+        $user->setPassword($hashedPassword);
+
+        $user->setRole(UserRole::Sales);
+        $user->setRoles([UserRole::Sales->toSymfonyRole()]);
+        $user->setCompany($company);
+        $manager->persist($user);
+
+        $user = new User();
+        $user->setFirstName('baker');
+        $user->setLastName('baker');
+        $user->setEmail('baker@baker.com');
+
+        // Hacher le mot de passe
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'baker');
+        $user->setPassword($hashedPassword);
+
+        $user->setRole(UserRole::Baker);
+        $user->setRoles([UserRole::Baker->toSymfonyRole()]);
+        $user->setCompany($company);
+        $manager->persist($user);
 
         $manager->flush();
     }

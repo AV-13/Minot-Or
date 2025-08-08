@@ -59,7 +59,6 @@ export default function QuotationDetail() {
     if (loading) {
         return (
             <MainLayout>
-                <Header />
                 <div className={styles.loadingContainer}>
                     <p>Chargement des détails du devis...</p>
                 </div>
@@ -71,7 +70,6 @@ export default function QuotationDetail() {
     if (error) {
         return (
             <MainLayout>
-                <Header />
                 <div className={styles.errorContainer}>
                     <p>{error}</p>
                     <Button onClick={handleBackToList}>Retour à la liste des devis</Button>
@@ -83,19 +81,12 @@ export default function QuotationDetail() {
 
     return (
         <MainLayout>
-            <Header />
-
             <div className={styles.pageHeader}>
                 <h1>Détails de votre devis</h1>
                 <p>Récapitulatif de votre demande de devis et informations de livraison</p>
             </div>
 
             <div className={styles.pageContent}>
-                <div className={styles.backLink}>
-                    <Button onClick={handleBackToList} customClass={styles.backButton}>
-                        ← Retour à la liste des devis
-                    </Button>
-                </div>
 
                 <div className={styles.detailsContainer}>
                     <div className={styles.leftColumn}>

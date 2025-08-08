@@ -41,19 +41,19 @@ const OrderedProducts = ({ products, quotation }) => {
 
             <div className={styles.summaryDetails}>
                 <div className={styles.summaryRow}>
-                    <span>Sous-total</span>
+                    <span>Sous-total : </span>
                     <span>{subTotal.toFixed(2)} €</span>
                 </div>
                 <div className={styles.summaryRow}>
-                    <span>TVA (5.5%)</span>
+                    <span>TVA (5.5%) : </span>
                     <span>{vat.toFixed(2)} €</span>
                 </div>
                 <div className={styles.summaryRow}>
-                    <span>Frais de livraison</span>
+                    <span>Frais de livraison : </span>
                     <span>{shippingCost === 0 ? 'Gratuit' : `${shippingCost} €`}</span>
                 </div>
                 <div className={styles.totalRow}>
-                    <span>Total</span>
+                    <span>Total : </span>
                     <span className={styles.totalPrice}>{total.toFixed(2)} €</span>
                 </div>
             </div>

@@ -7,6 +7,7 @@ export function CartProvider({ children }) {
         const stored = localStorage.getItem('cart');
         return stored ? JSON.parse(stored) : [];
     });
+    const [notification, setNotification] = useState(null);
 
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -31,6 +32,12 @@ export function CartProvider({ children }) {
                 }];
             }
         });
+        setNotification(product);
+
+        // Cacher la notification après 5 secondes
+        setTimeout(() => {
+            setNotification(null);
+        }, 5000);
     };
 
     const removeFromCart = (id) => {
@@ -47,8 +54,16 @@ export function CartProvider({ children }) {
         });
     };
 
+    const clearCart = () => {
+        setCart([]);
+    };
+
+    const closeNotification = () => {
+        setNotification(null);
+    };
+
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, notification, closeNotification, clearCart }}>
             {children}
         </CartContext.Provider>
     );

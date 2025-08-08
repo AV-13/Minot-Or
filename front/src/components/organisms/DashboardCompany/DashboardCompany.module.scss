@@ -1,0 +1,25 @@
+// front/src/components/organisms/DashboardCompany/DashboardCompany.module.scss
+.container {
+  width: 100%;
+}
+
+.searchBar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: flex-end;
+}
+
+.searchButton {
+  padding: 10px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 40px;
+
+  &:hover {
+    background-color: #0069d9;
+  }
+}

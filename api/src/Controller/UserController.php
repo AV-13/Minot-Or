@@ -268,39 +268,6 @@ final class UserController extends AbstractController
     }
 
     /**
-     * Deletes a user from the current company.
-     */
-    #[OA\Delete(
-        path: '/api/users/{id}',
-        summary: 'Delete user',
-        responses: [
-            new OA\Response(response: 200, description: 'User deleted')
-        ]
-    )]
-    #[IsGranted('ROLE_USER')]
-    #[Route('/{id<\d+>}', name: 'user_delete', methods: ['DELETE'])]
-    public function delete(User $user, EntityManagerInterface $em, Security $security): JsonResponse
-    {
-        $current = $security->getUser();
-
-        // Si l'utilisateur courant est Sales
-        if ($current->getRole()->value === 'Sales') {
-            // Il ne peut pas supprimer un autre Sales
-            if ($user->getRole()->value === 'Sales') {
-                return $this->json(['error' => 'Impossible de supprimer un autre utilisateur Sales'], 403);
-            }
-        } else {
-            if (!$this->isGranted('ROLE_ADMIN')) {
-                return $this->json(['error' => 'Access denied'], 403);
-            }
-        }
-
-        $em->remove($user);
-        $em->flush();
-        return $this->json(['message' => 'User deleted successfully']);
-    }
-
-    /**
      * Returns the currently authenticated user.
      */
     #[OA\Get(
@@ -351,5 +318,44 @@ final class UserController extends AbstractController
         }
         $exists = (bool) $em->getRepository(User::class)->findOneBy(['email' => $email]);
         return $this->json(['exists' => $exists]);
+    }
+    /**
+     * Deletes a user from the current company.
+     */
+    #[OA\Delete(
+        path: '/api/users/{id}',
+        summary: 'Delete user',
+        responses: [
+            new OA\Response(response: 200, description: 'User deleted')
+        ]
+    )]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/{id<\d+>}', name: 'user_delete', methods: ['DELETE'])]
+    public function delete(User $user, EntityManagerInterface $em, Security $security): JsonResponse
+    {
+        $current = $security->getUser();
+
+        // Autoriser l'utilisateur à supprimer son propre compte
+        if ($current->getId() === $user->getId()) {
+            $em->remove($user);
+            $em->flush();
+            return $this->json(['message' => 'Votre compte a été supprimé avec succès']);
+        }
+
+        // Si l'utilisateur courant est Sales
+        if ($current->getRole()->value === 'Sales') {
+            // Il ne peut pas supprimer un autre Sales
+            if ($user->getRole()->value === 'Sales') {
+                return $this->json(['error' => 'Impossible de supprimer un autre utilisateur Sales'], 403);
+            }
+        } else {
+            if (!$this->isGranted('ROLE_ADMIN')) {
+                return $this->json(['error' => 'Access denied'], 403);
+            }
+        }
+
+        $em->remove($user);
+        $em->flush();
+        return $this->json(['message' => 'User deleted successfully']);
     }
 }

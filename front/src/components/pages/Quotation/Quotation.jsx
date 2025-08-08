@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import apiClient from "../../../utils/apiClient";
 
 export default function Quotation() {
-    const { cart, removeFromCart, updateQuantity } = useCart();
+    const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -130,6 +130,7 @@ export default function Quotation() {
             });
             console.log("Évaluation créée");
 
+            clearCart();
             // Redirection vers une page de confirmation
             navigate(`/quotation/detail/${salesListId}`, { state: { quotationId: salesListId } });
 
@@ -145,14 +146,8 @@ export default function Quotation() {
         }
     };
 
-    const handleSaveQuotation = () => {
-        console.log('Saving quotation to favorites');
-        // Sauvegarder le devis dans les favoris de l'utilisateur
-    };
-
     return (
         <MainLayout>
-            <Header />
 
             <div className={styles.pageHeader}>
                 <h1>Demande de devis</h1>
@@ -182,7 +177,6 @@ export default function Quotation() {
                         shippingCost={shippingCost}
                         total={total.toFixed(2)}
                         onSubmitQuotation={handleSubmitQuotation}
-                        onSaveQuotation={handleSaveQuotation}
                     />
                 </div>
             </div>

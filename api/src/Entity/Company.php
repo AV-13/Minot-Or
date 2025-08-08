@@ -24,6 +24,9 @@ class Company
     #[ORM\Column(length: 50)]
     private ?string $companyContact = null;
 
+    #[ORM\Column(type: "boolean", options: ["default" => false])]
+    private bool $unsold = false;
+
     /**
      * @var Collection<int, User>
      */
@@ -72,6 +75,18 @@ class Company
     public function setCompanyContact(string $companyContact): static
     {
         $this->companyContact = $companyContact;
+
+        return $this;
+    }
+
+    public function isUnsold(): bool
+    {
+        return $this->unsold;
+    }
+
+    public function setUnsold(bool $unsold): static
+    {
+        $this->unsold = $unsold;
 
         return $this;
     }

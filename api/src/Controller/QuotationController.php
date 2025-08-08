@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Quotation;
 use App\Entity\SalesList;
+use App\Entity\User;
 use App\Repository\QuotationRepository;
 use App\Repository\PricingRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,6 +64,12 @@ class QuotationController extends AbstractController
         if ($status && $status !== 'all') {
             $qb->andWhere('s.status = :status')
                ->setParameter('status', $status);
+        }
+
+        $paymentStatus = $request->query->get('paymentStatus');
+        if ($paymentStatus !== null) {
+            $qb->andWhere('q.paymentStatus = :paymentStatus')
+               ->setParameter('paymentStatus', (bool)$paymentStatus);
         }
 
         // Comptage total pour pagination
@@ -310,7 +317,7 @@ class QuotationController extends AbstractController
         ]
     )]
     #[Route('/{id}', name: 'quotation_update', methods: ['PUT'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SALES')]
     public function update(Request $request, Quotation $quotation = null, EntityManagerInterface $em): JsonResponse
     {
         if (!$quotation) {
@@ -383,5 +390,46 @@ class QuotationController extends AbstractController
             'id' => $quotation->getId(),
             'paymentStatus' => $quotation->isPaymentStatus()
         ]);
+    }
+    #[OA\Get(
+        path: '/api/quotations/user/{userId}',
+        summary: 'Get all quotations for a specific user',
+        parameters: [
+            new OA\Parameter(name: 'userId', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'List of quotations for the user'),
+            new OA\Response(response: 404, description: 'User not found')
+        ]
+    )]
+    #[Route('/user/{userId}', name: 'quotation_user_list', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function getUserQuotations(int $userId, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $em->getRepository(User::class)->find($userId);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], 404);
+        }
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('q')
+            ->from(Quotation::class, 'q')
+            ->join('q.salesList', 's')
+            ->join('s.evaluates', 'e')
+            ->where('e.reviewer = :user')
+            ->setParameter('user', $user);
+
+        $quotations = $qb->getQuery()->getResult();
+
+        $data = array_map(fn(Quotation $q) => [
+            'id' => $q->getId(),
+            'totalAmount' => $q->getTotalAmount(),
+            'issueDate' => $q->getIssueDate()?->format('Y-m-d'),
+            'dueDate' => $q->getDueDate()?->format('Y-m-d'),
+            'paymentStatus' => $q->isPaymentStatus(),
+        ], $quotations);
+
+        return $this->json($data);
     }
 }

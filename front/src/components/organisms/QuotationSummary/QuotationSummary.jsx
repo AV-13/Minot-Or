@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../../atoms/Button/Button';
 import styles from './QuotationSummary.module.scss';
 
-const QuotationSummary = ({ cart, subtotal, vat, shippingCost, total, onSubmitQuotation, onSaveQuotation }) => {
+const QuotationSummary = ({ cart, subtotal, vat, shippingCost, total, onSubmitQuotation }) => {
     return (
         <div className={styles.summarySection}>
             <div className={styles.sectionHeader}>
@@ -38,14 +38,6 @@ const QuotationSummary = ({ cart, subtotal, vat, shippingCost, total, onSubmitQu
                 <div className={styles.totalRow}>
                     <span>Total estimé</span>
                     <span className={styles.totalPrice}>{total} €</span>
-                </div>
-            </div>
-
-            <div className={styles.saveOption}>
-                <p>Souhaitez-vous enregistrer cette demande dans vos favoris avant de la soumettre ?</p>
-                <div className={styles.saveActions}>
-                    <Button onClick={onSaveQuotation} customClass={styles.saveButton}>Oui, enregistrer</Button>
-                    <Button onClick={() => {}} customClass={styles.cancelButton}>Non, merci</Button>
                 </div>
             </div>
 

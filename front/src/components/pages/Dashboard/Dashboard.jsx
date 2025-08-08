@@ -28,6 +28,12 @@ export default function Dashboard() {
             description: 'Consultez et gérez les devis clients en cours et archivés.',
             icon: '/icons/quotation.svg',
             link: '/dashboard/quotations'
+        },
+        {
+            title: 'Entreprises',
+            description: 'Gérez les entreprises et surveillez les invendus signalés.',
+            icon: '/icons/building.svg', // Vous devrez ajouter cette icône
+            link: '/dashboard/companies'
         }
     ];
 

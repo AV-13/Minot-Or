@@ -32,25 +32,25 @@ const Navbar = () => {
                                 Accueil
                             </NavLink>
                         </li>
-                        <li className={styles.dropdownContainer}>
-                            <DropdownMenu
-                                trigger="Tableau de bord"
-                                items={dashboardItems}
-                                mainLink="/dashboard"
-                            />
-                        </li>
+                        <AuthorizedElement allowedRoles={['sales']}>
+                            <li className={styles.dropdownContainer}>
+                                    <DropdownMenu
+                                        trigger="Tableau de bord"
+                                        items={dashboardItems}
+                                        mainLink="/dashboard"
+                                    />
+                            </li>
+                        </AuthorizedElement>
                         <li>
                             <NavLink to="/product" className={({isActive}) => isActive ? styles.active : undefined}>
                                 Produits
                             </NavLink>
                         </li>
-                        <AuthorizedElement allowedRoles={['Driver']}>
-                            <li>
-                                <NavLink to="/livraisons" className={({isActive}) => isActive ? styles.active : undefined}>
-                                    Livraisons
-                                </NavLink>
-                            </li>
-                        </AuthorizedElement>
+                        <li>
+                            <NavLink to="/order-history" className={({isActive}) => isActive ? styles.active : undefined}>
+                                Mes commandes
+                            </NavLink>
+                        </li>
                     </>
                 )}
             </ul>

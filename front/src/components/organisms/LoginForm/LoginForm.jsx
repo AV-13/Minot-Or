@@ -29,10 +29,8 @@ const LoginForm = () => {
                 password: form.password
             });
 
-            console.log('Réponse de connexion:', response);
-
             // Utiliser le contexte d'authentification pour stocker le token
-            login(response.token);
+            await login(response.token);
 
             // Rediriger vers la page d'accueil
             navigate('/');

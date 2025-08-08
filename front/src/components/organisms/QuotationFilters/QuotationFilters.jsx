@@ -15,7 +15,20 @@ const QuotationFilters = ({ onSearch, onFilterChange }) => {
     const handleStatusChange = (e) => {
         const newStatus = e.target.value;
         setStatusFilter(newStatus);
-        onFilterChange({ status: newStatus, dateRange });
+
+        if (newStatus === 'paid') {
+            onFilterChange({
+                status: 'all',
+                paymentStatus: 1,
+                dateRange
+            });
+        } else {
+            onFilterChange({
+                status: 'all',
+                paymentStatus: 0,
+                dateRange
+            });
+        }
     };
 
     const handleDateChange = (field, value) => {
@@ -50,8 +63,6 @@ const QuotationFilters = ({ onSearch, onFilterChange }) => {
                     >
                         <option value="all">Tous les statuts</option>
                         <option value="pending">En attente</option>
-                        <option value="accepted">Accepté</option>
-                        <option value="rejected">Refusé</option>
                         <option value="paid">Payé</option>
                     </select>
                 </div>
