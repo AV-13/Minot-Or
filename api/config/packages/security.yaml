@@ -49,6 +49,7 @@ security:
         # Autorise l'accès public à la doc
         - { path: ^/api/doc, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/deliveries/scan$, roles: IS_AUTHENTICATED_FULLY, methods: [POST] }
 
 when@test:
     security:

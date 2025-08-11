@@ -30,9 +30,9 @@ class Delivery
     private DeliveryStatus|null $deliveryStatus = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private string|null $driverRemark = null;
+    private ?string $driverRemark = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(length: 64, unique: true)]
     private ?string $qrCode = null;
 
     #[ORM\OneToOne(inversedBy: 'delivery', cascade: ['persist', 'remove'])]
