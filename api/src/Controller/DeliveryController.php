@@ -66,7 +66,7 @@ class DeliveryController extends AbstractController
         $total = $repo->count([]);
         $deliveries = $repo->findBy([], ['deliveryDate' => 'DESC'], $limit, $offset);
 
-        $exposeQr = $this->isGranted('ROLE_DRIVER') || $this->isGranted('ROLE_ORDERPREPARER');
+        $exposeQr = $this->isGranted('ROLE_ORDERPREPARER');
         $data = array_map(fn(Delivery $d) => $this->serializeDelivery($d, $exposeQr), $deliveries);
 
         return $this->json([
@@ -92,7 +92,6 @@ class DeliveryController extends AbstractController
             'id' => $d->getId(),
             'deliveryNumber' => $d->getDeliveryNumber(),
             'deliveryStatus' => $d->getDeliveryStatus()->value,
-            'qrCode' => $d->getQrCode(),
             'deliveryAddress' => $d->getDeliveryAddress(),
             'deliveryDate' => $d->getDeliveryDate()?->format('Y-m-d'),
         ], $items));
