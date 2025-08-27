@@ -1,4 +1,3 @@
-// front/src/components/pages/Profile/Profile.jsx
 import React from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import MainLayout from '../../templates/MainLayout';

@@ -118,6 +118,7 @@ const QuotationManagement = () => {
                         onPageChange={handlePageChange}
                         onViewDetails={handleViewDetails}
                         onMarkAsPaid={handleMarkAsPaid}
+                        fetchQuotations={fetchQuotations}
                     />
                 )}
             </div>

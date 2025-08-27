@@ -1,6 +1,6 @@
 // front/src/App.js
 import { BrowserRouter, Routes, Route } from 'react-router';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { RequireAuth } from './components/auth/RequireAuth';
 import Home from './components/pages/Home/Home';
 import Dashboard from './components/pages/Dashboard/Dashboard';
@@ -18,6 +18,7 @@ import OrderHistory from "./components/pages/OrderHistory/OrderHistory";
 import Profile from "./components/pages/Profile/Profile";
 import LoadingScreen from './components/atoms/LoadingScreen/LoadingScreen';
 import DashboardCompanies from "./components/pages/DashboardCompanies/DashboardCompanies";
+import TitleManager from './TitleManager';
 
 // Composant qui contient les routes et qui vérifie l'état de chargement
 const AppRoutes = () => {
@@ -108,11 +109,12 @@ const AppRoutes = () => {
 function App() {
     return (
         <BrowserRouter>
-            <AuthProvider>
-                <CartProvider>
-                    <AppRoutes />
-                </CartProvider>
-            </AuthProvider>
+          <TitleManager />
+          <AuthProvider>
+            <CartProvider>
+              <AppRoutes />
+            </CartProvider>
+          </AuthProvider>
         </BrowserRouter>
     );
 }

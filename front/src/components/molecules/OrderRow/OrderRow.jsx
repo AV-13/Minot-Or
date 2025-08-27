@@ -4,7 +4,6 @@ import OrderStatus from '../../atoms/OrderStatus/OrderStatus';
 import styles from './OrderRow.module.scss';
 
 const OrderRow = ({ order }) => {
-    console.log('OrderRow : ', order);
     return(
     <tr className={styles.row}>
         <td>{order.id}</td>

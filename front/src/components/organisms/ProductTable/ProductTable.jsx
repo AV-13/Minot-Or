@@ -1,33 +1,47 @@
+// Dans ProductTable.jsx
 import React from 'react';
+import styles from './ProductTable.module.scss';
 
-export default function ProductTable({ products, onDelete }) {
-    if (!products.length) return <p>Aucun produit trouvé.</p>;
+const ProductTable = ({ products, onDelete, onEdit }) => {
     return (
-        <table>
+        <table className={styles.table}>
             <thead>
             <tr>
+                <th>ID</th>
                 <th>Nom</th>
-                <th>Catégorie</th>
-                <th>Prix Net</th>
-                <th>Prix Brut</th>
-                <th>Stock</th>
+                <th>Type</th>
+                <th>Prix</th>
+                {/* Autres colonnes */}
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            {products.map(p => (
-                <tr key={p.id}>
-                    <td>{p.name}</td>
-                    <td>{p.category}</td>
-                    <td>{p.netPrice}</td>
-                    <td>{p.grossPrice}</td>
-                    <td>{p.stockQuantity}</td>
-                    <td>
-                        <button onClick={() => onDelete(p.id)}>Supprimer</button>
+            {products.map(product => (
+                <tr key={product.id}>
+                    <td>{product.id}</td>
+                    <td>{product.name}</td>
+                    <td>{product.type}</td>
+                    <td>{product.price} €</td>
+                    {/* Autres colonnes */}
+                    <td className={styles.actions}>
+                        <button
+                            className={styles.editButton}
+                            onClick={() => onEdit(product)}
+                        >
+                            Éditer
+                        </button>
+                        <button
+                            className={styles.deleteButton}
+                            onClick={() => onDelete(product.id)}
+                        >
+                            Supprimer
+                        </button>
                     </td>
                 </tr>
             ))}
             </tbody>
         </table>
     );
-}
+};
+
+export default ProductTable;

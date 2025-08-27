@@ -4,7 +4,6 @@ import styles from './QuotationDetailInfo.module.scss';
 
 const QuotationDetailInfo = ({ quotation }) => {
     if (!quotation) return <div className={styles.loading}>Chargement des informations...</div>;
-    console.log(quotation);
     const getStatusFrench = (status) => {
         // Traiter les autres statuts
         switch (status) {

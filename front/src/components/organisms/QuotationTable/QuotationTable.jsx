@@ -10,7 +10,8 @@ const QuotationTable = ({
                             totalPages,
                             onPageChange,
                             onViewDetails,
-                            onMarkAsPaid
+                            onMarkAsPaid,
+                            fetchQuotations
                         }) => {
     if (!quotations || quotations.length === 0) {
         return <div className={styles.emptyTable}>Aucun devis trouvé</div>;
@@ -26,6 +27,7 @@ const QuotationTable = ({
                     <th>Date d'émission</th>
                     <th>Date d'échéance</th>
                     <th>Montant total</th>
+                    <th>Remise globale</th>
                     <th>Statut</th>
                     <th>Actions</th>
                 </tr>
@@ -37,6 +39,7 @@ const QuotationTable = ({
                         quotation={quotation}
                         onViewDetails={onViewDetails}
                         onMarkAsPaid={onMarkAsPaid}
+                        onEditSuccess={fetchQuotations}
                     />
                 ))}
                 </tbody>

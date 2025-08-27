@@ -18,6 +18,7 @@ export default function DashboardProduct() {
     const [page, setPage] = useState(1);
     const [limit] = useState(20);
     const [total, setTotal] = useState(0);
+    const [editingProduct, setEditingProduct] = useState(null); // Nouvel état pour le produit en édition
 
     useEffect(() => { fetchProducts(); }, [page, search, typeFilter]);
 
@@ -47,6 +48,14 @@ export default function DashboardProduct() {
         setShowForm(false);
     };
 
+    const handleEdit = async (product) => {
+        // Mettre à jour le produit existant
+        await apiClient.put(`/products/${product.id}`, product);
+        fetchProducts();
+        setEditingProduct(null);
+        setShowForm(false);
+    };
+
     const handleDelete = async (id) => {
         await apiClient.delete(`/products/${id}`);
         fetchProducts();
@@ -58,13 +67,36 @@ export default function DashboardProduct() {
         setTypeFilter(typeFilterInput);
     };
 
+    const handleEditClick = (product) => {
+        setEditingProduct(product);
+        setShowForm(true);
+    };
+
     return (
         <div>
             <h2>Dashboard Produits</h2>
-            <button onClick={() => setShowForm(v => !v)}>
+            <button onClick={() => {
+                if (showForm && !editingProduct) {
+                    // Si le formulaire est ouvert pour un ajout, on le ferme
+                    setShowForm(false);
+                } else if (showForm && editingProduct) {
+                    // Si le formulaire est ouvert pour une édition, on annule l'édition
+                    setEditingProduct(null);
+                    setShowForm(false);
+                } else {
+                    // Sinon on ouvre le formulaire pour un ajout
+                    setShowForm(true);
+                }
+            }}>
                 {showForm ? 'Annuler' : 'Ajouter un produit'}
             </button>
-            {showForm && <AddProductForm onAdd={handleAdd} />}
+            {showForm && (
+                <AddProductForm
+                    onSubmit={editingProduct ? handleEdit : handleAdd}
+                    initialValues={editingProduct}
+                    isEditing={!!editingProduct}
+                />
+            )}
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                 <InputWithLabel
                     type="text"
@@ -80,7 +112,11 @@ export default function DashboardProduct() {
                 <button onClick={handleSearch}>Rechercher</button>
             </div>
             {loading ? <p>Chargement...</p> :
-                <ProductTable products={products} onDelete={handleDelete} />
+                <ProductTable
+                    products={products}
+                    onDelete={handleDelete}
+                    onEdit={handleEditClick}
+                />
             }
             <Pagination
                 page={page}

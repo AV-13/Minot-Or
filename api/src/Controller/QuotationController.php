@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use OpenApi\Attributes as OA;
+use App\Service\DistanceService;
 
 #[OA\Tag(name: "Quotation")]
 #[Route('/api/quotations')]
@@ -23,7 +24,7 @@ class QuotationController extends AbstractController
      * Renvoie une liste paginée des devis avec informations client pour l'admin.
      */
     #[Route('/admin', name: 'quotation_admin_list', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_SALES')]
     public function adminList(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $page = max(1, (int)$request->query->get('page', 1));
@@ -121,6 +122,7 @@ class QuotationController extends AbstractController
             return [
                 'id' => $quotation->getId(),
                 'totalAmount' => $quotation->getTotalAmount(),
+                'globalDiscount' => $salesList?->getGlobalDiscount(),
                 'issueDate' => $quotation->getIssueDate()?->format('Y-m-d'),
                 'dueDate' => $quotation->getDueDate()?->format('Y-m-d'),
                 'paymentStatus' => $quotation->isPaymentStatus(),
@@ -277,7 +279,7 @@ class QuotationController extends AbstractController
     )]
     #[Route('/{id}', name: 'quotation_detail', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function detail(Quotation $quotation = null): JsonResponse
+    public function detail(Quotation $quotation = null, DistanceService $distanceService = null): JsonResponse
     {
         if (!$quotation) {
             return $this->json(['error' => 'Quotation not found'], 404);
@@ -288,6 +290,7 @@ class QuotationController extends AbstractController
             'issueDate' => $quotation->getIssueDate()?->format('Y-m-d'),
             'dueDate' => $quotation->getDueDate()?->format('Y-m-d'),
             'paymentStatus' => $quotation->isPaymentStatus(),
+            'deliveryFee' => $quotation->getPricing()->getFixedFee() + $quotation->getPricing()->getCostPerKm() * ($distanceService->getDistance('','') ?? 10),
             'acceptanceDate' => $quotation->getAcceptanceDate()?->format('Y-m-d'),
             'salesListId' => $quotation->getSalesList()?->getId(),
             'pricingId' => $quotation->getPricing()?->getId(),

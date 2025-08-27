@@ -31,9 +31,6 @@ export default function Quotation() {
 
     useEffect(() => {
         // Transformer les éléments du panier pour leur donner une structure adaptée à l'affichage
-        cart.map(item => {
-            console.log(item);
-        })
         const formattedCart = cart.map(item => ({
             ...item,
             unit: 'Sac 25kg',
@@ -92,7 +89,6 @@ export default function Quotation() {
                 orderDate: currentDate
             });
             const salesListId = salesListResponse.id;
-            console.log("SalesList créée avec l'ID:", salesListId);
 
             // 2. Ajouter les produits à la liste de vente (via la table Contains)
             for (const item of cart) {
@@ -102,7 +98,6 @@ export default function Quotation() {
                     productQuantity: item.quantity,
                     productDiscount: 0
                 });
-                console.log(`Produit ${item.id} ajouté à la liste`);
             }
 
             // 3. Créer les informations de livraison
@@ -112,14 +107,12 @@ export default function Quotation() {
                 deliveryNumber: `DEL-${Date.now().toString().slice(-6)}`,
                 deliveryStatus: 'InPreparation'
             });
-            console.log("Informations de livraison créées");
 
             // 4. Créer le devis
             await apiClient.post(`/quotations/salesLists/${salesListId}/quotation`, {
                 dueDate: expirationDate,
                 distance: 10
             });
-            console.log("Devis créé");
 
             // 5. Créer l'évaluation (relation entre SalesList et User)
             const currentUser = await apiClient.get('/users/me'); // Récupérer l'utilisateur courant
@@ -128,7 +121,6 @@ export default function Quotation() {
                 userId: currentUser.id,
                 quoteAccepted: false // Initialement non accepté
             });
-            console.log("Évaluation créée");
 
             clearCart();
             // Redirection vers une page de confirmation

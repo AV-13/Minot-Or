@@ -1,44 +1,74 @@
-// Modification à apporter à QuotationListItem.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './QuotationListItem.module.scss';
 import Button from '../../atoms/Button/Button';
+import { FaUser, FaEuroSign, FaCalendarAlt } from 'react-icons/fa';
+import apiClient from '../../../utils/apiClient';
 
-const QuotationListItem = ({ quotation, onViewDetails, onMarkAsPaid }) => {
-    const formatDate = (dateString) => {
-        if (!dateString) return 'N/A';
-        return new Date(dateString).toLocaleDateString('fr-FR');
-    };
+const QuotationListItem = ({ quotation, onViewDetails, onMarkAsPaid, onEditSuccess }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [discount, setDiscount] = useState(quotation.globalDiscount);
 
-    const formatAmount = (amount) => {
-        return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
-    };
-
-    const getStatusLabel = (status) => {
-        const statusMap = {
+    const formatDate = (dateString) =>
+        dateString ? new Date(dateString).toLocaleDateString('fr-FR') : 'N/A';
+    const formatAmount = (amount) =>
+        new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
+    const getStatusLabel = (status) =>
+        ({
             'pending': 'En attente',
             'accepted': 'Accepté',
             'rejected': 'Refusé',
             'paid': 'Payé'
-        };
-        return statusMap[status] || 'Inconnu';
+        }[status] || 'Inconnu');
+
+    const handleEditClick = () => setIsEditing(true);
+    const handleCancel = () => {
+        setDiscount(quotation.globalDiscount);
+        setIsEditing(false);
+    };
+
+    const handleSave = async () => {
+        try {
+            await apiClient.put(`/salesLists/${quotation.salesListId}`, { globalDiscount: discount });
+            setIsEditing(false);
+            if (onEditSuccess) onEditSuccess();
+        } catch (e) {
+            // Gérer l'erreur si besoin
+        }
     };
 
     return (
         <tr className={styles.quotationItem}>
             <td>#{quotation.id}</td>
-            <td>{quotation.client ? `${quotation.client.firstName} ${quotation.client.lastName}` : 'Client inconnu'}</td>
-            <td>{formatDate(quotation.issueDate)}</td>
+            <td>
+                <FaUser style={{ marginRight: 6, color: '#2980b9' }} />
+                {quotation.client ? `${quotation.client.firstName} ${quotation.client.lastName}` : 'Client inconnu'}
+            </td>
+            <td>
+                <FaCalendarAlt style={{ marginRight: 6, color: '#7f8c8d' }} />
+                {formatDate(quotation.issueDate)}
+            </td>
             <td>{formatDate(quotation.dueDate)}</td>
-            <td>{formatAmount(quotation.totalAmount)}</td>
+            <td>{formatAmount(quotation.totalAmount - (quotation.totalAmount * (quotation.globalDiscount || 0) / 100))}</td>
+            <td>
+                {isEditing ? (
+                    <input
+                        type="number"
+                        min={0}
+                        value={discount}
+                        onChange={e => setDiscount(Number(e.target.value))}
+                        style={{ width: 80 }}
+                    />
+                ) : (
+                    `${quotation.globalDiscount}%`
+                )}
+            </td>
             <td className={styles.status}>
                 {quotation.paymentStatus ? (
-                    <span className={`${styles.statusBadge} ${styles.paid}`}>
-            Payé
-        </span>
+                    <span className={`${styles.statusBadge} ${styles.paid}`}>Payé</span>
                 ) : (
                     <span className={`${styles.statusBadge} ${styles[quotation.salesListStatus || 'pending']}`}>
-            {getStatusLabel(quotation.salesListStatus)}
-        </span>
+                        {getStatusLabel(quotation.salesListStatus)}
+                    </span>
                 )}
             </td>
             <td className={styles.actions}>
@@ -52,6 +82,18 @@ const QuotationListItem = ({ quotation, onViewDetails, onMarkAsPaid }) => {
                     >
                         Marquer comme payé
                     </Button>
+                )}
+                {!quotation.paymentStatus && (
+                    !isEditing ? (
+                        <Button onClick={handleEditClick} className={styles.editButton}>
+                            Modifier
+                        </Button>
+                    ) : (
+                        <>
+                            <Button onClick={handleSave} className={styles.saveButton}>Valider</Button>
+                            <Button onClick={handleCancel} className={styles.cancelButton}>Annuler</Button>
+                        </>
+                    )
                 )}
             </td>
         </tr>

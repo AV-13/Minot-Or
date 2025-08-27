@@ -2,7 +2,7 @@
 import React from 'react';
 import styles from './OrderedProducts.module.scss';
 
-const OrderedProducts = ({ products, quotation }) => {
+const OrderedProducts = ({ products, quotation, deliveryPrice }) => {
     if (!products || products.length === 0) {
         return <div className={styles.emptyProducts}>Aucun produit dans cette commande</div>;
     }
@@ -11,8 +11,9 @@ const OrderedProducts = ({ products, quotation }) => {
     const subTotal = quotation?.productsPrice || 0;
     const vatRate = 0.055; // 5.5%
     const vat = subTotal * vatRate;
-    const shippingCost = 0; // Gratuit
-    const total = subTotal + vat + shippingCost;
+    const total = subTotal + vat + deliveryPrice;
+
+    console.log(quotation);
 
     return (
         <div className={styles.productsCard}>
@@ -29,7 +30,6 @@ const OrderedProducts = ({ products, quotation }) => {
                             <span className={styles.productQuantity}>{product.productQuantity} × {product.unit || 'Sac 25kg'}</span>
                         </div>
                         <div className={styles.productPrice}>
-                            {console.log(product)}
                             {/* Pas besoin de calculer le prix si indisponible */}
                             {product.productGrossPrice ?
                                 (product.productGrossPrice * product.productQuantity).toFixed(2) + ' €' :
@@ -50,7 +50,7 @@ const OrderedProducts = ({ products, quotation }) => {
                 </div>
                 <div className={styles.summaryRow}>
                     <span>Frais de livraison : </span>
-                    <span>{shippingCost === 0 ? 'Gratuit' : `${shippingCost} €`}</span>
+                    <span>{deliveryPrice} €</span>
                 </div>
                 <div className={styles.totalRow}>
                     <span>Total : </span>

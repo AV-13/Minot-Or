@@ -16,6 +16,7 @@ export default function QuotationDetail() {
     const navigate = useNavigate();
     const [quotation, setQuotation] = useState(null);
     const [delivery, setDelivery] = useState(null);
+    const [deliveryPrice, setDeliveryPrice] = useState(0);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -25,18 +26,19 @@ export default function QuotationDetail() {
             try {
                 setLoading(true);
 
+                const quotationResponse = await apiClient.get(`/quotations/${id}`);
+                setDeliveryPrice(quotationResponse.deliveryFee || 0);
+
                 // 1. Récupérer les informations du devis
-                const quotationResponse = await apiClient.get(`/salesLists/${id}`);
-                setQuotation(quotationResponse);
+                const salesListResponse = await apiClient.get(`/salesLists/${quotationResponse.salesListId}`);
+                setQuotation(salesListResponse);
 
                 // 2. Récupérer les informations de livraison
-                const deliveryResponse = await apiClient.get(`/deliveries/salesLists/${id}`);
-                console.log(deliveryResponse);
+                const deliveryResponse = await apiClient.get(`/deliveries/salesLists/${quotationResponse.salesListId}`);
                 setDelivery(deliveryResponse);
 
                 // 3. Récupérer les produits associés
-                const productsResponse = await apiClient.get(`/salesLists/${id}/products`);
-                console.log('productsResponse', productsResponse);
+                const productsResponse = await apiClient.get(`/salesLists/${quotationResponse.salesListId}/products`);
                 setProducts(productsResponse);
 
                 setLoading(false);
@@ -53,7 +55,7 @@ export default function QuotationDetail() {
     }, [id]);
 
     const handleBackToList = () => {
-        navigate('/quotations');
+        navigate('/dashboard/quotations');
     };
 
     if (loading) {
@@ -95,12 +97,11 @@ export default function QuotationDetail() {
                     </div>
 
                     <div className={styles.rightColumn}>
-                        <OrderedProducts products={products} quotation={quotation} />
+                        <OrderedProducts products={products} quotation={quotation} deliveryPrice={deliveryPrice} />
                     </div>
                 </div>
             </div>
 
-            <Footer />
         </MainLayout>
     );
 }
