@@ -1,30 +1,46 @@
 ########################
 # Étape 1 : builder Composer
 ########################
-FROM composer:2 AS vendor
+FROM php:8.3-cli AS vendor
+
+# Installer les dépendances nécessaires à l’extension mongodb
+RUN apt-get update && apt-get install -y \
+    git unzip pkg-config libssl-dev libcurl4-openssl-dev autoconf gcc make \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# 1) Dépendances uniquement pour le cache
+# Installer Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 COPY composer.json composer.lock ./
-# on désactive les scripts car bin/console n'est pas encore présent
 RUN composer install --prefer-dist --no-progress --no-scripts
 
-# 2) Copie **tout** le code de l’API
 COPY . .
-
-# 3) Installation finale (scripts OK, MakerBundle inclus)
 RUN composer install --prefer-dist --no-progress
+
 
 ########################
 # Étape 2 : image PHP-Apache
 ########################
 FROM php:8.3-apache
 
-# 1. Paquets nécessaires à la compilation des extensions
+# Installer l’extension mongodb et ses dépendances
 RUN apt-get update && apt-get install -y \
-        libicu-dev         \
-        zlib1g-dev         \
+        libicu-dev \
+        zlib1g-dev \
+        libssl-dev \
+        git \
+        unzip \
+        pkg-config \
+        libcurl4-openssl-dev \
+        autoconf \
+        gcc \
+        make \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
     && docker-php-ext-install -j$(nproc) pdo_mysql intl opcache \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 

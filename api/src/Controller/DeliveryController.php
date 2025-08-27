@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use OpenApi\Attributes as OA;
-use Symfony\Component\Uid\Uuid;
 
 #[OA\Tag(name: "Delivery")]
 #[Route('/api/deliveries')]
@@ -101,7 +100,7 @@ class DeliveryController extends AbstractController
      * Creates a delivery for a sales list.
      */
     #[OA\Post(
-        path: '/api/deliveries/salesLists/{id}/delivery',
+        path: '/api/salesLists/{id}/delivery',
         summary: 'Create a delivery for a sales list',
         requestBody: new OA\RequestBody(
             required: true,
@@ -258,7 +257,7 @@ class DeliveryController extends AbstractController
         ]);
     }
 
-    
+
 
     /**
      * Returns the details of a delivery.

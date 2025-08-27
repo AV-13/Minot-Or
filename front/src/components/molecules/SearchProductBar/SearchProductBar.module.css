@@ -1,0 +1,28 @@
+.searchBar {
+  display: flex;
+  margin-bottom: 20px; }
+  .searchBar .searchInput {
+    position: relative;
+    flex: 1;
+    margin-right: 10px; }
+    .searchBar .searchInput input {
+      width: 100%;
+      padding: 10px 10px 10px 35px;
+      border: 1px solid #ddd;
+      border-radius: 4px; }
+    .searchBar .searchInput .searchIcon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999; }
+  .searchBar .filters {
+    display: flex; }
+    .searchBar .filters select {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-left: 10px;
+      background-color: white; }
+
+/*# sourceMappingURL=SearchProductBar.module.css.map */
