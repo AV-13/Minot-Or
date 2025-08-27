@@ -12,7 +12,7 @@
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.14",
         "doctrine/doctrine-migrations-bundle": "^3.4",
-        "doctrine/mongodb-odm-bundle": "*",
+        "doctrine/mongodb-odm-bundle": "^5.3",
         "doctrine/orm": "^3.3",
         "lexik/jwt-authentication-bundle": "^3.1",
         "nelmio/api-doc-bundle": "^5.0",
@@ -82,7 +82,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": "true",
             "require": "7.2.*",
             "docker": false
         }
