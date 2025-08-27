@@ -1,0 +1,67 @@
+.detailCard {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+
+  .icon {
+    font-size: 24px;
+    margin-right: 12px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+  }
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 15px;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+
+  .label {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 4px;
+  }
+
+  .value {
+    font-weight: 500;
+    color: #333;
+  }
+
+  .status {
+    font-weight: 600;
+    color: #2a5885;
+  }
+}
+
+.loading {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+}

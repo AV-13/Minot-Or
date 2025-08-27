@@ -139,7 +139,8 @@ final class CompanyController extends AbstractController
             'id' => $company->getId(),
             'companyName' => $company->getCompanyName(),
             'companySiret' => $company->getCompanySiret(),
-            'companyContact' => $company->getCompanyContact()
+            'companyContact' => $company->getCompanyContact(),
+            'unsold' => $company->isUnsold(),
         ]);
     }
 
@@ -261,6 +262,55 @@ final class CompanyController extends AbstractController
         return $this->json([
             'message' => "Company and all associated users have been deleted.",
             'deletedUsers' => $userCount
+        ]);
+    }
+    /**
+     * Met à jour le statut des invendus d'une entreprise.
+     */
+    #[OA\Patch(
+        path: '/api/companies/{id}/unsold',
+        summary: 'Mettre à jour le statut des invendus',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['unsold'],
+                properties: [
+                    new OA\Property(property: 'unsold', type: 'boolean')
+                ]
+            )
+        ),
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Statut des invendus mis à jour'),
+            new OA\Response(response: 400, description: 'Requête invalide'),
+            new OA\Response(response: 403, description: 'Accès refusé'),
+            new OA\Response(response: 404, description: 'Entreprise non trouvée')
+        ]
+    )]
+    #[Route('/{id}/unsold', name: 'company_update_unsold', methods: ['PATCH'])]
+    #[IsGranted('ROLE_BAKER')]
+    public function updateUnsold(Request $request, Company $company, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['unsold']) || !is_bool($data['unsold'])) {
+            return $this->json(['error' => 'Le champ unsold est requis et doit être un booléen'], 400);
+        }
+
+        // Vérifier que l'utilisateur est associé à cette entreprise
+        $user = $this->getUser();
+        if ($user->getCompany()->getId() !== $company->getId()) {
+            return $this->json(['error' => 'Vous n\'êtes pas autorisé à modifier cette entreprise'], 403);
+        }
+
+        $company->setUnsold($data['unsold']);
+        $em->flush();
+
+        return $this->json([
+            'message' => 'Statut des invendus mis à jour avec succès',
+            'unsold' => $company->isUnsold()
         ]);
     }
 }

@@ -16,6 +16,7 @@ export default function QuotationDetail() {
     const navigate = useNavigate();
     const [quotation, setQuotation] = useState(null);
     const [delivery, setDelivery] = useState(null);
+    const [deliveryPrice, setDeliveryPrice] = useState(0);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -25,18 +26,20 @@ export default function QuotationDetail() {
             try {
                 setLoading(true);
 
+                const quotationResponse = await apiClient.get(`/quotations/${id}`);
+                setDeliveryPrice(quotationResponse.deliveryFee || 0);
+
                 // 1. Récupérer les informations du devis
-                const quotationResponse = await apiClient.get(`/salesLists/${id}`);
-                setQuotation(quotationResponse.data);
+                const salesListResponse = await apiClient.get(`/salesLists/${quotationResponse.salesListId}`);
+                setQuotation(salesListResponse);
 
                 // 2. Récupérer les informations de livraison
-                const deliveryResponse = await apiClient.get(`/deliveries/salesLists/${id}`);
-                console.log(deliveryResponse);
-                setDelivery(deliveryResponse.data);
+                const deliveryResponse = await apiClient.get(`/deliveries/salesLists/${quotationResponse.salesListId}`);
+                setDelivery(deliveryResponse);
 
                 // 3. Récupérer les produits associés
-                const productsResponse = await apiClient.get(`/salesLists/${id}/products`);
-                setProducts(productsResponse.data);
+                const productsResponse = await apiClient.get(`/salesLists/${quotationResponse.salesListId}/products`);
+                setProducts(productsResponse);
 
                 setLoading(false);
             } catch (err) {
@@ -52,13 +55,12 @@ export default function QuotationDetail() {
     }, [id]);
 
     const handleBackToList = () => {
-        navigate('/quotations');
+        navigate('/dashboard/quotations');
     };
 
     if (loading) {
         return (
             <MainLayout>
-                <Header />
                 <div className={styles.loadingContainer}>
                     <p>Chargement des détails du devis...</p>
                 </div>
@@ -70,7 +72,6 @@ export default function QuotationDetail() {
     if (error) {
         return (
             <MainLayout>
-                <Header />
                 <div className={styles.errorContainer}>
                     <p>{error}</p>
                     <Button onClick={handleBackToList}>Retour à la liste des devis</Button>
@@ -82,19 +83,12 @@ export default function QuotationDetail() {
 
     return (
         <MainLayout>
-            <Header />
-
             <div className={styles.pageHeader}>
                 <h1>Détails de votre devis</h1>
                 <p>Récapitulatif de votre demande de devis et informations de livraison</p>
             </div>
 
             <div className={styles.pageContent}>
-                <div className={styles.backLink}>
-                    <Button onClick={handleBackToList} customClass={styles.backButton}>
-                        ← Retour à la liste des devis
-                    </Button>
-                </div>
 
                 <div className={styles.detailsContainer}>
                     <div className={styles.leftColumn}>
@@ -103,12 +97,11 @@ export default function QuotationDetail() {
                     </div>
 
                     <div className={styles.rightColumn}>
-                        <OrderedProducts products={products} />
+                        <OrderedProducts products={products} quotation={quotation} deliveryPrice={deliveryPrice} />
                     </div>
                 </div>
             </div>
 
-            <Footer />
         </MainLayout>
     );
 }

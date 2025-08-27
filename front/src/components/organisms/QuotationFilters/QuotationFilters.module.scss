@@ -1,0 +1,96 @@
+.filtersContainer {
+  background: #f5f5f5;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+  padding: 24px 32px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+
+.searchContainer {
+  flex: 1 1 300px;
+  display: flex;
+  align-items: center;
+
+  .searchInput {
+    padding: 10px 16px;
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #bfc9d9;
+    font-size: 1rem;
+    width: 220px;
+    outline: none;
+  }
+
+  .searchButton {
+    padding: 10px 20px;
+    border-radius: 0 8px 8px 0;
+    border: none;
+    background: #2c3e50;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover {
+      background: #34495e;
+    }
+  }
+}
+
+.filterControls {
+  display: flex;
+  gap: 32px;
+  flex: 2 1 400px;
+  align-items: center;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 0.95rem;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .selectFilter {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #bfc9d9;
+    background: #fff;
+    font-size: 1rem;
+    min-width: 140px;
+  }
+
+  .dateInputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .dateInput {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #bfc9d9;
+      background: #fff;
+      font-size: 1rem;
+      min-width: 120px;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .filtersContainer {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+  .filterControls {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

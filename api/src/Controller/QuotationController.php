@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Quotation;
 use App\Entity\SalesList;
+use App\Entity\User;
 use App\Repository\QuotationRepository;
 use App\Repository\PricingRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,11 +14,132 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use OpenApi\Attributes as OA;
+use App\Service\DistanceService;
 
 #[OA\Tag(name: "Quotation")]
 #[Route('/api/quotations')]
 class QuotationController extends AbstractController
 {
+    /**
+     * Renvoie une liste paginée des devis avec informations client pour l'admin.
+     */
+    #[Route('/admin', name: 'quotation_admin_list', methods: ['GET'])]
+    #[IsGranted('ROLE_SALES')]
+    public function adminList(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $page = max(1, (int)$request->query->get('page', 1));
+        $limit = max(1, (int)$request->query->get('limit', 20));
+        $offset = ($page - 1) * $limit;
+
+        // Filtres optionnels
+        $searchTerm = $request->query->get('term');
+        $dateFrom = $request->query->get('dateFrom');
+        $dateTo = $request->query->get('dateTo');
+        $status = $request->query->get('status');
+
+        // Construction de la requête
+        $qb = $em->createQueryBuilder();
+        $qb->select('q, s, e, u')
+           ->from('App\Entity\Quotation', 'q')
+           ->leftJoin('q.salesList', 's')
+           ->leftJoin('s.evaluates', 'e')
+           ->leftJoin('e.reviewer', 'u')
+           ->orderBy('q.issueDate', 'DESC');
+
+        // Appliquer les filtres
+        if ($searchTerm) {
+            $qb->andWhere('u.email LIKE :term OR u.firstName LIKE :term OR u.lastName LIKE :term')
+               ->setParameter('term', '%' . $searchTerm . '%');
+        }
+
+        if ($dateFrom) {
+            $qb->andWhere('q.issueDate >= :dateFrom')
+               ->setParameter('dateFrom', new \DateTime($dateFrom));
+        }
+
+        if ($dateTo) {
+            $qb->andWhere('q.issueDate <= :dateTo')
+               ->setParameter('dateTo', new \DateTime($dateTo));
+        }
+
+        if ($status && $status !== 'all') {
+            $qb->andWhere('s.status = :status')
+               ->setParameter('status', $status);
+        }
+
+        $paymentStatus = $request->query->get('paymentStatus');
+        if ($paymentStatus !== null) {
+            $qb->andWhere('q.paymentStatus = :paymentStatus')
+               ->setParameter('paymentStatus', (bool)$paymentStatus);
+        }
+
+        // Comptage total pour pagination
+        $totalQb = clone $qb;
+        $totalQb->select('COUNT(DISTINCT q.id)');
+        $total = $totalQb->getQuery()->getSingleScalarResult();
+
+        // Pagination
+        $qb->setFirstResult($offset)
+           ->setMaxResults($limit);
+
+        $quotations = $qb->getQuery()->getResult();
+
+        // Formatage des données
+        $data = array_map(function($quotation) {
+            /** @var Quotation $quotation */
+            $client = null;
+            $salesList = $quotation->getSalesList();
+            $debugInfo = [];
+
+            $debugInfo['hasSalesList'] = $salesList !== null;
+
+            if ($salesList) {
+                $evaluates = $salesList->getEvaluates();
+                $debugInfo['evaluatesCount'] = $evaluates->count();
+                $debugInfo['evaluatesEmpty'] = $evaluates->isEmpty();
+
+                if (!$evaluates->isEmpty()) {
+                    $evaluate = $evaluates->first();
+                    $debugInfo['evaluateExists'] = $evaluate !== null;
+
+                    if ($evaluate) {
+                        $user = $evaluate->getReviewer();
+                        $debugInfo['hasReviewer'] = $user !== null;
+
+                        if ($user) {
+                            $client = [
+                                'id' => $user->getId(),
+                                'email' => $user->getEmail(),
+                                'firstName' => $user->getFirstName(),
+                                'lastName' => $user->getLastName(),
+                                'quoteAccepted' => $evaluate->isQuoteAccepted()
+                            ];
+                        }
+                    }
+                }
+            }
+
+            return [
+                'id' => $quotation->getId(),
+                'totalAmount' => $quotation->getTotalAmount(),
+                'globalDiscount' => $salesList?->getGlobalDiscount(),
+                'issueDate' => $quotation->getIssueDate()?->format('Y-m-d'),
+                'dueDate' => $quotation->getDueDate()?->format('Y-m-d'),
+                'paymentStatus' => $quotation->isPaymentStatus(),
+                'salesListId' => $salesList?->getId(),
+                'salesListStatus' => $salesList?->getStatus()?->value,
+                'client' => $client,
+                'debug' => $debugInfo
+            ];
+        }, $quotations);
+
+        return $this->json([
+            'total' => $total,
+            'page' => $page,
+            'limit' => $limit,
+            'items' => $data
+        ]);
+    }
     /**
      * Returns a paginated list of quotations.
      */
@@ -157,7 +279,7 @@ class QuotationController extends AbstractController
     )]
     #[Route('/{id}', name: 'quotation_detail', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function detail(Quotation $quotation = null): JsonResponse
+    public function detail(Quotation $quotation = null, DistanceService $distanceService = null): JsonResponse
     {
         if (!$quotation) {
             return $this->json(['error' => 'Quotation not found'], 404);
@@ -168,6 +290,7 @@ class QuotationController extends AbstractController
             'issueDate' => $quotation->getIssueDate()?->format('Y-m-d'),
             'dueDate' => $quotation->getDueDate()?->format('Y-m-d'),
             'paymentStatus' => $quotation->isPaymentStatus(),
+            'deliveryFee' => $quotation->getPricing()->getFixedFee() + $quotation->getPricing()->getCostPerKm() * ($distanceService->getDistance('','') ?? 10),
             'acceptanceDate' => $quotation->getAcceptanceDate()?->format('Y-m-d'),
             'salesListId' => $quotation->getSalesList()?->getId(),
             'pricingId' => $quotation->getPricing()?->getId(),
@@ -197,7 +320,7 @@ class QuotationController extends AbstractController
         ]
     )]
     #[Route('/{id}', name: 'quotation_update', methods: ['PUT'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SALES')]
     public function update(Request $request, Quotation $quotation = null, EntityManagerInterface $em): JsonResponse
     {
         if (!$quotation) {
@@ -229,7 +352,7 @@ class QuotationController extends AbstractController
         ]
     )]
     #[Route('/{id}', name: 'quotation_delete', methods: ['DELETE'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SALES')]
     public function delete(Quotation $quotation = null, EntityManagerInterface $em): JsonResponse
     {
         if (!$quotation) {
@@ -270,5 +393,46 @@ class QuotationController extends AbstractController
             'id' => $quotation->getId(),
             'paymentStatus' => $quotation->isPaymentStatus()
         ]);
+    }
+    #[OA\Get(
+        path: '/api/quotations/user/{userId}',
+        summary: 'Get all quotations for a specific user',
+        parameters: [
+            new OA\Parameter(name: 'userId', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'List of quotations for the user'),
+            new OA\Response(response: 404, description: 'User not found')
+        ]
+    )]
+    #[Route('/user/{userId}', name: 'quotation_user_list', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function getUserQuotations(int $userId, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $em->getRepository(User::class)->find($userId);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], 404);
+        }
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('q')
+            ->from(Quotation::class, 'q')
+            ->join('q.salesList', 's')
+            ->join('s.evaluates', 'e')
+            ->where('e.reviewer = :user')
+            ->setParameter('user', $user);
+
+        $quotations = $qb->getQuery()->getResult();
+
+        $data = array_map(fn(Quotation $q) => [
+            'id' => $q->getId(),
+            'totalAmount' => $q->getTotalAmount(),
+            'issueDate' => $q->getIssueDate()?->format('Y-m-d'),
+            'dueDate' => $q->getDueDate()?->format('Y-m-d'),
+            'paymentStatus' => $q->isPaymentStatus(),
+        ], $quotations);
+
+        return $this->json($data);
     }
 }

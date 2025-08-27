@@ -25,10 +25,6 @@ const DeliveryDetailInfo = ({ delivery }) => {
                     <span className={styles.label}>Numéro de livraison:</span>
                     <span className={styles.value}>{delivery.deliveryNumber}</span>
                 </div>
-                <div className={styles.infoItem}>
-                    <span className={styles.label}>Statut:</span>
-                    <span className={`${styles.value} ${styles.status}`}>{delivery.deliveryStatus}</span>
-                </div>
             </div>
         </div>
     );

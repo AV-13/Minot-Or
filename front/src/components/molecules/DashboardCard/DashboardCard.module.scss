@@ -1,0 +1,46 @@
+// front/src/components/molecules/DashboardCard/DashboardCard.module.scss
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-decoration: none;
+  color: #2c3e50;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 200px;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.iconContainer {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.icon {
+  width: 100%;
+  height: auto;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+.description {
+  text-align: center;
+  color: #6c757d;
+  margin: 0;
+}

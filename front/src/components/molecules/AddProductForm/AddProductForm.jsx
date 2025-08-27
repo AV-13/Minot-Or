@@ -1,45 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
+import Select from '../../atoms/Select';
 import { TYPES } from '../../../constants/productType';
+import styles from './AddProductForm.module.scss';
 
-export default function AddProductForm({ onAdd }) {
-    const [productName, setProductName] = useState('');
-    const [category, setCategory] = useState('');
-    const [netPrice, setNetPrice] = useState('');
-    const [grossPrice, setGrossPrice] = useState('');
-    const [stockQuantity, setStockQuantity] = useState('');
-    const [unitWeight, setUnitWeight] = useState('');
+const AddProductForm = ({ onSubmit, initialValues, isEditing }) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        type: '',
+        price: '',
+        description: '',
+        // Autres champs nécessaires
+    });
+
+    useEffect(() => {
+        if (initialValues) {
+            setFormData({
+                name: initialValues.name || '',
+                type: initialValues.type || '',
+                price: initialValues.price || '',
+                description: initialValues.description || '',
+                // Autres champs à préremplir
+            });
+        }
+    }, [initialValues]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!productName || !category) return;
-        onAdd({
-            productName,
-            category,
-            netPrice: parseFloat(netPrice),
-            grossPrice: parseFloat(grossPrice),
-            stockQuantity: parseInt(stockQuantity, 10),
-            unitWeight: parseFloat(unitWeight),
-        });
-        setProductName('');
-        setCategory('');
-        setNetPrice('');
-        setGrossPrice('');
-        setStockQuantity('');
-        setUnitWeight('');
+        const productData = { ...formData };
+
+        if (isEditing) {
+            // Si on édite, on inclut l'ID
+            productData.id = initialValues.id;
+        }
+
+        onSubmit(productData);
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-            <input placeholder="Nom" value={productName} onChange={e => setProductName(e.target.value)} required />
-            <select value={category} onChange={e => setCategory(e.target.value)} required>
-                <option value="">Catégorie</option>
-                {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-            <input type="number" step="0.01" placeholder="Prix net" value={netPrice} onChange={e => setNetPrice(e.target.value)} />
-            <input type="number" step="0.01" placeholder="Prix brut" value={grossPrice} onChange={e => setGrossPrice(e.target.value)} />
-            <input type="number" placeholder="Stock" value={stockQuantity} onChange={e => setStockQuantity(e.target.value)} />
-            <input type="number" step="0.01" placeholder="Poids unitaire" value={unitWeight} onChange={e => setUnitWeight(e.target.value)} />
-            <button type="submit">Ajouter</button>
+        <form className={styles.form} onSubmit={handleSubmit}>
+            <h3>{isEditing ? 'Modifier le produit' : 'Ajouter un produit'}</h3>
+
+            <InputWithLabel
+                label="Nom"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+            />
+
+            <Select
+                label="Type"
+                name="type"
+                options={TYPES}
+                value={formData.type}
+                onChange={handleChange}
+                required
+            />
+
+            <InputWithLabel
+                label="Prix"
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                required
+            />
+
+            <InputWithLabel
+                label="Description"
+                type="textarea"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+            />
+
+            {/* Autres champs */}
+
+            <div className={styles.formActions}>
+                <button type="submit">
+                    {isEditing ? 'Mettre à jour' : 'Ajouter'}
+                </button>
+            </div>
         </form>
     );
-}
+};
+
+export default AddProductForm;

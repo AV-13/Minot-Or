@@ -1,0 +1,43 @@
+.emailCell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.roleTag {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #e9ecef;
+  color: #495057;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.deleteButton {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.roleSelect {
+  width: 100%;
+  max-width: 150px;
+}
+
+.confirmationModal {
+  padding: 20px;
+  max-width: 400px;
+
+  h3 {
+    margin-top: 0;
+    color: #dc3545;
+  }
+
+  .modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+}

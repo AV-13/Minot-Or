@@ -2,17 +2,18 @@
 import React from 'react';
 import styles from './OrderedProducts.module.scss';
 
-const OrderedProducts = ({ products }) => {
+const OrderedProducts = ({ products, quotation, deliveryPrice }) => {
     if (!products || products.length === 0) {
         return <div className={styles.emptyProducts}>Aucun produit dans cette commande</div>;
     }
 
-    // Calculs financiers
-    const subTotal = products.reduce((sum, item) => sum + (item.grossPrice * item.productQuantity), 0);
+    // Utilisation du prix provenant de SalesList au lieu de recalculer
+    const subTotal = quotation?.productsPrice || 0;
     const vatRate = 0.055; // 5.5%
     const vat = subTotal * vatRate;
-    const shippingCost = 0; // Gratuit
-    const total = subTotal + vat + shippingCost;
+    const total = subTotal + vat + deliveryPrice;
+
+    console.log(quotation);
 
     return (
         <div className={styles.productsCard}>
@@ -23,13 +24,16 @@ const OrderedProducts = ({ products }) => {
 
             <div className={styles.productsList}>
                 {products.map(product => (
-                    <div key={product.id} className={styles.productItem}>
+                    <div key={product.productId} className={styles.productItem}>
                         <div className={styles.productInfo}>
-                            <span className={styles.productName}>{product.name}</span>
+                            <span className={styles.productName}>{product.productName}</span>
                             <span className={styles.productQuantity}>{product.productQuantity} × {product.unit || 'Sac 25kg'}</span>
                         </div>
                         <div className={styles.productPrice}>
-                            {(product.grossPrice * product.productQuantity).toFixed(2)} €
+                            {/* Pas besoin de calculer le prix si indisponible */}
+                            {product.productGrossPrice ?
+                                (product.productGrossPrice * product.productQuantity).toFixed(2) + ' €' :
+                                'Prix indisponible'}
                         </div>
                     </div>
                 ))}
@@ -37,19 +41,19 @@ const OrderedProducts = ({ products }) => {
 
             <div className={styles.summaryDetails}>
                 <div className={styles.summaryRow}>
-                    <span>Sous-total</span>
+                    <span>Sous-total : </span>
                     <span>{subTotal.toFixed(2)} €</span>
                 </div>
                 <div className={styles.summaryRow}>
-                    <span>TVA (5.5%)</span>
+                    <span>TVA (5.5%) : </span>
                     <span>{vat.toFixed(2)} €</span>
                 </div>
                 <div className={styles.summaryRow}>
-                    <span>Frais de livraison</span>
-                    <span>{shippingCost === 0 ? 'Gratuit' : `${shippingCost} €`}</span>
+                    <span>Frais de livraison : </span>
+                    <span>{deliveryPrice} €</span>
                 </div>
                 <div className={styles.totalRow}>
-                    <span>Total</span>
+                    <span>Total : </span>
                     <span className={styles.totalPrice}>{total.toFixed(2)} €</span>
                 </div>
             </div>

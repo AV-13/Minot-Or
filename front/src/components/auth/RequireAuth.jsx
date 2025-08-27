@@ -36,7 +36,6 @@ export const RequireAuth = ({ children, allowedRoles = [] }) => {
 // Composant pour afficher conditionnellement des éléments selon le rôle
 export const AuthorizedElement = ({ children, allowedRoles = [] }) => {
     const { user } = useAuth();
-
     if (!user) return null;
 
     if (

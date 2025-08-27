@@ -1,4 +1,6 @@
+// front/src/components/atoms/ProfileAvatar/ProfileAvatar.jsx
 import React, { useEffect, useState } from "react";
+import { NavLink } from 'react-router';
 import styles from "./ProfileAvatar.module.scss";
 import Modal from "../Modal/Modal";
 import AvatarPicker from "../AvatarPicker/AvatarPicker";
@@ -26,14 +28,17 @@ const ProfileAvatar = ({ userName }) => {
 
     return (
         <>
-            <div className={styles.profileAvatar} onClick={() => setOpen(true)} style={{ cursor: 'pointer' }}>
+            <div className={styles.profileAvatar}>
                 <img
                     className={styles.avatar}
                     src={avatar}
                     alt="Avatar"
-                    style={{ backgroundColor: color }}
+                    style={{ backgroundColor: color, cursor: 'pointer' }}
+                    onClick={() => setOpen(true)}
                 />
-                <span className={styles.userName}>{userName}</span>
+                <NavLink to="/profile" className={styles.userName}>
+                    {userName}
+                </NavLink>
             </div>
             <Modal open={open} onClose={() => setOpen(false)}>
                 <AvatarPicker onChange={handleChange} onClose={() => setOpen(false)} />

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import apiClient from "../../../utils/apiClient";
 
 export default function Quotation() {
-    const { cart, removeFromCart, updateQuantity } = useCart();
+    const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,9 +31,6 @@ export default function Quotation() {
 
     useEffect(() => {
         // Transformer les éléments du panier pour leur donner une structure adaptée à l'affichage
-        cart.map(item => {
-            console.log(item);
-        })
         const formattedCart = cart.map(item => ({
             ...item,
             unit: 'Sac 25kg',
@@ -92,7 +89,6 @@ export default function Quotation() {
                 orderDate: currentDate
             });
             const salesListId = salesListResponse.id;
-            console.log("SalesList créée avec l'ID:", salesListId);
 
             // 2. Ajouter les produits à la liste de vente (via la table Contains)
             for (const item of cart) {
@@ -102,7 +98,6 @@ export default function Quotation() {
                     productQuantity: item.quantity,
                     productDiscount: 0
                 });
-                console.log(`Produit ${item.id} ajouté à la liste`);
             }
 
             // 3. Créer les informations de livraison
@@ -112,17 +107,24 @@ export default function Quotation() {
                 deliveryNumber: `DEL-${Date.now().toString().slice(-6)}`,
                 deliveryStatus: 'InPreparation'
             });
-            console.log("Informations de livraison créées");
 
             // 4. Créer le devis
             await apiClient.post(`/quotations/salesLists/${salesListId}/quotation`, {
                 dueDate: expirationDate,
                 distance: 10
             });
-            console.log("Devis créé");
 
+            // 5. Créer l'évaluation (relation entre SalesList et User)
+            const currentUser = await apiClient.get('/users/me'); // Récupérer l'utilisateur courant
+            await apiClient.post('/evaluates', {
+                salesListId: salesListId,
+                userId: currentUser.id,
+                quoteAccepted: false // Initialement non accepté
+            });
+
+            clearCart();
             // Redirection vers une page de confirmation
-            navigate('/devis/confirmation', { state: { quotationId: salesListId } });
+            navigate(`/quotation/detail/${salesListId}`, { state: { quotationId: salesListId } });
 
         } catch (error) {
             console.error('Erreur lors de la soumission du devis:', error);
@@ -136,14 +138,8 @@ export default function Quotation() {
         }
     };
 
-    const handleSaveQuotation = () => {
-        console.log('Saving quotation to favorites');
-        // Sauvegarder le devis dans les favoris de l'utilisateur
-    };
-
     return (
         <MainLayout>
-            <Header />
 
             <div className={styles.pageHeader}>
                 <h1>Demande de devis</h1>
@@ -173,7 +169,6 @@ export default function Quotation() {
                         shippingCost={shippingCost}
                         total={total.toFixed(2)}
                         onSubmitQuotation={handleSubmitQuotation}
-                        onSaveQuotation={handleSaveQuotation}
                     />
                 </div>
             </div>

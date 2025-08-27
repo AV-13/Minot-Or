@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\SalesList;
 use App\Entity\Product;
 use App\Entity\Contains;
+use App\Entity\User;
 use App\Enum\SalesStatus;
 use App\Repository\SalesListRepository;
 use App\Repository\ProductRepository;
@@ -259,6 +260,8 @@ class SalesListController extends AbstractController
             'productId' => $c->getProduct()?->getId(),
             'productName' => $c->getProduct()?->getProductName(),
             'productQuantity' => $c->getProductQuantity(),
+            'productGrossPrice' => $c->getProduct()?->getGrossPrice(),
+            'productNetPrice' => $c->getProduct()?->getNetPrice(),
             'productDiscount' => $c->getProductDiscount()
         ], $contains);
 
@@ -360,5 +363,46 @@ class SalesListController extends AbstractController
         $em->flush();
 
         return $this->json(['message' => 'Product removed from sales list']);
+    }
+    #[Route('/user/{userId}', name: 'salesList_user_orders', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function getUserOrders(int $userId, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $em->getRepository(User::class)->find($userId);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], 404);
+        }
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('s, d, c, p')
+            ->from(SalesList::class, 's')
+            ->leftJoin('s.delivery', 'd')
+            ->leftJoin('s.contains', 'c')
+            ->leftJoin('c.product', 'p')
+            ->join('s.evaluates', 'e')
+            ->where('e.reviewer = :user')
+            ->setParameter('user', $user);
+
+        $salesLists = $qb->getQuery()->getResult();
+
+        $data = array_map(function (SalesList $salesList) {
+            $delivery = $salesList->getDelivery();
+            $contains = $salesList->getContains();
+            $products = array_map(fn($contain) => $contain->getProduct()?->getProductName(), $contains->toArray());
+
+            return [
+                'id' => $salesList->getId(),
+                'status' => $salesList->getStatus()?->value,
+                'products' => $products,
+                'delivery' => $delivery ? [
+                    'id' => $delivery->getId(),
+                    'address' => $delivery->getDeliveryAddress(),
+                    'date' => $salesList->getDelivery()?->getDeliveryDate()?->format('d-m-Y H:i'),
+                ] : null,
+            ];
+        }, $salesLists);
+
+        return $this->json($data);
     }
 }

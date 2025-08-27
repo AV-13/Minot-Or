@@ -1,8 +1,26 @@
 import React from 'react';
 import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
 import styles from './DeliveryInfoSection.module.scss';
+import {useState} from "react";
 
 const DeliveryInfoSection = ({ onInfoChange }) => {
+    const [deliveryDate, setDeliveryDate] = useState('');
+    const [error, setError] = useState('');
+
+    const handleDateChange = (event) => {
+        const selectedDate = new Date(event.target.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate < today) {
+            setError('La date de livraison ne peut pas être antérieure à celle d\'aujourd\'hui.');
+        } else {
+            setError('');
+            onInfoChange('deliveryDate', event.target.value);
+        }
+
+        setDeliveryDate(event.target.value);
+    };
     return (
         <div className={styles.deliverySection}>
             <div className={styles.sectionHeader}>
@@ -17,8 +35,9 @@ const DeliveryInfoSection = ({ onInfoChange }) => {
                         <input
                             type="date"
                             className={styles.dateInput}
-                            onChange={(e) => onInfoChange('deliveryDate', e.target.value)}
+                            onChange={handleDateChange}
                         />
+                        {error && <p className={styles.error}>{error}</p>}
                     </div>
 
                     <div className={styles.formColumn}>

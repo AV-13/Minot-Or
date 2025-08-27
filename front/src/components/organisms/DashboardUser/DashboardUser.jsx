@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import InputWithLabel from "../../molecules/InputWithLabel/InputWithLabel";
 import Select from "../../atoms/Select";
 import { ROLES } from "../../../constants/roles";
-import UserTable from "../UserTable";
+import UserTable from "../UserTable/UserTable";
 import apiClient from "../../../utils/apiClient";
 import Pagination from "../../molecules/Pagination/Pagination";
+import Toast from "../../atoms/Toast/Toast";
+import styles from './DashboardUser.module.scss';
 
 export default function DashboardUser() {
     const [users, setUsers] = useState([]);
@@ -16,6 +18,7 @@ export default function DashboardUser() {
     const [page, setPage] = useState(1);
     const [limit] = useState(20);
     const [total, setTotal] = useState(0);
+    const [toast, setToast] = useState(null);
 
     useEffect(() => { fetchUsers(); }, [page, search, roleFilter]);
 
@@ -35,18 +38,29 @@ export default function DashboardUser() {
         } catch (e) {
             setUsers([]);
             setTotal(0);
+            showToast("Erreur lors du chargement des utilisateurs", "error");
         }
         setLoading(false);
     };
 
     const handleDelete = async (id) => {
-        await apiClient.delete(`users/${id}`);
-        fetchUsers();
+        try {
+            await apiClient.delete(`users/${id}`);
+            fetchUsers();
+            showToast("Utilisateur supprimé avec succès", "success");
+        } catch (e) {
+            showToast("Erreur lors de la suppression", "error");
+        }
     };
 
     const handleRoleChange = async (id, newRole) => {
-        await apiClient.put(`users/${id}`, { role: newRole });
-        fetchUsers();
+        try {
+            await apiClient.put(`users/${id}`, { role: newRole });
+            fetchUsers();
+            showToast("Rôle modifié avec succès", "success");
+        } catch (e) {
+            showToast("Erreur lors de la modification du rôle", "error");
+        }
     };
 
     const handleSearch = () => {
@@ -55,32 +69,65 @@ export default function DashboardUser() {
         setRoleFilter(roleFilterInput);
     };
 
+    const showToast = (message, type) => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 3000);
+    };
+
     return (
-        <div>
-            <h2>Dashboard Utilisateurs</h2>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <InputWithLabel
-                    type="text"
-                    placeholder="Recherche par email ou nom"
-                    value={searchInput}
-                    onChange={e => setSearchInput(e.target.value)}
-                />
-                <Select
-                    options={['', ...ROLES]}
-                    value={roleFilterInput}
-                    onChange={e => setRoleFilterInput(e.target.value)}
-                />
-                <button onClick={handleSearch}>Rechercher</button>
+        <div className={styles.container}>
+            <div className={styles.filtersContainer}>
+                <div className={styles.filters}>
+                    <InputWithLabel
+                        type="text"
+                        placeholder="Recherche par email ou nom"
+                        value={searchInput}
+                        onChange={e => setSearchInput(e.target.value)}
+                        label="Rechercher"
+                        className={styles.searchInput}
+                    />
+                    <Select
+                        options={['', ...ROLES]}
+                        value={roleFilterInput}
+                        onChange={e => setRoleFilterInput(e.target.value)}
+                        label="Filtrer par rôle"
+                        className={styles.roleFilter}
+                    />
+                    <button
+                        className={styles.searchButton}
+                        onClick={handleSearch}
+                    >
+                        Rechercher
+                    </button>
+                </div>
+                <div className={styles.results}>
+                    {!loading && <span>{total} utilisateur(s) trouvé(s)</span>}
+                </div>
             </div>
-            {loading ? <p>Chargement...</p> :
-                <UserTable users={users} onDelete={handleDelete} onRoleChange={handleRoleChange} />
-            }
-            <Pagination
-                page={page}
-                limit={limit}
-                total={total}
-                onPageChange={setPage}
-            />
+
+            {loading ? (
+                <div className={styles.loadingContainer}>
+                    <div className={styles.spinner}></div>
+                    <p>Chargement des utilisateurs...</p>
+                </div>
+            ) : (
+                <UserTable
+                    users={users}
+                    onDelete={handleDelete}
+                    onRoleChange={handleRoleChange}
+                />
+            )}
+
+            <div className={styles.paginationContainer}>
+                <Pagination
+                    page={page}
+                    limit={limit}
+                    total={total}
+                    onPageChange={setPage}
+                />
+            </div>
+
+            {toast && <Toast message={toast.message} type={toast.type} />}
         </div>
     );
 }
