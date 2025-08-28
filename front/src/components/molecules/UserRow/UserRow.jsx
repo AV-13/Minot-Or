@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from "../../atoms/Button/Button";
-import Select from "../../atoms/Select";
+import Select from "../../atoms/Select/Select";
 import { ROLES } from "../../../constants/roles";
 import styles from './UserRow.module.scss';
 import Modal from "../../atoms/Modal/Modal";

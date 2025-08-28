@@ -15,4 +15,4 @@ Dans un cadre de développement, vous pouvez exécuter :
 Dans le répertoire `front`, vous pouvez exécuter :
 ### `npm run start`
 
-Ouvrez (http://localhost:3000)
+Ouvrez (http://localhost:3001)

@@ -109,10 +109,12 @@ export default function Quotation() {
             });
 
             // 4. Créer le devis
-            await apiClient.post(`/quotations/salesLists/${salesListId}/quotation`, {
+            const quotationResponse = await apiClient.post(`/quotations/salesLists/${salesListId}/quotation`, {
                 dueDate: expirationDate,
                 distance: 10
             });
+
+            const quotationId = quotationResponse.id;
 
             // 5. Créer l'évaluation (relation entre SalesList et User)
             const currentUser = await apiClient.get('/users/me'); // Récupérer l'utilisateur courant
@@ -124,7 +126,7 @@ export default function Quotation() {
 
             clearCart();
             // Redirection vers une page de confirmation
-            navigate(`/quotation/detail/${salesListId}`, { state: { quotationId: salesListId } });
+            navigate(`/quotation/detail/${quotationId}`, { state: { quotationId: salesListId } });
 
         } catch (error) {
             console.error('Erreur lors de la soumission du devis:', error);
@@ -169,6 +171,7 @@ export default function Quotation() {
                         shippingCost={shippingCost}
                         total={total.toFixed(2)}
                         onSubmitQuotation={handleSubmitQuotation}
+                        isSubmitting={isSubmitting}
                     />
                 </div>
             </div>

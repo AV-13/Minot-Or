@@ -8,6 +8,7 @@ import apiClient from "../../../utils/apiClient";
 const RegisterForm = ({ onNext }) => {
     const [data, setData] = useState({ email: '', password: '', firstName: '', lastName: '' });
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = e => {
         setData({ ...data, [e.target.name]: e.target.value });
@@ -16,6 +17,7 @@ const RegisterForm = ({ onNext }) => {
     const handleSubmit = async e => {
         e.preventDefault();
         setError(null);
+        setIsLoading(true)
 
         try {
             const res = await apiClient.get(`/users/verify?email=${encodeURIComponent(data.email)}`);
@@ -42,7 +44,7 @@ const RegisterForm = ({ onNext }) => {
                 <InputWithLabel placeholder="Votre nom" label="Nom" id="lastName" name="lastName" value={data.lastName} onChange={handleChange} />
                 <InputWithLabel placeholder="exemple@email.com" label="Email" id="email" name="email" value={data.email} onChange={handleChange} />
                 <InputWithLabel placeholder="Votre mot de passe" label="Mot de passe" id="password" name="password" type="password" value={data.password} onChange={handleChange} />
-                <Button type="submit">Suivant</Button>
+                <Button type="submit" isLoading={isLoading}>Suivant</Button>
             </form>
         </>
     );

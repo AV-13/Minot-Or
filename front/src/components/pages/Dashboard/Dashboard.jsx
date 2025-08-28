@@ -34,6 +34,18 @@ export default function Dashboard() {
             description: 'Gérez les entreprises et surveillez les invendus signalés.',
             icon: '/icons/building.svg', // Vous devrez ajouter cette icône
             link: '/dashboard/companies'
+        },
+        {
+            title: 'Camions',
+            description: 'Gérez les camions, leurs statuts et leurs entretiens.',
+            icon: '/icons/building.svg', // Vous devrez ajouter cette icône
+            link: '/dashboard/trucks'
+        },
+        {
+            title: 'Livraisons',
+            description: 'Consultez et gérez les livraisons en cours et passées.',
+            icon: '/icons/delivery.svg', // Ajoutez l’icône correspondante
+            link: '/dashboard/deliveries'
         }
     ];
 

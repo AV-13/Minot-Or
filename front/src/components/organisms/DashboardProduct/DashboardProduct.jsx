@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
-import Select from '../../atoms/Select';
-import ProductTable from '../ProductTable/ProductTable';
+import Select from '../../atoms/Select/Select';
+import Button from "../../atoms/Button/Button";
+import GenericTable from '../../organisms/GenericTable/GenericTable';
+import GenericRow from '../../molecules/GenericRow/GenericRow';
+import style from './DashboardProduct.module.scss';
 import apiClient from '../../../utils/apiClient';
 import { TYPES } from '../../../constants/productType';
 import AddProductForm from '../../molecules/AddProductForm/AddProductForm';
@@ -18,7 +21,7 @@ export default function DashboardProduct() {
     const [page, setPage] = useState(1);
     const [limit] = useState(20);
     const [total, setTotal] = useState(0);
-    const [editingProduct, setEditingProduct] = useState(null); // Nouvel état pour le produit en édition
+    const [editingProduct, setEditingProduct] = useState(null);
 
     useEffect(() => { fetchProducts(); }, [page, search, typeFilter]);
 
@@ -49,7 +52,6 @@ export default function DashboardProduct() {
     };
 
     const handleEdit = async (product) => {
-        // Mettre à jour le produit existant
         await apiClient.put(`/products/${product.id}`, product);
         fetchProducts();
         setEditingProduct(null);
@@ -72,24 +74,56 @@ export default function DashboardProduct() {
         setShowForm(true);
     };
 
+
+// category
+
+// description
+
+// grossPrice
+
+// id
+
+// name
+
+// netPrice
+
+// quantity
+
+// stockQuantity
+
+
+    // Colonnes pour GenericTable
+    const columns = [
+        { key: 'name', label: 'Nom' },
+        { key: 'category', label: 'Type' },
+        { key: 'grossPrice', label: 'Prix', render: value => `${value} €` },
+        { key: 'stockQuantity', label: 'Stock' },
+        {
+            key: 'actions',
+            label: 'Actions',
+            render: (_, item) => (
+                <>
+                    <Button customClass={style.editButton} onClick={() => handleEditClick(item)}>Éditer</Button>
+                    <Button  customClass={style.deleteButton} onClick={() => handleDelete(item.id)} style={{ marginLeft: 8 }}>Supprimer</Button>
+                </>
+            )
+        }
+    ];
+
     return (
         <div>
-            <h2>Dashboard Produits</h2>
-            <button onClick={() => {
+            <Button customClass={style.createButton} onClick={() => {
                 if (showForm && !editingProduct) {
-                    // Si le formulaire est ouvert pour un ajout, on le ferme
                     setShowForm(false);
                 } else if (showForm && editingProduct) {
-                    // Si le formulaire est ouvert pour une édition, on annule l'édition
                     setEditingProduct(null);
                     setShowForm(false);
                 } else {
-                    // Sinon on ouvre le formulaire pour un ajout
                     setShowForm(true);
                 }
             }}>
                 {showForm ? 'Annuler' : 'Ajouter un produit'}
-            </button>
+            </Button>
             {showForm && (
                 <AddProductForm
                     onSubmit={editingProduct ? handleEdit : handleAdd}
@@ -109,13 +143,17 @@ export default function DashboardProduct() {
                     value={typeFilterInput}
                     onChange={e => setTypeFilterInput(e.target.value)}
                 />
-                <button onClick={handleSearch}>Rechercher</button>
+                <Button onClick={handleSearch}>Rechercher</Button>
             </div>
             {loading ? <p>Chargement...</p> :
-                <ProductTable
-                    products={products}
-                    onDelete={handleDelete}
-                    onEdit={handleEditClick}
+                <GenericTable
+                    columns={columns}
+                    data={products}
+                    RowComponent={GenericRow}
+                    page={page}
+                    limit={limit}
+                    total={total}
+                    onPageChange={setPage}
                 />
             }
             <Pagination

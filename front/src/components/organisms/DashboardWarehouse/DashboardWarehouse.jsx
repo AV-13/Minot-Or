@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AddWarehouseForm from '../../molecules/AddWarehouseForm/AddWarehouseForm';
-import WarehouseTable from '../../molecules/WarehouseTable/WarehouseTable';
+import GenericTable from '../../organisms/GenericTable/GenericTable';
+import GenericRow from '../../molecules/GenericRow/GenericRow';
 import apiClient from '../../../utils/apiClient';
 import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
 import Pagination from "../../molecules/Pagination/Pagination";
@@ -44,7 +45,7 @@ export default function DashboardWarehouse() {
 
     const handleDelete = async (id) => {
         await apiClient.delete(`/warehouses/${id}`);
-        setWarehouses(warehouses.filter(w => w.id !== id));
+        fetchWarehouses();
     };
 
     const handleSearch = () => {
@@ -52,9 +53,24 @@ export default function DashboardWarehouse() {
         setSearch(searchInput);
     };
 
+    // Colonnes pour GenericTable
+    const columns = [
+        { key: 'id', label: 'Id' },
+        { key: 'warehouseAddress', label: 'Localisation' },
+        { key: 'storageCapacity', label: 'Capacité de stockage' },
+        {
+            key: 'actions',
+            label: 'Actions',
+            render: (_, item) => (
+                <button onClick={() => handleDelete(item.id)}>
+                    Supprimer
+                </button>
+            )
+        }
+    ];
+
     return (
         <div>
-            <h2>Dashboard Entrepôts</h2>
             <button onClick={() => setShowForm(v => !v)}>
                 {showForm ? 'Annuler' : 'Ajouter un entrepôt'}
             </button>
@@ -69,14 +85,16 @@ export default function DashboardWarehouse() {
                 <button onClick={handleSearch}>Rechercher</button>
             </div>
             {loading ? <p>Chargement...</p> :
-                <WarehouseTable warehouses={warehouses} onDelete={handleDelete} />
+                <GenericTable
+                    columns={columns}
+                    data={warehouses}
+                    RowComponent={GenericRow}
+                    page={page}
+                    limit={limit}
+                    total={total}
+                    onPageChange={setPage}
+                />
             }
-            <Pagination
-                page={page}
-                limit={limit}
-                total={total}
-                onPageChange={setPage}
-            />
         </div>
     );
 }

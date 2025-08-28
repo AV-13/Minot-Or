@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../../atoms/Button/Button';
 import styles from './QuotationSummary.module.scss';
 
-const QuotationSummary = ({ cart, subtotal, vat, shippingCost, total, onSubmitQuotation }) => {
+const QuotationSummary = ({ cart, subtotal, vat, shippingCost, total, onSubmitQuotation, isSubmitting }) => {
     return (
         <div className={styles.summarySection}>
             <div className={styles.sectionHeader}>
@@ -41,7 +41,7 @@ const QuotationSummary = ({ cart, subtotal, vat, shippingCost, total, onSubmitQu
                 </div>
             </div>
 
-            <Button onClick={onSubmitQuotation} customClass={styles.submitButton}>
+            <Button onClick={onSubmitQuotation} customClass={styles.submitButton} isLoading={isSubmitting}>
                 <span className={styles.submitIcon}>📤</span> Soumettre la demande de devis
             </Button>
 

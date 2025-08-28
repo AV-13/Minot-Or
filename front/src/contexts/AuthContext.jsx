@@ -1,12 +1,14 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import apiClient from '../utils/apiClient';
+import {useNavigate} from "react-router";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
     // Fonction pour charger les détails complets de l'utilisateur
     const loadUserDetails = async (token) => {
@@ -48,6 +50,9 @@ export const AuthProvider = ({ children }) => {
         } else {
             setIsLoading(false);
         }
+        const handleForceLogout = () => logout();
+        window.addEventListener('force-logout', handleForceLogout);
+        return () => window.removeEventListener('force-logout', handleForceLogout);
     }, []);
 
     const login = async (token) => {
@@ -59,6 +64,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         setUser(null);
         delete apiClient.defaults.headers.common['Authorization'];
+        navigate('/')
     };
 
     return (
