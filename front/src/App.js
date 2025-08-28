@@ -14,11 +14,13 @@ import DashboardWarehouses from "./components/pages/DashboardWarehouses/Dashboar
 import DashboardQuotations from "./components/pages/DashboardQuotations/DashboardQuotations";
 import DashboardProducts from "./components/pages/DashboardProducts/DashboardProducts";
 import DashboardUsers from "./components/pages/DashboardUsers/DashboardUsers";
+import DashboardTrucks from "./components/pages/DashboardTrucks/DashboardTrucks";
 import OrderHistory from "./components/pages/OrderHistory/OrderHistory";
 import Profile from "./components/pages/Profile/Profile";
 import LoadingScreen from './components/atoms/LoadingScreen/LoadingScreen';
 import DashboardCompanies from "./components/pages/DashboardCompanies/DashboardCompanies";
 import TitleManager from './TitleManager';
+import DashboardDeliveries from "./components/pages/DashboardDeliveries/DashboardDeliveries";
 
 // Composant qui contient les routes et qui vérifie l'état de chargement
 const AppRoutes = () => {
@@ -77,6 +79,14 @@ const AppRoutes = () => {
                     </RequireAuth>
                 }
             />
+            <Route
+                path="/dashboard/trucks"
+                element={
+                    <RequireAuth allowedRoles={['admin', 'Sales', 'Driver']}>
+                        <DashboardTrucks />
+                    </RequireAuth>
+                }
+            />
             <Route path="/quotation/detail/:id" element={<QuotationDetail />} />
             <Route
                 path="/order-history"
@@ -99,6 +109,14 @@ const AppRoutes = () => {
                 element={
                     <RequireAuth allowedRoles={['admin', 'Sales']}>
                         <DashboardCompanies />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path="/dashboard/deliveries"
+                element={
+                    <RequireAuth allowedRoles={['admin', 'Sales', 'Driver']}>
+                        <DashboardDeliveries />
                     </RequireAuth>
                 }
             />

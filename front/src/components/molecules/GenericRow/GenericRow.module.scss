@@ -1,0 +1,34 @@
+.quotationItem {
+  transition: background 0.2s;
+  &:hover {
+    background: #f5f7fa;
+  }
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  &.pending { background: #f39c12; }
+  &.accepted { background: #27ae60; }
+  &.rejected { background: #e74c3c; }
+  &.paid { background: #2980b9; }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.payButton {
+  background: #27ae60 !important;
+  color: #fff !important;
+  border-radius: 8px;
+  font-weight: 600;
+  &:hover {
+    background: #219150 !important;
+  }
+}
