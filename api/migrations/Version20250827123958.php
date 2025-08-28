@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250827111514 extends AbstractMigration
+final class Version20250827123958 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,7 @@ final class Version20250827111514 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE clean (truck_cleaning_id INT NOT NULL, truck_id INT NOT NULL, INDEX IDX_F1B0AD491FEE3B9 (truck_cleaning_id), INDEX IDX_F1B0AD49C6957CCE (truck_id), PRIMARY KEY(truck_cleaning_id, truck_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE company (id INT AUTO_INCREMENT NOT NULL, company_name VARCHAR(50) NOT NULL, company_siret VARCHAR(50) NOT NULL, company_contact VARCHAR(50) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE company (id INT AUTO_INCREMENT NOT NULL, company_name VARCHAR(50) NOT NULL, company_siret VARCHAR(50) NOT NULL, company_contact VARCHAR(50) NOT NULL, unsold TINYINT(1) DEFAULT 0 NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE contains (sales_list_id INT NOT NULL, product_id INT NOT NULL, product_quantity INT NOT NULL, product_discount INT NOT NULL, INDEX IDX_8EFA6A7E33576AEB (sales_list_id), INDEX IDX_8EFA6A7E4584665A (product_id), PRIMARY KEY(sales_list_id, product_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE delivery (id INT AUTO_INCREMENT NOT NULL, sales_list_id INT NOT NULL, delivery_date DATE NOT NULL, delivery_address VARCHAR(255) NOT NULL, delivery_number VARCHAR(50) NOT NULL, delivery_status ENUM(\'in_preparation\',\'in_progress\',\'delivered\') NOT NULL COMMENT \'(DC2Type:delivery_status_enum)\', driver_remark LONGTEXT DEFAULT NULL, qr_code VARCHAR(64) NOT NULL, UNIQUE INDEX UNIQ_3781EC107D8B1FB5 (qr_code), UNIQUE INDEX UNIQ_3781EC1033576AEB (sales_list_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE evaluate (sales_list_id INT NOT NULL, reviewer_id INT NOT NULL, quote_accepted TINYINT(1) NOT NULL, INDEX IDX_8E840A8833576AEB (sales_list_id), INDEX IDX_8E840A8870574616 (reviewer_id), PRIMARY KEY(sales_list_id, reviewer_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');

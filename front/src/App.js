@@ -19,11 +19,12 @@ import Profile from "./components/pages/Profile/Profile";
 import LoadingScreen from './components/atoms/LoadingScreen/LoadingScreen';
 import DashboardCompanies from "./components/pages/DashboardCompanies/DashboardCompanies";
 import TitleManager from './TitleManager';
+import {useAnalytics} from "./hooks/useAnalytics";
 
 // Composant qui contient les routes et qui vérifie l'état de chargement
 const AppRoutes = () => {
     const { isLoading } = useAuth();
-
+    useAnalytics();
     if (isLoading) {
         return <LoadingScreen />;
     }

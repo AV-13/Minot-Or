@@ -21,14 +21,8 @@ class AnalyticsEvent
     #[MongoDB\Field(type: 'string', nullable: true)]
     private $referrer;
 
-    #[MongoDB\Field(type: 'int', nullable: true)]
-    private $sessionDuration;
-
     #[MongoDB\Field(type: 'string', nullable: true)]
     private $deviceType;
-
-    #[MongoDB\Field(type: 'string', nullable: true)]
-    private $country;
 
     #[MongoDB\Field(type: 'int', nullable: true)]
     private $screenWidth;
@@ -38,9 +32,6 @@ class AnalyticsEvent
 
     #[MongoDB\Field(type: 'string', nullable: true)]
     private $language;
-
-    #[MongoDB\Field(type: 'bool', nullable: true)]
-    private $isBounce;
 
     #[MongoDB\Field(type: 'string', nullable: true)]
     private $eventType;
@@ -102,17 +93,6 @@ class AnalyticsEvent
         return $this;
     }
 
-// sessionDuration
-    public function getSessionDuration(): ?int
-    {
-        return $this->sessionDuration;
-    }
-    public function setSessionDuration(?int $sessionDuration): self
-    {
-        $this->sessionDuration = $sessionDuration;
-        return $this;
-    }
-
 // deviceType
     public function getDeviceType(): ?string
     {
@@ -121,17 +101,6 @@ class AnalyticsEvent
     public function setDeviceType(?string $deviceType): self
     {
         $this->deviceType = $deviceType;
-        return $this;
-    }
-
-// country
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-    public function setCountry(?string $country): self
-    {
-        $this->country = $country;
         return $this;
     }
 
@@ -168,16 +137,6 @@ class AnalyticsEvent
         return $this;
     }
 
-// isBounce
-    public function getIsBounce(): ?bool
-    {
-        return $this->isBounce;
-    }
-    public function setIsBounce(?bool $isBounce): self
-    {
-        $this->isBounce = $isBounce;
-        return $this;
-    }
 
 // eventType
     public function getEventType(): ?string

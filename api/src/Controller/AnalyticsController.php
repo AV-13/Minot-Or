@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AnalyticsController extends AbstractController
 {
@@ -23,13 +24,10 @@ class AnalyticsController extends AbstractController
         $event->setTimestamp(new \DateTime($data['timestamp'] ?? 'now'));
         $event->setUserAgent($data['userAgent'] ?? null);
         $event->setReferrer($data['referrer'] ?? null);
-        $event->setSessionDuration($data['sessionDuration'] ?? null);
         $event->setDeviceType($data['deviceType'] ?? null);
-        $event->setCountry($data['country'] ?? null);
         $event->setScreenWidth($data['screenWidth'] ?? null);
         $event->setScreenHeight($data['screenHeight'] ?? null);
         $event->setLanguage($data['language'] ?? null);
-        $event->setIsBounce($data['isBounce'] ?? null);
         $event->setEventType($data['eventType'] ?? null);
         $event->setPageTitle($data['pageTitle'] ?? null);
         $event->setLoadTime($data['loadTime'] ?? null);
@@ -37,7 +35,23 @@ class AnalyticsController extends AbstractController
         $dm->persist($event);
         $dm->flush();
 
-        return $this->json(['message' => 'Event recorded'], 201);
+        return $this->json([
+            'message' => 'Event recorded',
+            'data' => [
+                'id' => $event->getId(),
+                'url' => $event->getUrl(),
+                'timestamp' => $event->getTimestamp()?->format('Y-m-d H:i:s'),
+                'userAgent' => $event->getUserAgent(),
+                'referrer' => $event->getReferrer(),
+                'deviceType' => $event->getDeviceType(),
+                'screenWidth' => $event->getScreenWidth(),
+                'screenHeight' => $event->getScreenHeight(),
+                'language' => $event->getLanguage(),
+                'eventType' => $event->getEventType(),
+                'pageTitle' => $event->getPageTitle(),
+                'loadTime' => $event->getLoadTime(),
+            ]
+        ], 201);
     }
 
     #[Route('/api/analytics', name: 'analytics_list', methods: ['GET'])]

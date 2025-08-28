@@ -10,6 +10,9 @@ security:
                 class: App\Entity\User
                 property: email
     firewalls:
+        analytics:
+            pattern: ^/api/analytics
+            security: false
         login:
             pattern: ^/api/login
             stateless: true
@@ -40,6 +43,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/analytics, roles: PUBLIC_ACCESS }
         - { path: ^/api/companies$, roles: PUBLIC_ACCESS, methods: [POST] }
         - { path: ^/api/companies/siret, roles: PUBLIC_ACCESS }
         - { path: ^/api/users$, roles: PUBLIC_ACCESS, methods: [POST] }
