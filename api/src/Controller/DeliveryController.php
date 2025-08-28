@@ -6,6 +6,7 @@ use App\Entity\Delivery;
 use App\Entity\SalesList;
 use App\Entity\Truck;
 use App\Enum\DeliveryStatus;
+use App\Enum\SalesStatus;
 use App\Repository\DeliveryRepository;
 use App\Repository\SalesListRepository;
 use App\Repository\TruckRepository;
@@ -158,6 +159,7 @@ class DeliveryController extends AbstractController
     /**
      * Préparateur : scan pour démarrer la livraison (InPreparation -> InProgress).
      */
+    #[IsGranted('ROLE_DRIVER')]
     #[OA\Post(
         path: '/api/deliveries/scan-prep',
         summary: 'Order preparer scan: mark delivery InProgress',
@@ -258,7 +260,40 @@ class DeliveryController extends AbstractController
         ]);
     }
 
-    
+    #[Route('/scan-order', name: 'order_preparer_scan_ready', methods: ['POST'])]
+    #[IsGranted('ROLE_ORDERPREPARER')]
+    public function scanOrderReady(Request $request, DeliveryRepository $repo, EntityManagerInterface $em): JsonResponse
+    {
+        $p  = json_decode($request->getContent(), true) ?? [];
+        $qr = $p['qrCode'] ?? null;
+        if (!$qr) return $this->json(['error' => 'qrCode required'], 400);
+
+        $delivery = $repo->findOneBy(['qrCode' => $qr]);
+        if (!$delivery) return $this->json(['error' => 'QR not found'], 404);
+
+        // On garde la cohérence: la livraison doit encore être "en préparation"
+        if ($delivery->getDeliveryStatus() !== DeliveryStatus::InPreparation) {
+            return $this->json(['error' => 'Delivery not in preparation'], 409);
+        }
+
+        $sales = $delivery->getSalesList();
+        if ($sales->getStatus() !== SalesStatus::PreparingProducts) {
+            return $this->json(['error' => 'Invalid sales_list status'], 409);
+        }
+
+        $sales->setStatus(SalesStatus::AwaitingDelivery);
+        $em->flush();
+
+        return $this->json([
+            'salesListId'     => $sales->getId(),
+            'salesListStatus' => $sales->getStatus()->value,
+            'deliveryNumber'  => $delivery->getDeliveryNumber(),
+            'deliveryStatus'  => $delivery->getDeliveryStatus()->value,
+        ]);
+    }
+
+
+
 
     /**
      * Returns the details of a delivery.
