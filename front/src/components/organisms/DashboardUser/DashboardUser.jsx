@@ -5,6 +5,7 @@ import { ROLES } from "../../../constants/roles";
 import GenericTable from "../GenericTable/GenericTable";
 import GenericRow from "../../molecules/GenericRow/GenericRow";
 import apiClient from "../../../utils/apiClient";
+import Pagination from "../../molecules/Pagination/Pagination";
 import Toast from "../../atoms/Toast/Toast";
 import styles from './DashboardUser.module.scss';
 import GenericFilters from "../GenericFilters/GenericFilters";
@@ -75,7 +76,6 @@ export default function DashboardUser() {
         setTimeout(() => setToast(null), 3000);
     };
 
-    // Colonnes pour GenericTable
     const columns = [
         { key: 'email', label: 'Email' },
         { key: 'firstName', label: 'Prénom' },

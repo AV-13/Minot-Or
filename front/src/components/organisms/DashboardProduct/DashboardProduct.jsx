@@ -53,6 +53,7 @@ export default function DashboardProduct() {
     };
 
     const handleEdit = async (product) => {
+        // Mettre à jour le produit existant
         await apiClient.put(`/products/${product.id}`, product);
         fetchProducts();
         setEditingProduct(null);
@@ -75,70 +76,18 @@ export default function DashboardProduct() {
         setShowForm(true);
     };
 
-
-// category
-
-// description
-
-// grossPrice
-
-// id
-
-// name
-
-// netPrice
-
-// quantity
-
-// stockQuantity
-
-
-    // Colonnes pour GenericTable
-    const columns = [
-        { key: 'name', label: 'Nom' },
-        { key: 'category', label: 'Type' },
-        { key: 'grossPrice', label: 'Prix', render: value => `${value} €` },
-        { key: 'stockQuantity', label: 'Stock' },
-        {
-            key: 'actions',
-            label: 'Actions',
-            render: (_, item) => (
-                <>
-                    <Button customClass={style.editButton} onClick={() => handleEditClick(item)}>Éditer</Button>
-                    <Button  customClass={style.deleteButton} onClick={() => handleDelete(item.id)} style={{ marginLeft: 8 }}>Supprimer</Button>
-                </>
-            )
-        }
-    ];
-
-    const filtersConfig = [
-        {
-            type: 'search',
-            name: 'search',
-            placeholder: 'Rechercher par nom...',
-            value: searchInput,
-            onChange: setSearchInput
-        },
-        {
-            type: 'select',
-            name: 'typeFilter',
-            label: 'Type',
-            options: [{ value: '', label: 'Tous' }, ...TYPES.map(t => ({ value: t, label: t }))],
-            default: '',
-            value: typeFilterInput,
-            onChange: setTypeFilterInput
-        }
-    ]
-
     return (
         <div>
             <Button customClass={style.createButton} onClick={() => {
                 if (showForm && !editingProduct) {
+                    // Si le formulaire est ouvert pour un ajout, on le ferme
                     setShowForm(false);
                 } else if (showForm && editingProduct) {
+                    // Si le formulaire est ouvert pour une édition, on annule l'édition
                     setEditingProduct(null);
                     setShowForm(false);
                 } else {
+                    // Sinon on ouvre le formulaire pour un ajout
                     setShowForm(true);
                 }
             }}>
