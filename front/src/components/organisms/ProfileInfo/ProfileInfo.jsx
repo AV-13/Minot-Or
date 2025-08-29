@@ -8,17 +8,29 @@ const ProfileInfo = ({ user }) => {
 
     return (
         <Card className={styles.profileInfoCard}>
-            <h2>Mes informations</h2>
-            <div className={styles.userInfo}>
+            <div className={styles.cardHeader}>
+                <div className={styles.iconWrapper}>
+                    <svg className={styles.icon} viewBox="0 0 24 24" fill="none">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                </div>
+                <h2>Informations personnelles</h2>
+            </div>
+
+            <div className={styles.infoContent}>
                 <ContactInfo
                     name={user.username}
                     email={user.email}
-                    phone={user.phone}
-                    address={user.address}
+                    phone=""
+                    address=""
                 />
-                <div className={styles.roleInfo}>
-                    <span className={styles.roleLabel}>Rôle :</span>
-                    <span className={styles.roleValue}>{user.role}</span>
+
+                <div className={styles.roleSection}>
+                    <div className={styles.roleCard}>
+                        <span className={styles.roleLabel}>Rôle</span>
+                        <span className={styles.roleValue}>{user.role || 'Utilisateur'}</span>
+                    </div>
                 </div>
             </div>
         </Card>

@@ -10,16 +10,7 @@ const Home = () => {
 
     return (
         <MainLayout>
-            <h1>Bienvenue sur l'accueil</h1>
             <Header></Header>
-            {user && (
-                <p>
-                    Votre rôle: {
-                    user.roles && Object.values(user.roles).length > 0
-                        ? Object.values(user.roles)[0]
-                        : 'Aucun rôle'
-                }
-                </p>            )}
             <OurServices></OurServices>
             <CatchyFooter></CatchyFooter>
         </MainLayout>

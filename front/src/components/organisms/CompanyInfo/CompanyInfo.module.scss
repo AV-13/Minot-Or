@@ -1,12 +1,368 @@
-.unsoldAlert {
-  margin-top: 15px;
-  padding: 10px;
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  border-radius: 4px;
+$primary: #6AAACF;
+$secondary: #1A111A;
+$tertiary: #FF5F5F;
+$neutral: #FFFFFF;
+
+.companySection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.companyCard {
+  background: $neutral;
+  border-radius: 20px;
+  border: 1px solid rgba($primary, 0.08);
+  box-shadow: 0 4px 24px rgba($primary, 0.08), 0 2px 8px rgba($secondary, 0.04);
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 32px rgba($primary, 0.12), 0 4px 16px rgba($secondary, 0.06);
+    transform: translateY(-2px);
+  }
+}
+
+.cardHeader {
+  background: linear-gradient(135deg, $primary 0%, lighten($primary, 5%) 100%);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba($neutral, 0.2), transparent);
+  }
+}
+
+.iconWrapper {
+  width: 44px;
+  height: 44px;
+  background: rgba($neutral, 0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($neutral, 0.2);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: $neutral;
+}
+
+.cardHeader h2 {
+  color: $neutral;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.companyContent {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.companyDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.siretSection {
+  margin-top: 4px;
+}
+
+.siretCard {
+  background: linear-gradient(135deg, rgba($primary, 0.06) 0%, rgba($primary, 0.02) 100%);
+  border: 1px solid rgba($primary, 0.12);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba($primary, 0.08) 0%, rgba($primary, 0.04) 100%);
+    border-color: rgba($primary, 0.18);
+  }
+}
+
+.siretLabel {
+  color: rgba($secondary, 0.75);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.siretValue {
+  color: $primary;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+}
+
+// Section des invendus séparée
+.unsoldZone {
+  background: $neutral;
+  border-radius: 20px;
+  border: 1px solid rgba($primary, 0.15);
+  box-shadow: 0 4px 24px rgba($primary, 0.08);
+  overflow: hidden;
+  width: 425px;
+  margin: 8px;
+}
+
+.unsoldHeader {
+  background: linear-gradient(135deg, rgba($primary, 0.08) 0%, rgba($primary, 0.04) 100%);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid rgba($primary, 0.15);
+}
+
+.unsoldIcon {
+  width: 44px;
+  height: 44px;
+  background: rgba($primary, 0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    color: $primary;
+  }
+}
+
+.unsoldText {
+  h3 {
+    color: $primary;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    letter-spacing: 0.3px;
+  }
 
   p {
-    color: #856404;
-    margin-bottom: 10px;
+    color: rgba($secondary, 0.7);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+}
+
+.unsoldSection {
+  padding: 28px;
+}
+
+.statusCard {
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+
+  &.hasUnsold {
+    background: linear-gradient(135deg, rgba($tertiary, 0.08) 0%, rgba($tertiary, 0.04) 100%);
+    border: 1px solid rgba($tertiary, 0.2);
+
+    .statusIcon {
+      background: linear-gradient(135deg, $tertiary 0%, lighten($tertiary, 10%) 100%);
+      color: $neutral;
+    }
+
+    .statusText h3 {
+      color: $tertiary;
+    }
+  }
+
+  &.noUnsold {
+    background: linear-gradient(135deg, rgba($primary, 0.06) 0%, rgba($primary, 0.02) 100%);
+    border: 1px solid rgba($primary, 0.12);
+
+    .statusIcon {
+      background: linear-gradient(135deg, $primary 0%, lighten($primary, 10%) 100%);
+      color: $neutral;
+    }
+
+    .statusText h3 {
+      color: $primary;
+    }
+  }
+}
+
+.statusHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.statusIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.statusText {
+  flex: 1;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+  }
+
+  p {
+    color: rgba($secondary, 0.7);
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+}
+
+.actionButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.buttonIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.buttonSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+.loadingState,
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+
+  p {
+    color: rgba($secondary, 0.6);
+    margin: 16px 0 0 0;
+    font-size: 1rem;
+  }
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba($primary, 0.2);
+  border-radius: 50%;
+  border-top-color: $primary;
+  animation: spin 1s ease-in-out infinite;
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  color: rgba($primary, 0.4);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .companySection {
+    gap: 16px;
+  }
+
+  .cardHeader,
+  .unsoldHeader {
+    padding: 20px;
+
+    h2,
+    h3 {
+      font-size: 1.2rem;
+    }
+  }
+
+  .iconWrapper,
+  .unsoldIcon {
+    width: 40px;
+    height: 40px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .companyContent,
+  .unsoldSection {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .statusCard {
+    padding: 16px;
+  }
+
+  .statusHeader {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .statusIcon {
+    width: 36px;
+    height: 36px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .siretCard {
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 }
