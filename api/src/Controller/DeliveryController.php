@@ -157,9 +157,8 @@ class DeliveryController extends AbstractController
     }
 
     /**
-     * Préparateur : scan pour démarrer la livraison (InPreparation -> InProgress).
+     * Driver : démarrer la livraison (InPreparation -> InProgress)
      */
-    #[IsGranted('ROLE_DRIVER')]
     #[OA\Post(
         path: '/api/deliveries/scan-prep',
         summary: 'Order preparer scan: mark delivery InProgress',
@@ -177,7 +176,7 @@ class DeliveryController extends AbstractController
         ]
     )]
     #[Route('/scan-prep', name: 'delivery_scan_prep', methods: ['POST'])]
-    #[IsGranted('ROLE_ORDERPREPARER')]
+    #[IsGranted('ROLE_DRIVER')]
     public function scanPrep(Request $request, DeliveryRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $p = json_decode($request->getContent(), true) ?? [];
@@ -260,7 +259,7 @@ class DeliveryController extends AbstractController
         ]);
     }
 
-    #[Route('/scan-order', name: 'order_preparer_scan_ready', methods: ['POST'])]
+    #[Route('deliveries/scan-order', name: 'order_preparer_scan_ready', methods: ['POST'])]
     #[IsGranted('ROLE_ORDERPREPARER')]
     public function scanOrderReady(Request $request, DeliveryRepository $repo, EntityManagerInterface $em): JsonResponse
     {
