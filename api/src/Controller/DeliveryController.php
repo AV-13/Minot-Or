@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Delivery;
 use App\Entity\SalesList;
 use App\Entity\Truck;
+use App\Entity\User;
 use App\Enum\DeliveryStatus;
 use App\Enum\SalesStatus;
 use App\Repository\DeliveryRepository;
@@ -80,16 +81,25 @@ class DeliveryController extends AbstractController
 
     #[Route('/mine', methods: ['GET'])]
     #[IsGranted('ROLE_DRIVER')]
-    public function mine(Request $req, DeliveryRepository $repo): JsonResponse {
-        $status = $req->query->get('status'); // optional: in_preparation, in_progress
-        $criteria = [];
-        if ($status && DeliveryStatus::tryFrom($status)) {
-            $criteria['deliveryStatus'] = DeliveryStatus::from($status);
+    public function mine(Request $req, DeliveryRepository $repo): JsonResponse
+    {
+        /** @var User $me */
+        $me = $this->getUser();
+
+        $statusParam = (string)$req->query->get('status', '');
+        $statuses = [];
+        if ($statusParam !== '') {
+            foreach (array_filter(array_map('trim', explode(',', $statusParam))) as $s) {
+                $st = \App\Enum\DeliveryStatus::tryFrom($s);
+                if ($st) $statuses[] = $st;
+            }
         } else {
-            $criteria['deliveryStatus'] = [DeliveryStatus::InPreparation, DeliveryStatus::InProgress];
+            $statuses = [\App\Enum\DeliveryStatus::InPreparation, \App\Enum\DeliveryStatus::InProgress];
         }
-        $items = $repo->findBy($criteria, ['deliveryDate' => 'ASC'], 100);
-        return $this->json(array_map(fn(Delivery $d) => [
+
+        $items = $repo->findMineByDriverAndStatuses($me, $statuses);
+
+        return $this->json(array_map(fn(\App\Entity\Delivery $d) => [
             'id' => $d->getId(),
             'deliveryNumber' => $d->getDeliveryNumber(),
             'deliveryStatus' => $d->getDeliveryStatus()->value,
@@ -97,6 +107,7 @@ class DeliveryController extends AbstractController
             'deliveryDate' => $d->getDeliveryDate()?->format('Y-m-d'),
         ], $items));
     }
+
 
     /**
      * Creates a delivery for a sales list.
@@ -246,20 +257,53 @@ class DeliveryController extends AbstractController
             return $this->json(['error' => 'Invalid status transition'], 409);
         }
 
+        // 1) Marquer la livraison comme livrée
         $d->setDeliveryStatus(DeliveryStatus::Delivered);
         if ($remark !== '') $d->setDriverRemark($remark);
         if (method_exists($d, 'setDeliveredAt')) $d->setDeliveredAt(new \DateTimeImmutable());
 
+        // 2) MOUVEMENT TRUCKS :
+        //    - pour chaque Truck associé à cette livraison
+        //      * delivery_id -> NULL (on “détache”)
+        //      * delivery_count -> +1
+        //      * is_available -> true (optionnel mais souvent logique)
+        $updated = 0;
+        foreach ($d->getTrucks() as $t) {
+            // incrémente le compteur
+            if (method_exists($t, 'getDeliveryCount') && method_exists($t, 'setDeliveryCount')) {
+                $current = (int) $t->getDeliveryCount();
+                $t->setDeliveryCount($current + 1);
+            }
+
+            // dispo à nouveau (si tu veux laisser tel quel, commente cette ligne)
+            if (method_exists($t, 'setIsAvailable')) {
+                $t->setIsAvailable(true);
+            }
+
+            // détacher côté owning side
+            if (method_exists($t, 'setDelivery')) {
+                $t->setDelivery(null);
+            }
+            // détacher côté inverse si nécessaire (selon mapping)
+            if (method_exists($d, 'removeTruck')) {
+                $d->removeTruck($t);
+            }
+
+            $updated++;
+        }
+
         $em->flush();
 
         return $this->json([
-            'message' => 'Delivery marked as delivered',
+            'message'        => 'Delivery marked as delivered',
             'deliveryNumber' => $d->getDeliveryNumber(),
             'deliveryStatus' => $d->getDeliveryStatus()->value,
+            'trucksUpdated'  => $updated,
         ]);
     }
 
-    #[Route('deliveries/scan-order', name: 'order_preparer_scan_ready', methods: ['POST'])]
+
+    #[Route('/scan-order', name: 'order_preparer_scan_ready', methods: ['POST'])]
     #[IsGranted('ROLE_ORDERPREPARER')]
     public function scanOrderReady(Request $request, DeliveryRepository $repo, EntityManagerInterface $em): JsonResponse
     {

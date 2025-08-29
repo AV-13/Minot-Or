@@ -16,6 +16,26 @@ class DeliveryRepository extends ServiceEntityRepository
         parent::__construct($registry, Delivery::class);
     }
 
+    // src/Repository/DeliveryRepository.php
+    public function findMineByDriverAndStatuses(\App\Entity\User $driver, array $statuses, int $limit = 100): array
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->distinct()
+            ->join('d.trucks', 't')
+            ->andWhere('t.driver = :driver')
+            ->setParameter('driver', $driver)
+            ->orderBy('d.deliveryDate', 'ASC')
+            ->setMaxResults($limit);
+
+        if (!empty($statuses)) {
+            $qb->andWhere('d.deliveryStatus IN (:st)')
+                ->setParameter('st', $statuses);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+
     //    /**
     //     * @return Delivery[] Returns an array of Delivery objects
     //     */
