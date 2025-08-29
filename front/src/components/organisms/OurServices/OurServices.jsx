@@ -10,7 +10,7 @@ const OurServices = () => (
         </p>
         <div className={styles['cards-container']}>
             <HomeCard
-                logo="/icons/invoice.svg"
+                logo="/icons/quotation.svg"
                 title="Demandes de devis"
                 description="Obtenez rapidement des devis personnalisés pour tous vos besoins en produits de minoterie, accompagné de nos équipes."                buttonLabel="Demander un devis"
                 onButtonClick={() => { /* TODO action */ }}

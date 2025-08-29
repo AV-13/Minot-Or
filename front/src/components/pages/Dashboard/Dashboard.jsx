@@ -8,19 +8,19 @@ export default function Dashboard() {
         {
             title: 'Utilisateurs',
             description: 'Gérez les utilisateurs, leurs rôles et leurs permissions.',
-            icon: '/icons/users.svg',
+            icon: '/icons/user.svg',
             link: '/dashboard/users'
         },
         {
             title: 'Produits',
             description: 'Gérez le catalogue de produits, les prix et les stocks.',
-            icon: '/icons/products.svg',
+            icon: '/icons/cart.svg',
             link: '/dashboard/products'
         },
         {
             title: 'Entrepôts',
             description: 'Gérez les entrepôts et les emplacements de stockage.',
-            icon: '/icons/warehouse.svg',
+            icon: '/icons/truck.svg',
             link: '/dashboard/warehouses'
         },
         {
@@ -32,7 +32,7 @@ export default function Dashboard() {
         {
             title: 'Entreprises',
             description: 'Gérez les entreprises et surveillez les invendus signalés.',
-            icon: '/icons/building.svg', // Vous devrez ajouter cette icône
+            icon: '/icons/building.svg',
             link: '/dashboard/companies'
         },
         {

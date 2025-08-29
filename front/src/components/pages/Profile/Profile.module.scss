@@ -1,16 +1,193 @@
-.profileContainer {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+$primary: #6AAACF;
+$secondary: #1A111A;
+$tertiary: #FF5F5F;
+$neutral: #FFFFFF;
 
-  h1 {
-    margin-bottom: 2rem;
-    text-align: center;
+.profileContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba($primary, 0.03) 0%, rgba($tertiary, 0.02) 100%);
+}
+
+.profileHeader {
+  position: relative;
+  padding-bottom: 120px;
+  overflow: hidden;
+}
+
+.headerBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 280px;
+  background: linear-gradient(135deg, $primary 0%, lighten($primary, 10%) 100%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
   }
 
-  .profileSections {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, rgba($primary, 0.1));
+  }
+}
+
+.headerContent {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatarSection {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.avatarWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 32px rgba($secondary, 0.15);
+  position: relative;
+  z-index: 2;
+}
+
+.avatarBorder {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $neutral 0%, rgba($primary, 0.3) 100%);
+  z-index: 1;
+}
+
+.userTitle {
+  text-align: center;
+  color: $neutral;
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    text-shadow: 0 2px 12px rgba($secondary, 0.2);
+    letter-spacing: 0.5px;
+  }
+}
+
+.userRole {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $neutral;
+  background: rgba($neutral, 0.25);
+  padding: 8px 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($neutral, 0.3);
+  text-shadow: 0 1px 3px rgba($secondary, 0.2);
+}
+
+.profileContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px 60px;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 48px;
+  align-items: start;
+}
+
+.leftColumn,
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.dangerZone {
+  border-top: 1px solid rgba($primary, 0.1);
+  padding-top: 32px;
+}
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+  .headerContent {
+    padding: 40px 16px 0;
+  }
+
+  .profileContent {
+    padding: 0 16px 40px;
+  }
+
+  .contentGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .userTitle h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .headerBackground {
+    height: 240px;
+  }
+
+  .headerContent {
+    padding: 32px 12px 0;
+  }
+
+  .profileContent {
+    padding: 0 12px 32px;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .userTitle h1 {
+    font-size: 1.6rem;
+  }
+
+  .userRole {
+    font-size: 1rem;
+    padding: 6px 16px;
+  }
+
+  .contentGrid {
+    gap: 16px;
   }
 }
