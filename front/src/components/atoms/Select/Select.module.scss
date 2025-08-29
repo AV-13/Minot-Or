@@ -1,0 +1,25 @@
+.inputSelectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  &:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+}

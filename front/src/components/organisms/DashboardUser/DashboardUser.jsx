@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import InputWithLabel from "../../molecules/InputWithLabel/InputWithLabel";
-import Select from "../../atoms/Select";
+import Select from "../../atoms/Select/Select";
 import { ROLES } from "../../../constants/roles";
-import UserTable from "../UserTable/UserTable";
+import GenericTable from "../GenericTable/GenericTable";
+import GenericRow from "../../molecules/GenericRow/GenericRow";
 import apiClient from "../../../utils/apiClient";
-import Pagination from "../../molecules/Pagination/Pagination";
 import Toast from "../../atoms/Toast/Toast";
 import styles from './DashboardUser.module.scss';
 
@@ -74,6 +74,36 @@ export default function DashboardUser() {
         setTimeout(() => setToast(null), 3000);
     };
 
+    // Colonnes pour GenericTable
+    const columns = [
+        { key: 'email', label: 'Email' },
+        { key: 'firstName', label: 'Prénom' },
+        { key: 'lastName', label: 'Nom' },
+        {
+            key: 'role',
+            label: 'Rôle',
+            render: (value, item) => (
+                <Select
+                    options={ROLES}
+                    value={value}
+                    onChange={e => handleRoleChange(item.id, e.target.value)}
+                />
+            )
+        },
+        {
+            key: 'actions',
+            label: 'Actions',
+            render: (_, item) => (
+                <button
+                    className={styles.deleteButton}
+                    onClick={() => handleDelete(item.id)}
+                >
+                    Supprimer
+                </button>
+            )
+        }
+    ];
+
     return (
         <div className={styles.container}>
             <div className={styles.filtersContainer}>
@@ -111,21 +141,16 @@ export default function DashboardUser() {
                     <p>Chargement des utilisateurs...</p>
                 </div>
             ) : (
-                <UserTable
-                    users={users}
-                    onDelete={handleDelete}
-                    onRoleChange={handleRoleChange}
-                />
-            )}
-
-            <div className={styles.paginationContainer}>
-                <Pagination
+                <GenericTable
+                    columns={columns}
+                    data={users}
+                    RowComponent={GenericRow}
                     page={page}
                     limit={limit}
                     total={total}
                     onPageChange={setPage}
                 />
-            </div>
+            )}
 
             {toast && <Toast message={toast.message} type={toast.type} />}
         </div>

@@ -1,0 +1,44 @@
+.deliverySection {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px; }
+  .deliverySection .sectionHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; }
+    .deliverySection .sectionHeader .icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+      color: #6366f1; }
+    .deliverySection .sectionHeader h3 {
+      margin: 0;
+      color: #333; }
+  .deliverySection .deliveryForm .formRow {
+    display: flex;
+    margin-bottom: 20px; }
+    .deliverySection .deliveryForm .formRow .formColumn {
+      flex: 1;
+      margin-right: 15px; }
+      .deliverySection .deliveryForm .formRow .formColumn:last-child {
+        margin-right: 0; }
+    .deliverySection .deliveryForm .formRow .fullWidth {
+      width: 100%; }
+    .deliverySection .deliveryForm .formRow label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500; }
+    .deliverySection .deliveryForm .formRow .dateInput, .deliverySection .deliveryForm .formRow .timeSlotSelect, .deliverySection .deliveryForm .formRow .addressSelect {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px; }
+    .deliverySection .deliveryForm .formRow .instructionsTextarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-height: 100px;
+      resize: vertical; }
+
+/*# sourceMappingURL=DeliveryInfoSection.module.css.map */

@@ -105,7 +105,7 @@ const OrderTable = ({ orders = [] }) => {
                                     title="Voir les détails"
                                     onClick={() => handleViewDetails(item)}
                                 >
-                                    👁️
+                                    🔍
                                 </button>
                             </td>
                         </tr>

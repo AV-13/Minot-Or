@@ -9,9 +9,11 @@ const CompanyForm = ({ onFinish, onBack }) => {
     const [companyData, setCompanyData] = useState(null);
     const [error, setError] = useState('');
     const [verified, setVerified] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Vérifie le numéro de Siret au clic sur le bouton "Vérifier"
     const handleVerify = async () => {
+        setIsLoading(true)
         if (siret) {
             try {
                 const response = await apiClient.get(`/companies/siret/${siret}`);
@@ -92,7 +94,7 @@ const CompanyForm = ({ onFinish, onBack }) => {
                         type="text"
                         required
                     />
-                    <Button type="submit">Créer mon entreprise</Button>
+                    <Button type="submit" isLoading={isLoading}>Créer mon entreprise</Button>
                 </div>
             )}
         </form>

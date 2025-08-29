@@ -7,7 +7,6 @@ use App\Entity\SalesList;
 use App\Entity\Truck;
 use App\Entity\User;
 use App\Enum\DeliveryStatus;
-use App\Enum\SalesStatus;
 use App\Repository\DeliveryRepository;
 use App\Repository\SalesListRepository;
 use App\Repository\TruckRepository;
