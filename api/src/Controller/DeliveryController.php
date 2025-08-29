@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use OpenApi\Attributes as OA;
+use Symfony\Component\Uid\Uuid;
 
 #[OA\Tag(name: "Delivery")]
 #[Route('/api/deliveries')]
@@ -100,7 +101,7 @@ class DeliveryController extends AbstractController
      * Creates a delivery for a sales list.
      */
     #[OA\Post(
-        path: '/api/salesLists/{id}/delivery',
+        path: '/api/deliveries/salesLists/{id}/delivery',
         summary: 'Create a delivery for a sales list',
         requestBody: new OA\RequestBody(
             required: true,
@@ -157,6 +158,7 @@ class DeliveryController extends AbstractController
     /**
      * Préparateur : scan pour démarrer la livraison (InPreparation -> InProgress).
      */
+    #[IsGranted('ROLE_DRIVER')]
     #[OA\Post(
         path: '/api/deliveries/scan-prep',
         summary: 'Order preparer scan: mark delivery InProgress',
@@ -256,6 +258,39 @@ class DeliveryController extends AbstractController
             'deliveryStatus' => $d->getDeliveryStatus()->value,
         ]);
     }
+
+    #[Route('/scan-order', name: 'order_preparer_scan_ready', methods: ['POST'])]
+    #[IsGranted('ROLE_ORDERPREPARER')]
+    public function scanOrderReady(Request $request, DeliveryRepository $repo, EntityManagerInterface $em): JsonResponse
+    {
+        $p  = json_decode($request->getContent(), true) ?? [];
+        $qr = $p['qrCode'] ?? null;
+        if (!$qr) return $this->json(['error' => 'qrCode required'], 400);
+
+        $delivery = $repo->findOneBy(['qrCode' => $qr]);
+        if (!$delivery) return $this->json(['error' => 'QR not found'], 404);
+
+        // On garde la cohérence: la livraison doit encore être "en préparation"
+        if ($delivery->getDeliveryStatus() !== DeliveryStatus::InPreparation) {
+            return $this->json(['error' => 'Delivery not in preparation'], 409);
+        }
+
+        $sales = $delivery->getSalesList();
+        if ($sales->getStatus() !== SalesStatus::PreparingProducts) {
+            return $this->json(['error' => 'Invalid sales_list status'], 409);
+        }
+
+        $sales->setStatus(SalesStatus::AwaitingDelivery);
+        $em->flush();
+
+        return $this->json([
+            'salesListId'     => $sales->getId(),
+            'salesListStatus' => $sales->getStatus()->value,
+            'deliveryNumber'  => $delivery->getDeliveryNumber(),
+            'deliveryStatus'  => $delivery->getDeliveryStatus()->value,
+        ]);
+    }
+
 
 
 
