@@ -1,0 +1,21 @@
+.createButton{
+  background-color : #4CAF50; /* Green */
+  &:hover {
+    background-color: #45a049;
+  }
+}
+
+.editButton {
+  background-color: #FFDE21;
+  color: black;
+  &:hover {
+    background-color: #e6c200;
+  }
+}
+
+.deleteButton {
+  background-color: #f44336; /* Red */
+  &:hover {
+    background-color: #da190b;
+  }
+}

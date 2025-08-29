@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
-import Select from '../../atoms/Select';
+import Select from '../../atoms/Select/Select';
 import { TYPES } from '../../../constants/productType';
 import styles from './AddProductForm.module.scss';
 
