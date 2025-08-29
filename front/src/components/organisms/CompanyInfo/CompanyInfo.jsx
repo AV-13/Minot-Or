@@ -70,10 +70,7 @@ const CompanyInfo = ({ companyId }) => {
         <div className={styles.companySection}>
             <Card className={styles.companyCard}>
                 <div className={styles.emptyState}>
-                    <svg className={styles.emptyIcon} viewBox="0 0 24 24" fill="none">
-                        <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M8 21v-4a2 2 0 012-2h4a2 2 0 012 2v4" stroke="currentColor" strokeWidth="2"/>
-                    </svg>
+                    <img src="/icons/building.svg" alt="Entreprise" className={styles.icon} />
                     <p>Aucune entreprise associée</p>
                 </div>
             </Card>
@@ -85,14 +82,7 @@ const CompanyInfo = ({ companyId }) => {
             <Card className={styles.companyCard}>
                 <div className={styles.cardHeader}>
                     <div className={styles.iconWrapper}>
-                        <svg className={styles.icon} viewBox="0 0 24 24" fill="none">
-                            <path d="M3 21h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M5 21V7l8-4v18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M19 21V11l-6-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M9 9v.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M9 12v.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M9 15v.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
+                        <img src="/icons/building.svg" alt="Entreprise" className={styles.icon} />
                     </div>
                     <h2>Mon entreprise</h2>
                 </div>

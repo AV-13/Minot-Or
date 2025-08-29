@@ -19,7 +19,7 @@ $neutral: #FFFFFF;
 }
 
 .cardHeader {
-  background: linear-gradient(135deg, $primary 0%, lighten($primary, 5%) 100%);
+  background-color: #65558f;
   padding: 24px 28px;
   display: flex;
   align-items: center;
@@ -40,7 +40,7 @@ $neutral: #FFFFFF;
 .iconWrapper {
   width: 44px;
   height: 44px;
-  background: rgba($neutral, 0.15);
+  background-color: #eeeaff;
   border-radius: 12px;
   display: flex;
   align-items: center;

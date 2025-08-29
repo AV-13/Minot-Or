@@ -10,10 +10,7 @@ const ProfileInfo = ({ user }) => {
         <Card className={styles.profileInfoCard}>
             <div className={styles.cardHeader}>
                 <div className={styles.iconWrapper}>
-                    <svg className={styles.icon} viewBox="0 0 24 24" fill="none">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    <img src="/icons/user.svg" alt="Avatar" className={styles.icon} />
                 </div>
                 <h2>Informations personnelles</h2>
             </div>
