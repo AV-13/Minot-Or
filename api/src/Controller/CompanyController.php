@@ -92,15 +92,35 @@ final class CompanyController extends AbstractController
         ]
     )]
     #[Route('', name: 'company_list', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_SALES')]
     public function list(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $page = max(1, (int)$request->query->get('page', 1));
         $limit = max(1, (int)$request->query->get('limit', 20));
+        $search = $request->query->get('search');
         $repo = $em->getRepository(Company::class);
 
-        $total = $repo->count([]);
-        $companies = $repo->findBy([], [], $limit, ($page - 1) * $limit);
+        if ($search) {
+            $qb = $em->createQueryBuilder()
+                ->select('c')
+                ->from(Company::class, 'c')
+                ->where('c.companyName LIKE :search OR c.companySiret LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+                ->setFirstResult(($page - 1) * $limit)
+                ->setMaxResults($limit);
+
+            $companies = $qb->getQuery()->getResult();
+
+            $total = $em->createQueryBuilder()
+                ->select('COUNT(c.id)')
+                ->from(Company::class, 'c')
+                ->where('c.companyName LIKE :search OR c.companySiret LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+                ->getQuery()->getSingleScalarResult();
+        } else {
+            $total = $repo->count([]);
+            $companies = $repo->findBy([], [], $limit, ($page - 1) * $limit);
+        }
 
         $data = array_map(fn(Company $c) => [
             'id' => $c->getId(),

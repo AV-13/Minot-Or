@@ -59,14 +59,34 @@ class DeliveryController extends AbstractController
     )]
     #[Route('', name: 'delivery_list', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
-    public function list(Request $request, DeliveryRepository $repo): JsonResponse
+    public function list(Request $request, DeliveryRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $page = max(1, (int) $request->query->get('page', 1));
         $limit = max(1, (int) $request->query->get('limit', 20));
         $offset = ($page - 1) * $limit;
+        $search = $request->query->get('search');
 
-        $total = $repo->count([]);
-        $deliveries = $repo->findBy([], ['deliveryDate' => 'DESC'], $limit, $offset);
+        if ($search) {
+            $qb = $em->createQueryBuilder()
+                ->select('d')
+                ->from(Delivery::class, 'd')
+                ->where('d.deliveryNumber LIKE :search OR d.deliveryAddress LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit);
+
+            $deliveries = $qb->getQuery()->getResult();
+
+            $countQb = $em->createQueryBuilder()
+                ->select('COUNT(d.id)')
+                ->from(Delivery::class, 'd')
+                ->where('d.deliveryNumber LIKE :search OR d.deliveryAddress LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+            $total = $countQb->getQuery()->getSingleScalarResult();
+        } else {
+            $total = $repo->count([]);
+            $deliveries = $repo->findBy([], ['deliveryDate' => 'DESC'], $limit, $offset);
+        }
 
         $data = array_map(fn(Delivery $d) => $this->serializeDelivery($d, true), $deliveries);
 

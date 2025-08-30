@@ -5,6 +5,8 @@ import GenericTable from '../../organisms/GenericTable/GenericTable';
 import GenericRow from '../../molecules/GenericRow/GenericRow';
 import apiClient from '../../../utils/apiClient';
 import GenericFilters from "../../organisms/GenericFilters/GenericFilters";
+import Loader from '../../atoms/Loader/Loader';
+import style from './DashboardTrucks.module.scss';
 
 const columns = [
     { key: 'registrationNumber', label: 'Immatriculation' },
@@ -22,13 +24,16 @@ export default function DashboardTrucks() {
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
     const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
+        setLoading(true);
         apiClient.get('/trucks', { params: { page, limit, search } })
             .then(res => {
                 setTrucks(res.items);
                 setTotal(res.total);
-            });
+            }).finally(() => setLoading(false));
     }, [page, search]);
 
     const handleSearch = (term) => {
@@ -49,7 +54,11 @@ export default function DashboardTrucks() {
             <h1>Gestion des camions</h1>
 
             <GenericFilters filtersConfig={filtersConfig} onSearch={handleSearch}/>
-
+            {loading ? (
+                <div className={style.loaderContainer}>
+                    <Loader />
+                </div>
+            ) : (
             <GenericTable
                 columns={columns}
                 data={trucks}
@@ -59,6 +68,7 @@ export default function DashboardTrucks() {
                 total={total}
                 onPageChange={setPage}
             />
+            )}
         </MainLayout>
     );
 }

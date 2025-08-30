@@ -14,12 +14,12 @@ const StatusBadge = ({ status, paymentStatus }) => {
                 badgeClass = styles.pending;
                 label = 'En attente';
                 break;
-            case 'accepted':
-                badgeClass = styles.accepted;
+            case 'preparing_products':
+                badgeClass = styles.pending;
                 label = 'Accepté';
                 break;
-            case 'rejected':
-                badgeClass = styles.rejected;
+            case 'awaiting_delivery':
+                badgeClass = styles.pending;
                 label = 'Refusé';
                 break;
             default:

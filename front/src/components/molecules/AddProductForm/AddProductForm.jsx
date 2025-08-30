@@ -3,24 +3,39 @@ import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
 import Select from '../../atoms/Select/Select';
 import { TYPES } from '../../../constants/productType';
 import styles from './AddProductForm.module.scss';
+import apiClient from '../../../utils/apiClient';
 
 const AddProductForm = ({ onSubmit, initialValues, isEditing }) => {
     const [formData, setFormData] = useState({
-        name: '',
-        type: '',
-        price: '',
+        productName: '',
+        category: TYPES[0] || '',
+        netPrice: '',
+        grossPrice: '',
+        unitWeight: '',
+        quantity: '',
         description: '',
-        // Autres champs nécessaires
+        warehouseId: '',
     });
+    const [warehouses, setWarehouses] = useState([]);
+
+    useEffect(() => {
+        // Charger la liste des entrepôts
+        apiClient.get('/warehouses').then(res => {
+            setWarehouses(res.items || []);
+        });
+    }, []);
 
     useEffect(() => {
         if (initialValues) {
             setFormData({
-                name: initialValues.name || '',
-                type: initialValues.type || '',
-                price: initialValues.price || '',
+                productName: initialValues.productName || '',
+                category: initialValues.category || '',
+                netPrice: initialValues.netPrice || '',
+                grossPrice: initialValues.grossPrice || '',
+                unitWeight: initialValues.unitWeight || '',
+                quantity: initialValues.quantity || '',
                 description: initialValues.description || '',
-                // Autres champs à préremplir
+                warehouseId: initialValues.warehouseId || '',
             });
         }
     }, [initialValues]);
@@ -33,45 +48,73 @@ const AddProductForm = ({ onSubmit, initialValues, isEditing }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const productData = { ...formData };
-
         if (isEditing) {
-            // Si on édite, on inclut l'ID
             productData.id = initialValues.id;
         }
-
         onSubmit(productData);
     };
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
             <h3>{isEditing ? 'Modifier le produit' : 'Ajouter un produit'}</h3>
-
             <InputWithLabel
                 label="Nom"
-                name="name"
-                value={formData.name}
+                name="productName"
+                value={formData.productName}
                 onChange={handleChange}
                 required
             />
-
             <Select
-                label="Type"
-                name="type"
-                options={TYPES}
-                value={formData.type}
+                label="Catégorie"
+                name="category"
+                options={TYPES.map(t => ({ value: t, label: t }))}
+                value={formData.category}
                 onChange={handleChange}
                 required
             />
-
+            <Select
+                label="Entrepôt"
+                name="warehouseId"
+                options={[{ value: '', label: 'Sélectionner un entrepôt' }, ...warehouses.map(w => ({
+                    value: w.id,
+                    label: w.warehouseAddress
+                }))]}
+                value={formData.warehouseId}
+                onChange={handleChange}
+                required
+            />
             <InputWithLabel
-                label="Prix"
+                label="Prix net"
                 type="number"
-                name="price"
-                value={formData.price}
+                name="netPrice"
+                value={formData.netPrice}
                 onChange={handleChange}
                 required
             />
-
+            <InputWithLabel
+                label="Prix TTC"
+                type="number"
+                name="grossPrice"
+                value={formData.grossPrice}
+                onChange={handleChange}
+                required
+            />
+            <InputWithLabel
+                label="Poids unitaire (kg)"
+                type="number"
+                name="unitWeight"
+                value={formData.unitWeight}
+                onChange={handleChange}
+                required
+            />
+            <InputWithLabel
+                label="Stock"
+                type="number"
+                name="quantity"
+                value={formData.quantity}
+                onChange={handleChange}
+                required
+            />
             <InputWithLabel
                 label="Description"
                 type="textarea"
@@ -79,9 +122,6 @@ const AddProductForm = ({ onSubmit, initialValues, isEditing }) => {
                 value={formData.description}
                 onChange={handleChange}
             />
-
-            {/* Autres champs */}
-
             <div className={styles.formActions}>
                 <button type="submit">
                     {isEditing ? 'Mettre à jour' : 'Ajouter'}

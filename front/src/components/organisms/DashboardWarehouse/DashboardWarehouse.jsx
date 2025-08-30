@@ -54,7 +54,7 @@ export default function DashboardWarehouse() {
 
     const handleSearch = (searchInput) => {
         setPage(1);
-        setSearch(searchInput);
+        setSearch(searchInput.searchTerm || '');
     };
 
     // Colonnes pour GenericTable

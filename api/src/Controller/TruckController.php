@@ -122,15 +122,41 @@ class TruckController extends AbstractController
         $page = max(1, (int)$request->query->get('page', 1));
         $limit = max(1, (int)$request->query->get('limit', 20));
         $offset = ($page - 1) * $limit;
+        $search = $request->query->get('search');
 
-        $criteria = [];
-        if ($request->query->get('warehouseId')) $criteria['warehouse'] = $request->query->get('warehouseId');
-        if ($request->query->get('truckType')) $criteria['truckType'] = $request->query->get('truckType');
-        if ($request->query->has('isAvailable')) $criteria['isAvailable'] = filter_var($request->query->get('isAvailable'), FILTER_VALIDATE_BOOLEAN);
+        $qb = $em->createQueryBuilder()
+            ->select('t')
+            ->from(Truck::class, 't');
 
-        $repo = $em->getRepository(Truck::class);
-        $total = $repo->count($criteria);
-        $trucks = $repo->findBy($criteria, [], $limit, $offset);
+        // Filtres classiques
+        if ($request->query->get('warehouseId')) {
+            $qb->andWhere('t.warehouse = :warehouseId')
+               ->setParameter('warehouseId', $request->query->get('warehouseId'));
+        }
+        if ($request->query->get('truckType')) {
+            $qb->andWhere('t.truckType = :truckType')
+               ->setParameter('truckType', $request->query->get('truckType'));
+        }
+        if ($request->query->has('isAvailable')) {
+            $qb->andWhere('t.isAvailable = :isAvailable')
+               ->setParameter('isAvailable', filter_var($request->query->get('isAvailable'), FILTER_VALIDATE_BOOLEAN));
+        }
+
+        // Filtre recherche
+        if ($search) {
+            $qb->andWhere('t.registrationNumber LIKE :search OR t.truckType LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        $qb->setFirstResult($offset)
+           ->setMaxResults($limit);
+
+        $trucks = $qb->getQuery()->getResult();
+
+        // Compter le total filtré
+        $countQb = clone $qb;
+        $countQb->select('COUNT(t.id)');
+        $total = $countQb->getQuery()->getSingleScalarResult();
 
         $data = array_map(fn(Truck $t) => [
             'id' => $t->getId(),

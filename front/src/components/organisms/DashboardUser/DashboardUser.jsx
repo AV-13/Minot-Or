@@ -9,6 +9,7 @@ import Pagination from "../../molecules/Pagination/Pagination";
 import Toast from "../../atoms/Toast/Toast";
 import styles from './DashboardUser.module.scss';
 import GenericFilters from "../GenericFilters/GenericFilters";
+import Button from "../../atoms/Button/Button";
 
 export default function DashboardUser() {
     const [users, setUsers] = useState([]);
@@ -65,10 +66,10 @@ export default function DashboardUser() {
         }
     };
 
-    const handleSearch = () => {
+    const handleSearch = (values) => {
         setPage(1);
-        setSearch(searchInput);
-        setRoleFilter(roleFilterInput);
+        setSearch(values.search);
+        setRoleFilter(values.roleFilter);
     };
 
     const showToast = (message, type) => {
@@ -95,12 +96,12 @@ export default function DashboardUser() {
             key: 'actions',
             label: 'Actions',
             render: (_, item) => (
-                <button
-                    className={styles.deleteButton}
+                <Button
+                    customClass={styles.deleteButton}
                     onClick={() => handleDelete(item.id)}
                 >
                     Supprimer
-                </button>
+                </Button>
             )
         }
     ];
@@ -117,7 +118,11 @@ export default function DashboardUser() {
             type: 'select',
             name: 'roleFilter',
             label: 'Filtrer par rôle',
-            options: [{ value: '', label: 'Tous' }, ...ROLES],
+            options: [{ value: '', label: 'Tous' }, ...ROLES.map(role => (
+                typeof role === 'string'
+                    ? { value: role, label: role }
+                    : role
+            ))],
             value: roleFilterInput,
             onChange: setRoleFilterInput
         }
@@ -125,7 +130,7 @@ export default function DashboardUser() {
 
     return (
         <div className={styles.container}>
-            <GenericFilters filtersConfig={filtersConfig} />
+            <GenericFilters filtersConfig={filtersConfig} onSearch={handleSearch} />
 
             {loading ? (
                 <div className={styles.loadingContainer}>

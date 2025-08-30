@@ -41,7 +41,7 @@ export default function DashboardCompany() {
     };
 
     const handleSearch = (term) => {
-        setSearch(term);
+        setSearch(term.searchTerm || '');
         setPage(1);
     };
 

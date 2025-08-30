@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
-import Select from '../../atoms/Select/Select';
 import Button from "../../atoms/Button/Button";
 import GenericTable from '../../organisms/GenericTable/GenericTable';
 import GenericRow from '../../molecules/GenericRow/GenericRow';
@@ -8,7 +6,6 @@ import style from './DashboardProduct.module.scss';
 import apiClient from '../../../utils/apiClient';
 import { TYPES } from '../../../constants/productType';
 import AddProductForm from '../../molecules/AddProductForm/AddProductForm';
-import Pagination from "../../molecules/Pagination/Pagination";
 import GenericFilters from "../GenericFilters/GenericFilters";
 
 export default function DashboardProduct() {
@@ -65,16 +62,52 @@ export default function DashboardProduct() {
         fetchProducts();
     };
 
-    const handleSearch = () => {
+    const handleSearch = (values) => {
         setPage(1);
-        setSearch(searchInput);
-        setTypeFilter(typeFilterInput);
+        setSearch(values.search);
+        setTypeFilter(values.typeFilter);
     };
 
     const handleEditClick = (product) => {
         setEditingProduct(product);
         setShowForm(true);
     };
+
+    const columns = [
+        { key: 'name', label: 'Nom' },
+        { key: 'category', label: 'Type' },
+        { key: 'grossPrice', label: 'Prix', render: value => `${value} €` },
+        { key: 'stockQuantity', label: 'Stock' },
+        {
+            key: 'actions',
+            label: 'Actions',
+            render: (_, item) => (
+                <>
+                    <Button customClass={style.editButton} onClick={() => handleEditClick(item)}>Éditer</Button>
+                    <Button  customClass={style.deleteButton} onClick={() => handleDelete(item.id)} style={{ marginLeft: 8 }}>Supprimer</Button>
+                </>
+            )
+        }
+    ];
+
+    const filtersConfig = [
+        {
+            type: 'search',
+            name: 'search',
+            placeholder: 'Rechercher par nom...',
+            value: searchInput,
+            onChange: setSearchInput
+        },
+        {
+            type: 'select',
+            name: 'typeFilter',
+            label: 'Type',
+            options: [{ value: '', label: 'Tous' }, ...TYPES.map(t => ({ value: t, label: t }))],
+            default: '',
+            value: typeFilterInput,
+            onChange: setTypeFilterInput
+        }
+    ]
 
     return (
         <div>
@@ -100,7 +133,7 @@ export default function DashboardProduct() {
                     isEditing={!!editingProduct}
                 />
             )}
-            <GenericFilters filtersConfig={filtersConfig}/>
+            <GenericFilters filtersConfig={filtersConfig} onSearch={handleSearch}/>
             {loading ? <p>Chargement...</p> :
                 <GenericTable
                     columns={columns}
@@ -112,12 +145,6 @@ export default function DashboardProduct() {
                     onPageChange={setPage}
                 />
             }
-            <Pagination
-                page={page}
-                limit={limit}
-                total={total}
-                onPageChange={setPage}
-            />
         </div>
     );
 }

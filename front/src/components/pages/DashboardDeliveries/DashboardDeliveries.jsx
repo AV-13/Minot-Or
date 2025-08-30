@@ -6,6 +6,8 @@ import QrModal from "../../atoms/QrModal/QrModal";
 import Button from "../../atoms/Button/Button";
 import apiClient from '../../../utils/apiClient';
 import GenericFilters from "../../organisms/GenericFilters/GenericFilters";
+import style from './DashboardDeliveries.module.scss';
+import Loader from "../../atoms/Loader/Loader";
 
 export default function DashboardDeliveries() {
     const [qrModalOpen, setQrModalOpen] = useState(false);
@@ -15,6 +17,8 @@ export default function DashboardDeliveries() {
     const [search, setSearch] = useState('');
     const [limit] = useState(10);
     const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(false); // Ajout loader
+
 
     const columns = [
     { key: 'deliveryNumber', label: 'Numéro' },
@@ -41,15 +45,17 @@ export default function DashboardDeliveries() {
 ];
 
     useEffect(() => {
-    apiClient.get('/deliveries', { params: { page, limit } })
-        .then(res => {
-            setDeliveries(res.items);
-            setTotal(res.total);
-        });
-    }, [page]);
+        setLoading(true);
+        apiClient.get('/deliveries', { params: { page, limit, search } })
+            .then(res => {
+                setDeliveries(res.items);
+                setTotal(res.total);
+            })
+            .finally(() => setLoading(false));
+    }, [page, search]);
 
-    const handleSearch = (term) => {
-        setSearch(term);
+    const handleSearch = (values) => {
+        setSearch(values.searchTerm || '');
         setPage(1);
     };
 
@@ -67,15 +73,21 @@ export default function DashboardDeliveries() {
 
             <GenericFilters filtersConfig={configFilters} onSearch={handleSearch}/>
 
-            <GenericTable
-                columns={columns}
-                data={deliveries}
-                RowComponent={GenericRow}
-                page={page}
-                limit={limit}
-                total={total}
-                onPageChange={setPage}
-            />
+            {loading ? (
+                <div className={style.loaderContainer}>
+                    <Loader />
+                </div>
+            ) : (
+                <GenericTable
+                    columns={columns}
+                    data={deliveries}
+                    RowComponent={GenericRow}
+                    page={page}
+                    limit={limit}
+                    total={total}
+                    onPageChange={setPage}
+                />
+            )}
             <QrModal
                 qrCode={selectedQr}
                 open={qrModalOpen}

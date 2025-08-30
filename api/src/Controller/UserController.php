@@ -227,8 +227,12 @@ final class UserController extends AbstractController
         if ($user->getCompany()->getId() !== $current->getCompany()->getId()) {
             return $this->json(['error' => 'Access denied'], 403);
         }
-        if (!$this->isGranted('ROLE_ADMIN') && $current->getId() !== $user->getId()) {
-            return $this->json(['error' => 'Only admin or the user himself can update'], 403);
+        if (
+            !$this->isGranted('ROLE_ADMIN') &&
+            $current->getRole()->value !== 'Sales' &&
+            $current->getId() !== $user->getId()
+        ) {
+            return $this->json(['error' => 'Only admin, sales or the user himself can update'], 403);
         }
 
         $data = json_decode($request->getContent(), true);

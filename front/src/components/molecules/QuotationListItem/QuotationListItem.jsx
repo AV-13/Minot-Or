@@ -12,17 +12,19 @@ const QuotationListItem = ({ quotation, onViewDetails, onMarkAsPaid, onEditSucce
         dateString ? new Date(dateString).toLocaleDateString('fr-FR') : 'N/A';
     const formatAmount = (amount) =>
         new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
-    const getStatusLabel = (status) =>
-        ({
-            'pending': 'En attente',
-            'accepted': 'Accepté',
-            'rejected': 'Refusé',
-            'paid': 'Payé'
+
+    const getStatusLabel = (status) => {
+        console.log(status);
+        return ({
+            'pending': 'En attente de paiement',
+            'preparing_products': 'Préparation des produits',
+            'awaiting_delivery': 'En attente de livraison',
         }[status] || 'Inconnu');
+    }
 
     const handleEditClick = () => setIsEditing(true);
     const handleCancel = () => {
-        setDiscount(quotation.globalDiscount);
+        setDiscount(quotation.globalDiscountng_);
         setIsEditing(false);
     };
 

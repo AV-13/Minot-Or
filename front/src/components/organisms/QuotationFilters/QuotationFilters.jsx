@@ -24,7 +24,7 @@ const QuotationFilters = ({ onSearch, onFilterChange }) => {
             });
         } else {
             onFilterChange({
-                status: 'all',
+                status: newStatus, // <-- ici on transmet le vrai statut
                 paymentStatus: 0,
                 dateRange
             });
@@ -62,13 +62,15 @@ const QuotationFilters = ({ onSearch, onFilterChange }) => {
                         className={styles.selectFilter}
                     >
                         <option value="all">Tous les statuts</option>
-                        <option value="pending">En attente</option>
+                        <option value="pending">En attente de paiement</option>
+                        <option value="preparing_products">En préparation des produits</option>
+                        <option value="awaiting_delivery">En attente de livraison</option>
                         <option value="paid">Payé</option>
                     </select>
                 </div>
 
                 <div className={styles.filterGroup}>
-                    <label>Période :</label>
+                    <label>Période date d'émission :</label>
                     <div className={styles.dateInputs}>
                         <input
                             type="date"

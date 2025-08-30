@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use OpenApi\Attributes as OA;
 
 #[OA\Tag(name: "Warehouse")]
@@ -38,7 +39,7 @@ final class WarehouseController extends AbstractController
         ]
     )]
     #[Route('', name: 'warehouse_create', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[Security("is_granted('ROLE_SALES') or is_granted('ROLE_PROCUREMENT') or is_granted('ROLE_ADMIN')", message: "Access denied.")]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
