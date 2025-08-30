@@ -7,6 +7,7 @@ import GenericRow from "../../molecules/GenericRow/GenericRow";
 import apiClient from "../../../utils/apiClient";
 import Toast from "../../atoms/Toast/Toast";
 import styles from './DashboardUser.module.scss';
+import GenericFilters from "../GenericFilters/GenericFilters";
 
 export default function DashboardUser() {
     const [users, setUsers] = useState([]);
@@ -104,36 +105,27 @@ export default function DashboardUser() {
         }
     ];
 
+    const filtersConfig = [
+        {
+            type: 'search',
+            name: 'search',
+            placeholder: 'Rechercher par email, prénom, nom',
+            value: searchInput,
+            onChange: setSearchInput
+        },
+        {
+            type: 'select',
+            name: 'roleFilter',
+            label: 'Filtrer par rôle',
+            options: [{ value: '', label: 'Tous' }, ...ROLES],
+            value: roleFilterInput,
+            onChange: setRoleFilterInput
+        }
+    ]
+
     return (
         <div className={styles.container}>
-            <div className={styles.filtersContainer}>
-                <div className={styles.filters}>
-                    <InputWithLabel
-                        type="text"
-                        placeholder="Recherche par email ou nom"
-                        value={searchInput}
-                        onChange={e => setSearchInput(e.target.value)}
-                        label="Rechercher"
-                        className={styles.searchInput}
-                    />
-                    <Select
-                        options={['', ...ROLES]}
-                        value={roleFilterInput}
-                        onChange={e => setRoleFilterInput(e.target.value)}
-                        label="Filtrer par rôle"
-                        className={styles.roleFilter}
-                    />
-                    <button
-                        className={styles.searchButton}
-                        onClick={handleSearch}
-                    >
-                        Rechercher
-                    </button>
-                </div>
-                <div className={styles.results}>
-                    {!loading && <span>{total} utilisateur(s) trouvé(s)</span>}
-                </div>
-            </div>
+            <GenericFilters filtersConfig={filtersConfig} />
 
             {loading ? (
                 <div className={styles.loadingContainer}>

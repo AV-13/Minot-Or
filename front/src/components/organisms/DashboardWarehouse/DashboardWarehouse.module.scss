@@ -1,0 +1,10 @@
+.addButton{
+  background-color : green;
+}
+
+.deleteButton{
+  background-color : #dc3545;
+  &:hover {
+    background-color : red;
+  }
+}

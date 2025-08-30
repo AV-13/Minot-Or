@@ -5,12 +5,14 @@ import GenericRow from '../../molecules/GenericRow/GenericRow';
 import QrModal from "../../atoms/QrModal/QrModal";
 import Button from "../../atoms/Button/Button";
 import apiClient from '../../../utils/apiClient';
+import GenericFilters from "../../organisms/GenericFilters/GenericFilters";
 
 export default function DashboardDeliveries() {
     const [qrModalOpen, setQrModalOpen] = useState(false);
     const [selectedQr, setSelectedQr] = useState('');
     const [deliveries, setDeliveries] = useState([]);
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState('');
     const [limit] = useState(10);
     const [total, setTotal] = useState(0);
 
@@ -46,9 +48,25 @@ export default function DashboardDeliveries() {
         });
     }, [page]);
 
+    const handleSearch = (term) => {
+        setSearch(term);
+        setPage(1);
+    };
+
+    const configFilters = [
+        {
+            type: 'search',
+            name: 'searchTerm',
+            placeholder: 'Rechercher une livraison...'
+        }
+    ];
+
     return (
         <MainLayout>
             <h1>Gestion des livraisons</h1>
+
+            <GenericFilters filtersConfig={configFilters} onSearch={handleSearch}/>
+
             <GenericTable
                 columns={columns}
                 data={deliveries}

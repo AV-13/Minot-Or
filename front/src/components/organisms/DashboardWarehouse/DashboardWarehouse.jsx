@@ -3,8 +3,12 @@ import AddWarehouseForm from '../../molecules/AddWarehouseForm/AddWarehouseForm'
 import GenericTable from '../../organisms/GenericTable/GenericTable';
 import GenericRow from '../../molecules/GenericRow/GenericRow';
 import apiClient from '../../../utils/apiClient';
+import style from './DashboardWarehouse.module.scss';
 import InputWithLabel from '../../molecules/InputWithLabel/InputWithLabel';
 import Pagination from "../../molecules/Pagination/Pagination";
+import GenericFilters from "../GenericFilters/GenericFilters";
+import Button from "../../atoms/Button/Button";
+import Loader from "../../atoms/Loader/Loader";
 
 export default function DashboardWarehouse() {
     const [warehouses, setWarehouses] = useState([]);
@@ -48,7 +52,7 @@ export default function DashboardWarehouse() {
         fetchWarehouses();
     };
 
-    const handleSearch = () => {
+    const handleSearch = (searchInput) => {
         setPage(1);
         setSearch(searchInput);
     };
@@ -62,29 +66,29 @@ export default function DashboardWarehouse() {
             key: 'actions',
             label: 'Actions',
             render: (_, item) => (
-                <button onClick={() => handleDelete(item.id)}>
+                <Button customClass={style.deleteButton} onClick={() => handleDelete(item.id)}>
                     Supprimer
-                </button>
+                </Button>
             )
+        }
+    ];
+
+    const filtersConfig = [
+        {
+            type: 'search',
+            name: 'searchTerm',
+            placeholder: 'Rechercher par localisation...'
         }
     ];
 
     return (
         <div>
-            <button onClick={() => setShowForm(v => !v)}>
+            <Button customClass={style.addButton} onClick={() => setShowForm(v => !v)}>
                 {showForm ? 'Annuler' : 'Ajouter un entrepôt'}
-            </button>
+            </Button>
             {showForm && <AddWarehouseForm onAdd={handleAdd} />}
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <InputWithLabel
-                    type="text"
-                    placeholder="Recherche par nom ou localisation"
-                    value={searchInput}
-                    onChange={e => setSearchInput(e.target.value)}
-                />
-                <button onClick={handleSearch}>Rechercher</button>
-            </div>
-            {loading ? <p>Chargement...</p> :
+            <GenericFilters filtersConfig={filtersConfig} onSearch={handleSearch}/>
+            {loading ? <Loader /> :
                 <GenericTable
                     columns={columns}
                     data={warehouses}
