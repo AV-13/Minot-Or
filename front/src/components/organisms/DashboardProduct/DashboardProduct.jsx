@@ -9,6 +9,7 @@ import apiClient from '../../../utils/apiClient';
 import { TYPES } from '../../../constants/productType';
 import AddProductForm from '../../molecules/AddProductForm/AddProductForm';
 import Pagination from "../../molecules/Pagination/Pagination";
+import GenericFilters from "../GenericFilters/GenericFilters";
 
 export default function DashboardProduct() {
     const [products, setProducts] = useState([]);
@@ -110,6 +111,25 @@ export default function DashboardProduct() {
         }
     ];
 
+    const filtersConfig = [
+        {
+            type: 'search',
+            name: 'search',
+            placeholder: 'Rechercher par nom...',
+            value: searchInput,
+            onChange: setSearchInput
+        },
+        {
+            type: 'select',
+            name: 'typeFilter',
+            label: 'Type',
+            options: [{ value: '', label: 'Tous' }, ...TYPES.map(t => ({ value: t, label: t }))],
+            default: '',
+            value: typeFilterInput,
+            onChange: setTypeFilterInput
+        }
+    ]
+
     return (
         <div>
             <Button customClass={style.createButton} onClick={() => {
@@ -131,20 +151,7 @@ export default function DashboardProduct() {
                     isEditing={!!editingProduct}
                 />
             )}
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <InputWithLabel
-                    type="text"
-                    placeholder="Recherche par nom"
-                    value={searchInput}
-                    onChange={e => setSearchInput(e.target.value)}
-                />
-                <Select
-                    options={['', ...TYPES]}
-                    value={typeFilterInput}
-                    onChange={e => setTypeFilterInput(e.target.value)}
-                />
-                <Button onClick={handleSearch}>Rechercher</Button>
-            </div>
+            <GenericFilters filtersConfig={filtersConfig}/>
             {loading ? <p>Chargement...</p> :
                 <GenericTable
                     columns={columns}

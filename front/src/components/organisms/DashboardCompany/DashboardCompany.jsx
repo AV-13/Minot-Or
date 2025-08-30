@@ -5,6 +5,7 @@ import CompanyTable from "../CompanyTable/CompanyTable";
 import apiClient from "../../../utils/apiClient";
 import Pagination from "../../molecules/Pagination/Pagination";
 import styles from './DashboardCompany.module.scss';
+import GenericFilters from "../GenericFilters/GenericFilters";
 
 export default function DashboardCompany() {
     const [companies, setCompanies] = useState([]);
@@ -39,9 +40,9 @@ export default function DashboardCompany() {
         setLoading(false);
     };
 
-    const handleSearch = () => {
+    const handleSearch = (term) => {
+        setSearch(term);
         setPage(1);
-        setSearch(searchInput);
     };
 
     const handleMarkRecovered = async (companyId) => {
@@ -56,17 +57,17 @@ export default function DashboardCompany() {
         }
     };
 
+    const filtersConfig = [
+        {
+            type: 'search',
+            name: 'searchTerm',
+            placeholder: 'Rechercher une entreprise...'
+        }
+    ];
+
     return (
         <div className={styles.container}>
-            <div className={styles.searchBar}>
-                <InputWithLabel
-                    type="text"
-                    placeholder="Rechercher une entreprise"
-                    value={searchInput}
-                    onChange={e => setSearchInput(e.target.value)}
-                />
-                <button className={styles.searchButton} onClick={handleSearch}>Rechercher</button>
-            </div>
+            <GenericFilters filtersConfig={filtersConfig} onSearch={handleSearch}/>
 
             {loading ? (
                 <p>Chargement des entreprises...</p>

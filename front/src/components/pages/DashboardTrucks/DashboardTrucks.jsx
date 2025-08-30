@@ -4,6 +4,7 @@ import MainLayout from '../../templates/MainLayout';
 import GenericTable from '../../organisms/GenericTable/GenericTable';
 import GenericRow from '../../molecules/GenericRow/GenericRow';
 import apiClient from '../../../utils/apiClient';
+import GenericFilters from "../../organisms/GenericFilters/GenericFilters";
 
 const columns = [
     { key: 'registrationNumber', label: 'Immatriculation' },
@@ -17,21 +18,39 @@ const columns = [
 
 export default function DashboardTrucks() {
     const [trucks, setTrucks] = useState([]);
+    const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
-        apiClient.get('/trucks', { params: { page, limit } })
+        console.log(search);
+        apiClient.get('/trucks', { params: { page, limit, search } })
             .then(res => {
                 setTrucks(res.items);
                 setTotal(res.total);
             });
-    }, [page]);
+    }, [page, search]);
+
+    const handleSearch = (term) => {
+        setSearch(term.searchTerm);
+        setPage(1);
+    };
+
+    const filtersConfig = [
+        {
+            type: 'search',
+            name: 'searchTerm',
+            placeholder: 'Rechercher un camion...'
+        }
+    ];
 
     return (
         <MainLayout>
             <h1>Gestion des camions</h1>
+
+            <GenericFilters filtersConfig={filtersConfig} onSearch={handleSearch}/>
+
             <GenericTable
                 columns={columns}
                 data={trucks}
