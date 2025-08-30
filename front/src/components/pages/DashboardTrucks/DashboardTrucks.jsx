@@ -24,7 +24,6 @@ export default function DashboardTrucks() {
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
-        console.log(search);
         apiClient.get('/trucks', { params: { page, limit, search } })
             .then(res => {
                 setTrucks(res.items);
