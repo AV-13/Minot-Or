@@ -6,7 +6,7 @@ FROM php:8.3-cli AS vendor
 # Installer les dépendances nécessaires à l’extension mongodb
 RUN apt-get update && apt-get install -y \
     git unzip pkg-config libssl-dev libcurl4-openssl-dev autoconf gcc make \
-    && pecl install mongodb \
+    && pecl install mongodb-1.19.3 \
     && docker-php-ext-enable mongodb \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -39,7 +39,7 @@ RUN apt-get update && apt-get install -y \
         autoconf \
         gcc \
         make \
-    && pecl install mongodb \
+    && pecl install mongodb-1.19.3 \
     && docker-php-ext-enable mongodb \
     && docker-php-ext-install -j$(nproc) pdo_mysql intl opcache \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
