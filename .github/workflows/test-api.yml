@@ -63,7 +63,7 @@ jobs:
           cd api
           php bin/console doctrine:schema:create --env=test
         env:
-          DATABASE_URL: "mysql://user:password@127.0.0.1:3306/minotor_test?serverVersion=8.0"
+          DATABASE_URL: "mysql://user:password@127.0.0.1:3306/minotor?serverVersion=8.0"
 
       - name: Exécution des tests
         run: |
