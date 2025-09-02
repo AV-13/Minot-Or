@@ -1,0 +1,48 @@
+name: Tests API
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'api/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'api/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: minotor_test
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configuration PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, intl, mongodb
+
+      - name: Installation des dépendances
+        run: |
+          cd api
+          composer install --prefer-dist --no-progress
+
+      - name: Exécution des tests
+        run: |
+          cd api
+          php bin/phpunit
+        env:
+          DATABASE_URL: "mysql://user:password@127.0.0.1:3306/minotor_test?serverVersion=8.0"
