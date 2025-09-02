@@ -13,7 +13,6 @@ enum ProductCategory: string
     case Milk      = 'milk';
     case Seed      = 'seed';
     case Chocolate = 'chocolate';
-    case Bread     = 'bread'; // TODO le pain n'est pas un produit vendu, il est collecté. Si on garde les produits
-                              //  collectés dans la table Product on peut l'appeler différemment pour tout englober ?
-                              //  bread => collected
+    case Bread     = 'bread';
+
 }
