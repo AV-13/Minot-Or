@@ -24,7 +24,12 @@ jobs:
           MYSQL_PASSWORD: password
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping -hmysql -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+          --health-start-period=20s
 
     steps:
       - uses: actions/checkout@v3
@@ -34,8 +39,8 @@ jobs:
           cd api
           echo 'APP_ENV=test' > .env
           echo 'APP_SECRET=test_secret_value_for_github_actions' >> .env
-          echo 'DATABASE_URL="mysql://user:password@127.0.0.1:3306/minotor_test?serverVersion=8.0"' >> .env
-          echo 'MONGODB_URL="mongodb://localhost:27017/minotor_test"' >> .env
+          echo 'DATABASE_URL="mysql://user:password@127.0.0.1:3306/minotor?serverVersion=8.0"' >> .env   # <-- host mysql
+          echo 'MONGODB_URL="mongodb://localhost:27017/minotor"' >> .env
           echo 'JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem' >> .env
           echo 'JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem' >> .env
           echo 'JWT_PASSPHRASE=testphrase' >> .env
@@ -59,15 +64,22 @@ jobs:
           composer install --prefer-dist --no-progress
 
       - name: Créer le schéma de la base de données
+        env:
+          DATABASE_URL: "mysql://user:password@127.0.0.1:3306/minotor?serverVersion=8.0"
         run: |
           cd api
           php bin/console doctrine:schema:create --env=test
+
+      - name: Charger les fixtures de test
         env:
           DATABASE_URL: "mysql://user:password@127.0.0.1:3306/minotor?serverVersion=8.0"
+        run: |
+          cd api
+          php bin/console doctrine:fixtures:load --env=test --no-interaction
 
       - name: Exécution des tests
+        env:
+          DATABASE_URL: "mysql://user:password@127.0.0.1:3306/minotor?serverVersion=8.0"
         run: |
           cd api
           php bin/phpunit
-        env:
-          DATABASE_URL: "mysql://user:password@127.0.0.1:3306/minotor_test?serverVersion=8.0"

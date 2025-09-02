@@ -282,6 +282,7 @@ class QuotationControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
+        $this->entityManager->clear();
 
         $updatedQuotation = $this->quotationRepository->find($quotation->getId());
         $this->assertTrue($updatedQuotation->isPaymentStatus());
