@@ -29,6 +29,24 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Configuration du fichier .env
+        run: |
+          cd api
+          echo 'APP_ENV=test' > .env
+          echo 'APP_SECRET=test_secret_value_for_github_actions' >> .env
+          echo 'DATABASE_URL="mysql://user:password@127.0.0.1:3306/minotor_test?serverVersion=8.0"' >> .env
+          echo 'MONGODB_URL="mongodb://localhost:27017/minotor_test"' >> .env
+          echo 'JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem' >> .env
+          echo 'JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem' >> .env
+          echo 'JWT_PASSPHRASE=testphrase' >> .env
+
+      - name: Générer les clés JWT
+        run: |
+          cd api
+          mkdir -p config/jwt
+          openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 -pass pass:testphrase
+          openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout -passin pass:testphrase
+
       - name: Configuration PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -39,6 +57,13 @@ jobs:
         run: |
           cd api
           composer install --prefer-dist --no-progress
+
+      - name: Créer le schéma de la base de données
+        run: |
+          cd api
+          php bin/console doctrine:schema:create --env=test
+        env:
+          DATABASE_URL: "mysql://user:password@127.0.0.1:3306/minotor_test?serverVersion=8.0"
 
       - name: Exécution des tests
         run: |

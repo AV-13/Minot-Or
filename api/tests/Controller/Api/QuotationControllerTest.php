@@ -42,7 +42,6 @@ class QuotationControllerTest extends WebTestCase
         $this->pricingRepository = static::getContainer()->get(PricingRepository::class);
         $this->productRepository = static::getContainer()->get(ProductRepository::class);
 
-        // Création des tokens pour les tests
         $this->adminToken = $this->getToken('sales@sales.com', 'Sales', 'sales');
         $this->userToken = $this->getToken('baker@baker.com', 'Baker', 'baker');
         $this->salesToken = $this->getToken('sales@sales.com', 'Sales', 'sales');
@@ -50,13 +49,11 @@ class QuotationControllerTest extends WebTestCase
 
     private function getToken(string $email, string $role, string $password): string
     {
-        // Création d'un utilisateur pour le test
         $user = $this->userRepository->findOneByEmail($email);
         if (!$user) {
             $user = new User();
             $user->setEmail($email);
 
-            // Utiliser le service de hachage de Symfony pour créer un mot de passe compatible
             $hasher = static::getContainer()->get('security.password_hasher');
             $hashedPassword = $hasher->hashPassword($user, $password);
             $user->setPassword($hashedPassword);
@@ -68,7 +65,6 @@ class QuotationControllerTest extends WebTestCase
             $this->entityManager->flush();
         }
 
-        // Requête pour obtenir le token
         $this->client->request(
             'POST',
             '/api/login',
@@ -119,14 +115,13 @@ class QuotationControllerTest extends WebTestCase
         $product = new Product();
         $product->setProductName('Test Product');
         $product->setQuantity(10.0);
-        $product->setNetPrice(20.0);  // Ce champ est probablement mappé à 'products_price'
+        $product->setNetPrice(20.0);
         $product->setGrossPrice(25.0);
         $product->setUnitWeight(1.0);
         $product->setDescription('Test product description');
         $product->setCategory(\App\Enum\ProductCategory::Bread);
         $product->setStockQuantity(100);
 
-        // Créer ou récupérer un entrepôt pour le produit
         $warehouse = $this->entityManager->getRepository(\App\Entity\Warehouse::class)->findOneBy([]);
         if (!$warehouse) {
             $warehouse = new \App\Entity\Warehouse();
@@ -167,10 +162,8 @@ class QuotationControllerTest extends WebTestCase
 
     public function testAdminList(): void
     {
-        // Création de données de test
         $this->createTestQuotation();
 
-        // Test avec filtres
         $this->client->request(
             'GET',
             '/api/quotations/admin?page=1&limit=10&status=PENDING',
@@ -289,10 +282,7 @@ class QuotationControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        // Vider le cache de l'EntityManager
-        $this->entityManager->clear();
 
-        // Vérifier que les modifications ont été appliquées
         $updatedQuotation = $this->quotationRepository->find($quotation->getId());
         $this->assertTrue($updatedQuotation->isPaymentStatus());
     }
@@ -312,10 +302,8 @@ class QuotationControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        // Vider le cache de l'EntityManager
         $this->entityManager->clear();
 
-        // Vérifier que le devis a été supprimé
         $this->assertNull($this->quotationRepository->find($quotationId));
     }
 
