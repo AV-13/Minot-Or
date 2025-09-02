@@ -22,7 +22,6 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        // Employés Minot'Or (beaucoup, avec tous les rôles)
         $minotor = $this->getReference(CompanyFixtures::MINOTOR_REF, Company::class);
         $roles = [
             UserRole::Sales,
