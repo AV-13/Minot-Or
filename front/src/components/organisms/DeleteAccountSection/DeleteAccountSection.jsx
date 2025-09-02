@@ -50,8 +50,8 @@ const DeleteAccountSection = () => {
                     </svg>
                 </div>
                 <div className={styles.dangerText}>
-                    <h3>Zone de danger</h3>
-                    <p>Actions irréversibles concernant votre compte</p>
+                    <h3>Actions irréversibles</h3>
+                    <p>Concernant votre compte</p>
                 </div>
             </div>
 

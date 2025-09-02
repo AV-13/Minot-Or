@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MainLayout from '../../templates/MainLayout';
 import OrderTable from '../../organisms/OrderTable/OrderTable';
+import PageHeader from "../../molecules/PageHeader/PageHeader";
 import apiClient from '../../../utils/apiClient';
 import styles from './OrderHistory.module.scss';
 
@@ -37,8 +38,11 @@ const OrderHistory = () => {
 
     return (
         <MainLayout>
+            <PageHeader
+                title="Historique des commandes"
+                description="Consultez toutes vos commandes passées et leur statut"
+            />
             <div className={styles.container}>
-                <h1>Historique des commandes</h1>
                 {loading ? (
                     <p>Chargement...</p>
                 ) : error ? (

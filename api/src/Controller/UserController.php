@@ -66,6 +66,12 @@ final class UserController extends AbstractController
             return $this->json(['error' => 'Email already used'], 409);
         }
 
+        $passwordConstraint = new \App\Validator\StrongPassword();
+        $passwordErrors = $validator->validate($data['password'], $passwordConstraint);
+        if (count($passwordErrors) > 0) {
+            return $this->json(['error' => $passwordErrors[0]->getMessage()], 400);
+        }
+
         $user = new User();
         $user->setEmail($data['email']);
         $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT));

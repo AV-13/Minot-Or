@@ -20,7 +20,7 @@ export default function Dashboard() {
         {
             title: 'Entrepôts',
             description: 'Gérez les entrepôts et les emplacements de stockage.',
-            icon: '/icons/truck.svg',
+            icon: '/icons/warehouse.svg',
             link: '/dashboard/warehouses'
         },
         {
@@ -38,13 +38,13 @@ export default function Dashboard() {
         {
             title: 'Camions',
             description: 'Gérez les camions, leurs statuts et leurs entretiens.',
-            icon: '/icons/building.svg', // Vous devrez ajouter cette icône
+            icon: '/icons/truck.svg', // Vous devrez ajouter cette icône
             link: '/dashboard/trucks'
         },
         {
             title: 'Livraisons',
             description: 'Consultez et gérez les livraisons en cours et passées.',
-            icon: '/icons/delivery.svg', // Ajoutez l’icône correspondante
+            icon: '/icons/package.svg', // Ajoutez l’icône correspondante
             link: '/dashboard/deliveries'
         }
     ];

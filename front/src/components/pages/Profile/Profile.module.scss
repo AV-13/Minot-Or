@@ -19,8 +19,12 @@ $neutral: #FFFFFF;
   top: 0;
   left: 0;
   right: 0;
-  height: 280px;
-  background-color: #7958F8;
+  height: 300px;
+  background-color: #65558f;
+  background-image: url('../../../../public/backgrounds/topography.svg'); // Remplace par le chemin de ton image
+  background-size: cover; // ou contain selon l'effet souhaité
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .headerContent {
@@ -42,6 +46,32 @@ $neutral: #FFFFFF;
 .avatarWrapper {
   position: relative;
   display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+
+  &:hover {
+    transform: scale(1.05);
+
+    .avatar {
+      opacity: 0.3; // Baisse drastiquement l'opacity
+      filter: blur(1px); // Ajoute un léger flou
+    }
+
+    .avatarBorder {
+      background: linear-gradient(135deg, $primary 0%, lighten($primary, 15%) 100%);
+      box-shadow: 0 0 0 4px rgba($primary, 0.4);
+    }
+
+    .editOverlay {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  &:active {
+    transform: scale(1.02);
+  }
 }
 
 .avatar {
@@ -52,6 +82,8 @@ $neutral: #FFFFFF;
   box-shadow: 0 8px 32px rgba($secondary, 0.15);
   position: relative;
   z-index: 2;
+  transition: all 0.3s ease;
+  display: block; // Assure que l'image prend bien sa taille
 }
 
 .avatarBorder {
@@ -63,6 +95,47 @@ $neutral: #FFFFFF;
   border-radius: 50%;
   background: linear-gradient(135deg, $neutral 0%, rgba($primary, 0.3) 100%);
   z-index: 1;
+  transition: all 0.3s ease;
+}
+
+// Overlay de modification - centré parfaitement
+.editOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5); // Centré parfaitement et plus petit initialement
+  width: 70px; // Plus grand
+  height: 70px;
+  background: rgba($primary, 0.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); // Animation avec rebond
+  z-index: 3;
+  backdrop-filter: blur(10px);
+  border: 3px solid rgba($neutral, 0.95);
+  box-shadow:
+          0 12px 32px rgba($primary, 0.5),
+          inset 0 2px 8px rgba($neutral, 0.3);
+
+  svg {
+    width: 32px; // Plus grand
+    height: 32px;
+    color: $neutral;
+    filter: drop-shadow(0 2px 4px rgba($secondary, 0.4));
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    background: rgba($primary, 1);
+    transform: translate(-50%, -50%) scale(1.1);
+
+    svg {
+      transform: scale(1.1);
+    }
+  }
 }
 
 .userTitle {
@@ -72,7 +145,7 @@ $neutral: #FFFFFF;
   h1 {
     font-size: 2.2rem;
     font-weight: 700;
-    margin: 0 0 8px 0;
+    margin: 0 0 20px 0;
     text-shadow: 0 2px 12px rgba($secondary, 0.2);
     letter-spacing: 0.5px;
   }
@@ -82,12 +155,13 @@ $neutral: #FFFFFF;
   font-size: 1.1rem;
   font-weight: 600;
   color: $neutral;
-  background: rgba($neutral, 0.25);
+  background: linear-gradient(135deg, rgba($primary, 0.3), rgba($primary, 0.5));
   padding: 8px 20px;
   border-radius: 20px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba($neutral, 0.3);
-  text-shadow: 0 1px 3px rgba($secondary, 0.2);
+  border: 1px solid rgba($neutral, 0.4);
+  text-shadow: 0 1px 3px rgba($secondary, 0.4);
+  font-weight: 700;
 }
 
 .profileContent {
@@ -135,6 +209,16 @@ $neutral: #FFFFFF;
     height: 120px;
   }
 
+  .editOverlay {
+    width: 60px;
+    height: 60px;
+
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
   .userTitle h1 {
     font-size: 1.8rem;
   }
@@ -156,6 +240,16 @@ $neutral: #FFFFFF;
   .avatar {
     width: 100px;
     height: 100px;
+  }
+
+  .editOverlay {
+    width: 50px;
+    height: 50px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   .userTitle h1 {

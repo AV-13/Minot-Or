@@ -1,24 +1,64 @@
+$primary: #6AAACF;
+$secondary: #1A111A;
+$neutral: #FFFFFF;
+
 .profileAvatar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid gray;
+  border: 2px solid rgba($primary, 0.3);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba($primary, 0.1);
+
+  &:hover {
+    transform: scale(1.05);
+    border-color: $primary;
+    box-shadow: 0 4px 16px rgba($primary, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .userName {
   font-weight: 600;
-  color: #D3D3D3;
+  color: black;
   text-decoration: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
 
   &:hover {
+    color: lighten($neutral, 10%);
     text-decoration: underline;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .profileAvatar {
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .userName {
+    font-size: 0.9rem;
   }
 }

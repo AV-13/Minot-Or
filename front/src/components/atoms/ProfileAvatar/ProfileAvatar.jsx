@@ -1,4 +1,3 @@
-// front/src/components/atoms/ProfileAvatar/ProfileAvatar.jsx
 import React, { useEffect, useState } from "react";
 import { NavLink } from 'react-router';
 import styles from "./ProfileAvatar.module.scss";
@@ -6,24 +5,26 @@ import Modal from "../Modal/Modal";
 import AvatarPicker from "../AvatarPicker/AvatarPicker";
 
 const ProfileAvatar = ({ userName }) => {
-    const [avatar, setAvatar] = useState('/avatars/3d_1-removebg-preview.png');
-    const [color, setColor] = useState('#FF9800');
+    const [avatar, setAvatar] = useState('/avatars/loreleiNeutral-1.svg');
+    const [color, setColor] = useState('#B5EAD7');
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const data = localStorage.getItem('profileAvatar');
         if (data) {
-            const { avatar, color } = JSON.parse(data);
-            setAvatar(avatar);
-            setColor(color);
+            try {
+                const { avatar, color } = JSON.parse(data);
+                if (avatar) setAvatar(avatar);
+                if (color) setColor(color);
+            } catch (error) {
+                console.error('Erreur lors du parsing des données avatar:', error);
+            }
         }
     }, []);
 
-    // Fonction appelée à chaque changement dans AvatarPicker
-    const handleChange = ({ avatar, color }) => {
-        setAvatar(avatar);
-        setColor(color);
-        localStorage.setItem('profileAvatar', JSON.stringify({ avatar, color }));
+    const handleAvatarChange = (data) => {
+        setAvatar(data.avatar);
+        setColor(data.color);
     };
 
     return (
@@ -32,7 +33,7 @@ const ProfileAvatar = ({ userName }) => {
                 <img
                     className={styles.avatar}
                     src={avatar}
-                    alt="Avatar"
+                    alt="Avatar de profil"
                     style={{ backgroundColor: color, cursor: 'pointer' }}
                     onClick={() => setOpen(true)}
                 />
@@ -41,7 +42,10 @@ const ProfileAvatar = ({ userName }) => {
                 </NavLink>
             </div>
             <Modal open={open} onClose={() => setOpen(false)}>
-                <AvatarPicker onChange={handleChange} onClose={() => setOpen(false)} />
+                <AvatarPicker
+                    onChange={handleAvatarChange}
+                    onClose={() => setOpen(false)}
+                />
             </Modal>
         </>
     );

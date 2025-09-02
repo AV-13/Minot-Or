@@ -1,70 +1,247 @@
-// Modale (à appliquer dans le composant Modal si possible)
-.modalContent {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
-  padding: 32px 24px 24px 24px;
-  min-width: 340px;
+$primary: #6AAACF;
+$secondary: #1A111A;
+$tertiary: #FF5F5F;
+$neutral: #FFFFFF;
+$accent: #ff9800;
+
+.pickerContainer {
+  background: $neutral;
+  border-radius: 24px;
+  box-shadow: 0 12px 48px rgba($secondary, 0.15);
+  padding: 0;
+  width: 800px; // Largeur augmentée
   max-width: 95vw;
-  margin: auto;
-  max-height: 70%;
+  margin: 0;
+  max-height: 90vh;
+  min-height: 650px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
-.selectedAvatar {
-  border-radius: 50%;
-  border: 2px solid gray;
-  width: 150px;
-  margin: auto;
+
+// En-tête de la modale
+.modalHeader {
+  background: linear-gradient(135deg, $primary 0%, lighten($primary, 8%) 100%);
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid rgba($neutral, 0.1);
+  flex-shrink: 0;
 }
+
+.headerIcon {
+  width: 56px;
+  height: 56px;
+  background: rgba($neutral, 0.15);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($neutral, 0.2);
+
+  svg {
+    width: 28px;
+    height: 28px;
+    color: $neutral;
+  }
+}
+
+.headerText {
+  flex: 1;
+
+  h2 {
+    color: $neutral;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.3px;
+  }
+
+  p {
+    color: rgba($neutral, 0.85);
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+}
+
+// Section aperçu et couleur côte à côte
+.topSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr; // Deux colonnes égales
+  gap: 24px;
+  padding: 32px;
+  border-bottom: 1px solid rgba($primary, 0.08);
+  flex-shrink: 0;
+}
+
+.previewColumn {
+  display: flex;
+  flex-direction: column;
+  h3 {
+    color: $secondary;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, $primary, lighten($primary, 15%));
+      border-radius: 2px;
+    }
+  }
+}
+
+.colorColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.previewCard {
+  background: $neutral;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba($primary, 0.08);
+  border: 1px solid rgba($primary, 0.1);
+  text-align: center;
+  height: fit-content;
+}
+
+.previewLabel {
+  margin-bottom: 20px;
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba($secondary, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
 .avatarPreview {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
-}
-// Onglets
-.tabs {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 18px;
 }
 
-.tabs button {
-  background: #f4f6fa;
-  border: none;
-  border-radius: 8px 8px 0 0;
-  padding: 8px 22px;
-  font-weight: 600;
-  color: #2c3e50;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  font-size: 1rem;
+.selectedAvatar {
+  width: 120px; // Retour à une taille plus grande
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid rgba($primary, 0.2);
+  box-shadow:
+          0 8px 32px rgba($primary, 0.15),
+          0 0 0 8px rgba($primary, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow:
+            0 12px 40px rgba($primary, 0.2),
+            0 0 0 8px rgba($primary, 0.08);
+  }
 }
 
-.tabs .activeTab,
-.tabs button.activeTab {
-  background: #ff9800;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.08);
+.colorSection {
+  h3 {
+    color: $secondary;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, $primary, lighten($primary, 15%));
+      border-radius: 2px;
+    }
+  }
 }
 
-// Liste d’avatars
-.avatars {
+.colorPickerWrapper {
+  background: $neutral;
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid rgba($primary, 0.1);
+  box-shadow: 0 2px 12px rgba($primary, 0.05);
+
+  :global(.w-color-compact) {
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  :global(.w-color-compact .w-color-compact-rect) {
+    border-radius: 10px !important;
+    margin: 5px !important;
+    width: 36px !important; // Plus grand
+    height: 36px !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+      transform: scale(1.1) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+  }
+}
+
+// Section avatars en pleine largeur
+.avatarSection {
+  padding: 32px;
+  flex: 1;
+  min-height: 300px;
+
+  h3 {
+    color: $secondary;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, $primary, lighten($primary, 15%));
+      border-radius: 2px;
+    }
+  }
+}
+
+.avatarsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); // Plus d'espace
+  gap: 24px;
+  background: $neutral;
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid rgba($primary, 0.1);
+  box-shadow: 0 2px 12px rgba($primary, 0.05);
 }
 
 .avatarBtn {
   border: none !important;
   padding: 0;
   cursor: pointer;
-  border-radius: 16px;
+  border-radius: 18px;
   outline: none;
-  background: #f4f6fa !important;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-  transition: box-shadow 0.2s, border 0.2s, transform 0.15s;
+  background: rgba($primary, 0.04) !important;
+  box-shadow: 0 2px 8px rgba($primary, 0.08);
+  transition: all 0.2s ease;
   width: 100px;
   height: 100px;
   display: flex;
@@ -74,24 +251,164 @@
 
   &:hover,
   &:focus {
-    box-shadow: 0 4px 16px rgba(255, 152, 0, 0.18);
-    transform: translateY(-2px) scale(1.04);
-    background: #fffbe6 !important;
+    box-shadow: 0 6px 20px rgba($primary, 0.15);
+    transform: translateY(-3px);
+    background: rgba($primary, 0.08) !important;
+  }
+
+  &.selected {
+    background: rgba($primary, 0.1) !important;
+    box-shadow:
+            0 0 0 3px $primary,
+            0 8px 24px rgba($primary, 0.25);
+    transform: scale(1.05);
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 24px;
+      height: 24px;
+      background: $primary;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba($primary, 0.3);
+
+      &::before {
+        content: '✓';
+        color: $neutral;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba($primary, 0.2);
+    transition: all 0.2s ease;
   }
 }
 
-.avatarBtn.selected,
-.avatarBtn.selected img {
-  border: 2.5px solid #ff9800;
-  box-shadow: 0 0 0 3px #fffbe6;
+// Section action
+.actionSection {
+  padding: 24px 32px;
+  background: rgba($primary, 0.02);
+  border-top: 1px solid rgba($primary, 0.08);
+  flex-shrink: 0;
 }
 
-.avatarBtn img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ccc;
-  background: #fff;
-  transition: border 0.2s;
+.validateButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 18px 24px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $primary 0%, lighten($primary, 8%) 100%);
+  border: none;
+  color: $neutral;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba($primary, 0.2);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba($primary, 0.25);
+    background: linear-gradient(135deg, lighten($primary, 5%) 0%, lighten($primary, 12%) 100%);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.buttonIcon {
+  width: 20px;
+  height: 20px;
+}
+
+// Responsive
+@media (max-width: 900px) {
+  .pickerContainer {
+    width: 95vw;
+    min-height: 600px;
+  }
+
+  .topSection {
+    grid-template-columns: 1fr; // Une seule colonne
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .selectedAvatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatarsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+    gap: 16px;
+    padding: 24px;
+  }
+
+  .avatarBtn {
+    width: 85px;
+    height: 85px;
+
+    img {
+      width: 65px;
+      height: 65px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .pickerContainer {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    min-height: auto;
+  }
+
+  .topSection {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .avatarSection {
+    padding: 20px;
+  }
+
+  .avatarsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .avatarBtn {
+    width: 70px;
+    height: 70px;
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  :global(.w-color-compact .w-color-compact-rect) {
+    width: 30px !important;
+    height: 30px !important;
+    margin: 3px !important;
+  }
 }
