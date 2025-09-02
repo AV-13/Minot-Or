@@ -31,7 +31,25 @@ class UserFixtures extends Fixture
             UserRole::Driver,
             UserRole::Baker, // Pour la diversité, même si peu probable
         ];
-        // Générer beaucoup d'employés Minot'Or
+
+        // Créer spécifiquement des conducteurs (5)
+        for ($i = 0; $i < 5; $i++) {
+            $user = new User();
+            $user->setFirstName($faker->firstName);
+            $user->setLastName($faker->lastName);
+            $user->setEmail($faker->unique()->email);
+            $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
+            $user->setPassword($hashedPassword);
+            $user->setRole(UserRole::Driver);
+            $user->setRoles([UserRole::Driver->toSymfonyRole()]);
+            $user->setCompany($minotor);
+            $manager->persist($user);
+
+            // Créer une référence pour chaque conducteur
+            $this->addReference('driver_' . $i, $user);
+        }
+
+        // Générer 30 d'employés Minot'Or
         for ($i = 0; $i < 30; $i++) {
             $user = new User();
             $user->setFirstName($faker->firstName);

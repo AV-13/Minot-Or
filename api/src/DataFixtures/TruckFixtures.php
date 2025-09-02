@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Truck;
 use App\Entity\Warehouse;
+use App\Entity\User;
 use App\Enum\TruckCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -15,11 +16,30 @@ class TruckFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             WarehouseFixtures::class,
+            UserFixtures::class, // Ajout de la dépendance aux UserFixtures
         ];
     }
+
     public function load(ObjectManager $manager): void
     {
         $monocuveWarehouses = [0, 1, 7, 20, 31, 32, 34];
+
+        // Récupération des conducteurs
+        $drivers = [];
+        $repository = $manager->getRepository(User::class);
+        $allUsers = $repository->findAll();
+
+        foreach ($allUsers as $user) {
+            if (in_array('ROLE_DRIVER', $user->getRoles(), true)) {
+                $drivers[] = $user;
+            }
+        }
+
+        if (empty($drivers)) {
+            throw new \LogicException('Aucun utilisateur avec le rôle ROLE_DRIVER n\'a été trouvé.');
+        }
+
+        $driverIndex = 0;
 
         for ($w = 0; $w < 41; $w++) {
             /** @var Warehouse $warehouse */
@@ -33,6 +53,8 @@ class TruckFixtures extends Fixture implements DependentFixtureInterface
             $truck1->setDeliveryCount(0);
             $truck1->setTransportDistance(0);
             $truck1->setTransportFee(0);
+            $truck1->setDriver($drivers[$driverIndex % count($drivers)]);
+            $driverIndex++;
             $manager->persist($truck1);
 
             if (in_array($w, $monocuveWarehouses, true)) {
@@ -44,6 +66,8 @@ class TruckFixtures extends Fixture implements DependentFixtureInterface
                 $truck2->setDeliveryCount(0);
                 $truck2->setTransportDistance(0);
                 $truck2->setTransportFee(0);
+                $truck2->setDriver($drivers[$driverIndex % count($drivers)]);
+                $driverIndex++;
                 $manager->persist($truck2);
             }
 
@@ -56,6 +80,8 @@ class TruckFixtures extends Fixture implements DependentFixtureInterface
                 $truck3->setDeliveryCount(0);
                 $truck3->setTransportDistance(0);
                 $truck3->setTransportFee(0);
+                $truck3->setDriver($drivers[$driverIndex % count($drivers)]);
+                $driverIndex++;
                 $manager->persist($truck3);
             }
         }
