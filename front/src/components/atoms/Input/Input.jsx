@@ -1,4 +1,3 @@
-import { sanitizeInput, validateInput } from '../../../utils/xssProtection';
 import styles from './Input.module.scss';
 
 const Input = ({
@@ -6,28 +5,16 @@ const Input = ({
                    onChange,
                    type = 'text',
                    enableXSSProtection = true,
-                   validationType = null,
                    ...props
                }) => {
-    const handleChange = (e) => {
-        let newValue = e.target.value;
-
-        if (enableXSSProtection) {
-            newValue = sanitizeInput(newValue);
-            if (validationType && !validateInput(newValue, validationType)) {
-                return;
-            }
-        }
-
-        onChange(newValue);
-    };
+    console.log('Input props:', { value, onChange: !!onChange, id: props.id }); // Debug
 
     return (
         <input
             {...props}
             type={type}
             value={value}
-            onChange={handleChange}
+            onChange={onChange}
             className={styles.input}
         />
     );

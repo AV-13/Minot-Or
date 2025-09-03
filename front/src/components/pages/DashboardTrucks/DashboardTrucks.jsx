@@ -4,6 +4,7 @@ import MainLayout from '../../templates/MainLayout';
 import GenericTable from '../../organisms/GenericTable/GenericTable';
 import GenericRow from '../../molecules/GenericRow/GenericRow';
 import apiClient from '../../../utils/apiClient';
+import PageHeader from "../../molecules/PageHeader/PageHeader";
 import GenericFilters from "../../organisms/GenericFilters/GenericFilters";
 import Loader from '../../atoms/Loader/Loader';
 import style from './DashboardTrucks.module.scss';
@@ -51,8 +52,10 @@ export default function DashboardTrucks() {
 
     return (
         <MainLayout>
-            <h1>Gestion des camions</h1>
-
+            <PageHeader
+                title="Gestion des camions"
+                description="Gérez les camions et leur disponibilité."
+            />
             <GenericFilters filtersConfig={filtersConfig} onSearch={handleSearch}/>
             {loading ? (
                 <div className={style.loaderContainer}>

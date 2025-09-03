@@ -2,6 +2,7 @@ import React from 'react';
 import MainLayout from "../../templates/MainLayout";
 import DashboardCard from '../../molecules/DashboardCard/DashboardCard';
 import styles from './Dashboard.module.scss';
+import PageHeader from "../../molecules/PageHeader/PageHeader";
 
 export default function Dashboard() {
     const dashboards = [
@@ -52,11 +53,10 @@ export default function Dashboard() {
     return (
         <MainLayout>
             <div className={styles.dashboardContainer}>
-                <div className={styles.header}>
-                    <h1>Tableau de bord</h1>
-                    <p>Sélectionnez une section pour accéder à sa gestion détaillée</p>
-                </div>
-
+                <PageHeader
+                    title="Tableau de bord"
+                    description="Sélectionnez une section pour accéder à sa gestion détaillée"
+                />
                 <div className={styles.cardsGrid}>
                     {dashboards.map((dashboard, index) => (
                         <DashboardCard

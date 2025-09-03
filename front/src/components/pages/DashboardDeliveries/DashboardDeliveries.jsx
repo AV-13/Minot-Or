@@ -5,6 +5,7 @@ import GenericRow from '../../molecules/GenericRow/GenericRow';
 import QrModal from "../../atoms/QrModal/QrModal";
 import Button from "../../atoms/Button/Button";
 import apiClient from '../../../utils/apiClient';
+import PageHeader from "../../molecules/PageHeader/PageHeader";
 import GenericFilters from "../../organisms/GenericFilters/GenericFilters";
 import style from './DashboardDeliveries.module.scss';
 import Loader from "../../atoms/Loader/Loader";
@@ -69,8 +70,27 @@ export default function DashboardDeliveries() {
 
     return (
         <MainLayout>
-            <h1>Gestion des livraisons</h1>
+            <PageHeader
+                title="Gestion des livraisons"
+                description="Suivez l'état des livraisons en temps réel."
+            />
+            <GenericFilters filtersConfig={configFilters} onSearch={handleSearch}/>
 
+            {loading ? (
+                <div className={style.loaderContainer}>
+                    <Loader />
+                </div>
+            ) : (
+                <GenericTable
+                    columns={columns}
+                    data={deliveries}
+                    RowComponent={GenericRow}
+                    page={page}
+                    limit={limit}
+                    total={total}
+                    onPageChange={setPage}
+                />
+            )}
             <GenericFilters filtersConfig={configFilters} onSearch={handleSearch}/>
 
             {loading ? (

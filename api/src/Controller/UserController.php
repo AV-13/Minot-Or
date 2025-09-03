@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -21,6 +22,7 @@ final class UserController extends AbstractController
 {
     /**
      * Creates a new user.
+     * @throws \Exception
      */
     #[OA\Post(
         path: '/api/users',
@@ -48,7 +50,8 @@ final class UserController extends AbstractController
     public function create(
         Request $request,
         EntityManagerInterface $em,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
@@ -74,7 +77,7 @@ final class UserController extends AbstractController
 
         $user = new User();
         $user->setEmail($data['email']);
-        $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT));
+        $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
         $user->setFirstName($data['firstName']);
         $user->setLastName($data['lastName']);
         $user->setRole(UserRole::WaitingForValidation);

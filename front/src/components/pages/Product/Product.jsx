@@ -8,6 +8,7 @@ import Header from "../../organisms/Header/Header";
 import Footer from "../../organisms/Footer/Footer";
 import MainLayout from "../../templates/MainLayout";
 import CartNotification from '../../molecules/CartNotification/CartNotification';
+import PageHeader from "../../molecules/PageHeader/PageHeader";
 
 
 export default function Product() {
@@ -45,8 +46,10 @@ export default function Product() {
                     onClose={closeNotification}
                 />
             )}
-            <h2>Catalogue de produits</h2>
-            <p>Parcourez notre catalogue complet de produits de minoterie pour votre boulangerie.</p>
+            <PageHeader
+                title="Catalogue de produits"
+                description="Parcourez notre catalogue complet de produits de minoterie pour votre boulangerie."
+            />
             <ProductFilter
                 name={name}
                 type={type}

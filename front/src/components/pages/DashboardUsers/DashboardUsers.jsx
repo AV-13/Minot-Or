@@ -3,15 +3,16 @@ import React from 'react';
 import MainLayout from "../../templates/MainLayout";
 import DashboardUser from "../../organisms/DashboardUser/DashboardUser";
 import styles from './DashboardUsers.module.scss';
+import PageHeader from "../../molecules/PageHeader/PageHeader";
 
 export default function DashboardUsers() {
     return (
         <MainLayout>
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <h1>Gestion des Utilisateurs</h1>
-                    <p>Gérez les comptes utilisateurs, leurs rôles et leurs permissions</p>
-                </div>
+                <PageHeader
+                    title="Gestion des Utilisateurs"
+                    description="Gérez les comptes utilisateurs, leurs rôles et leurs permissions"
+                />
                 <DashboardUser />
             </div>
         </MainLayout>
