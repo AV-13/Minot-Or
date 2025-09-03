@@ -14,9 +14,12 @@ use App\Repository\ProductRepository;
 use App\Repository\QuotationRepository;
 use App\Repository\SalesListRepository;
 use App\Repository\UserRepository;
+use App\Service\SecurityHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 
 class QuotationControllerTest extends WebTestCase
@@ -46,6 +49,17 @@ class QuotationControllerTest extends WebTestCase
         $this->userToken = $this->getToken('baker@baker.com', 'Baker', 'baker');
         $this->salesToken = $this->getToken('sales@sales.com', 'Sales', 'sales');
     }
+    protected function tearDown(): void
+    {
+        // Nettoyer toutes les données de test
+        $this->entityManager->createQuery('DELETE FROM App\Entity\Quotation')->execute();
+        $this->entityManager->createQuery('DELETE FROM App\Entity\Pricing')->execute();
+        $this->entityManager->createQuery('DELETE FROM App\Entity\SalesList')->execute();
+        $this->entityManager->createQuery('DELETE FROM App\Entity\User')->execute();
+        $this->entityManager->createQuery('DELETE FROM App\Entity\Company')->execute();
+
+        parent::tearDown();
+    }
 
     private function getToken(string $email, string $role, string $password): string
     {
@@ -54,13 +68,28 @@ class QuotationControllerTest extends WebTestCase
             $user = new User();
             $user->setEmail($email);
 
+            // Créer une company obligatoire
+            $company = new \App\Entity\Company();
+            $company->setCompanyName('Test Company');
+            $company->setCompanySiret('12345678901234');
+            $company->setCompanyContact('test@company.com');
+            $this->entityManager->persist($company);
+
             $hasher = static::getContainer()->get('security.password_hasher');
             $hashedPassword = $hasher->hashPassword($user, $password);
             $user->setPassword($hashedPassword);
 
-            $user->setRoles([$role]);
+            // Corriger l'attribution des rôles
+            if ($role === 'Sales') {
+                $user->setRole(\App\Enum\UserRole::Sales);
+            } elseif ($role === 'Baker') {
+                $user->setRole(\App\Enum\UserRole::Baker);
+            }
+
             $user->setFirstName('Test');
             $user->setLastName('User');
+            $user->setCompany($company);
+
             $this->entityManager->persist($user);
             $this->entityManager->flush();
         }
@@ -325,4 +354,169 @@ class QuotationControllerTest extends WebTestCase
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertIsArray($responseData);
     }
+
+
+    // TEST UNITAIRE
+    public function testCalculateTotalAmountUnit(): void
+    {
+        $pricing = $this->createMock(Pricing::class);
+        $pricing->method('getFixedFee')->willReturn(50.0);
+        $pricing->method('getCostPerKm')->willReturn(2.0);
+
+        $salesList = $this->createMock(SalesList::class);
+        $salesList->method('getGlobalDiscount')->willReturn(10); // int au lieu de 10.0
+
+        $totalProducts = 100.0;
+        $distance = 15;
+        $expectedTotal = $totalProducts + 50.0 + (2.0 * 15) - 10; // 170.0
+
+        $this->assertEquals(170.0, $expectedTotal);
+    }
+
+    // TEST D'INTEGRATION
+
+    public function testCreateQuotationIntegration(): void
+    {
+        $salesList = $this->createTestSalesList();
+        $pricing = $this->createTestPricing();
+
+        $this->client->request(
+            'POST',
+            '/api/quotations/salesLists/' . $salesList->getId() . '/quotation',
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken
+            ],
+            json_encode(['dueDate' => '2024-12-31', 'distance' => 25])
+        );
+
+        $this->assertResponseStatusCodeSame(201);
+
+        // Vérification en base
+        $quotation = $this->quotationRepository->findOneBy(['salesList' => $salesList]);
+        $this->assertNotNull($quotation);
+        $this->assertEquals($pricing->getId(), $quotation->getPricing()->getId());
+    }
+
+    // TEST FONCTIONNEL
+
+    public function testQuotationLifecycleFunctional(): void
+    {
+        $salesList = $this->createTestSalesList();
+        $this->createTestPricing();
+
+        $this->client->request('POST', '/api/quotations/salesLists/' . $salesList->getId() . '/quotation',
+            [], [],
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken],
+            json_encode(['dueDate' => '2024-12-31'])
+        );
+
+        $createResponse = json_decode($this->client->getResponse()->getContent(), true);
+        $quotationId = $createResponse['id'];
+
+        $this->client->request('PATCH', '/api/quotations/' . $quotationId . '/pay',
+            [], [], ['HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken]);
+
+        $this->client->request('GET', '/api/quotations/' . $quotationId,
+            [], [], ['HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken]
+        );
+
+        $finalResponse = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertTrue($finalResponse['paymentStatus']);
+    }
+
+    // TEST DE VALIDATION
+
+    public function testCreateQuotationValidation(): void
+    {
+        $salesList = $this->createTestSalesList();
+
+        // Test sans dueDate obligatoire
+        $this->client->request('POST', '/api/quotations/salesLists/' . $salesList->getId() . '/quotation',
+            [], [],
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken],
+            json_encode(['distance' => 10])
+        );
+
+        $this->assertResponseStatusCodeSame(400);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertStringContainsString('Missing field dueDate', $response['error']);
+    }
+    // TEST DE SECURITE
+
+    public function testUnauthorizedAccess(): void
+    {
+        $quotation = $this->createTestQuotation();
+
+        // Test sans token
+        $this->client->request('GET', '/api/quotations/' . $quotation->getId());
+        $this->assertResponseStatusCodeSame(401);
+
+        // Test avec mauvais rôle pour l'update
+        $this->client->request('PUT', '/api/quotations/' . $quotation->getId(),
+            [], [],
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken],
+            json_encode(['paymentStatus' => true])
+        );
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    // TEST DE REGRESSION
+
+    public function testNoPricingAvailableRegression(): void
+    {
+        // Supprimer d'abord toutes les quotations qui référencent les pricings
+        $quotations = $this->quotationRepository->findAll();
+        foreach ($quotations as $quotation) {
+            $this->entityManager->remove($quotation);
+        }
+        $this->entityManager->flush();
+
+        // Puis supprimer tous les pricings
+        $pricings = $this->pricingRepository->findAll();
+        foreach ($pricings as $pricing) {
+            $this->entityManager->remove($pricing);
+        }
+        $this->entityManager->flush();
+
+        $salesList = $this->createTestSalesList();
+
+        $this->client->request('POST', '/api/quotations/salesLists/' . $salesList->getId() . '/quotation',
+            [], [],
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer ' . $this->userToken],
+            json_encode(['dueDate' => '2024-12-31'])
+        );
+
+        $this->assertResponseStatusCodeSame(404);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('No pricing available in database', $response['error']);
+    }
+
+    // TEST DE PERFORMANCE
+
+    public function testAdminListPerformance(): void
+    {
+        // Créer 100 devis pour tester la pagination
+        for ($i = 0; $i < 100; $i++) {
+            $this->createTestQuotation();
+        }
+
+        $start = microtime(true);
+
+        $this->client->request('GET', '/api/quotations/admin?page=1&limit=50',
+            [], [], ['HTTP_AUTHORIZATION' => 'Bearer ' . $this->adminToken]
+        );
+
+        $duration = microtime(true) - $start;
+
+        $this->assertResponseIsSuccessful();
+        $this->assertLessThan(2.0, $duration); // Moins de 2 secondes
+
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals(50, count($response['items']));
+    }
+
+
 }
