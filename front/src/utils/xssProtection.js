@@ -1,13 +1,11 @@
 import DOMPurify from 'dompurify';
 
 export const sanitizeInput = (input) => {
-    // return DOMPurify.sanitize(input, {
-    //     ALLOWED_TAGS: [],
-    //     ALLOWED_ATTR: [],
-    //     KEEP_CONTENT: true
-    // });
-    console.log("input : ", input);
-    return input;
+    return DOMPurify.sanitize(input, {
+        ALLOWED_TAGS: [],
+        ALLOWED_ATTR: [],
+        KEEP_CONTENT: true
+    });
 };
 
 export const validateInput = (value, type) => {
